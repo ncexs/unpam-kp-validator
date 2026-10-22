@@ -49,7 +49,7 @@
     }
   </script>
 
-  <!-- PDF.js CDN for PDF reading -->
+  <!-- PDF.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <!-- Mammoth.js CDN for DOCX parsing -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
@@ -75,7 +75,7 @@
 
     /* Modern Pulse Glow */
     .upload-zone-active {
-      animation: pulseGlow 2s infinite ease-in-out;
+      animation: pulseGlow 2.5s infinite ease-in-out;
     }
     @keyframes pulseGlow {
       0%, 100% {
@@ -83,7 +83,7 @@
         border-color: #2563eb;
       }
       50% {
-        box-shadow: 0 0 0 12px rgba(37, 99, 235, 0);
+        box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
         border-color: #1d4ed8;
       }
     }
@@ -145,7 +145,7 @@
               <span class="text-xs font-bold uppercase tracking-wider text-unpam-700 bg-unpam-50 border border-unpam-200 px-2 py-0.5 rounded">
                 UNPAM KP Validator
               </span>
-              <span class="text-[11px] font-semibold text-slate-400 hidden sm:inline">v3.8 • Pro</span>
+              <span class="text-[11px] font-semibold text-slate-400 hidden sm:inline">v3.8 • Live</span>
             </div>
             <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight leading-snug">
               Sistem Audit & Pengecekan Otomatis Laporan KP
@@ -269,41 +269,64 @@
                 <span class="bg-unpam-100 text-unpam-800 text-xs font-black px-2.5 py-1 rounded-lg">LANGKAH 1</span>
                 <h3 class="text-lg font-extrabold text-slate-900">Upload Dokumen Laporan KP</h3>
               </div>
-              <p class="text-xs text-slate-500 mt-1">Dukung file <b>.PDF</b> atau <b>.DOCX (Word)</b>. File diproses langsung di browser Anda.</p>
+              <p class="text-xs text-slate-500 mt-1">Dukung file <b>.PDF</b>, <b>.DOCX (Word)</b>, atau <b>.TXT</b>. Diproses langsung di browser.</p>
             </div>
-            <!-- Quick Preset Button -->
-            <button onclick="loadDefaultDosenSample()" class="text-xs font-bold text-unpam-700 bg-unpam-50 hover:bg-unpam-100 border border-unpam-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 whitespace-nowrap self-start sm:self-auto">
-              <i class="fa-solid fa-rotate-left text-unpam-600"></i>
-              <span>Muat Laporan Contoh Dosen</span>
-            </button>
+            
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <!-- Manual Paste Fallback Button -->
+              <button onclick="openPasteModal()" class="text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 whitespace-nowrap" title="Buka modal tempel teks manual jika file scan/sulit dibaca">
+                <i class="fa-solid fa-paste text-indigo-600"></i>
+                <span>Tempel Teks</span>
+              </button>
+              <!-- Quick Preset Button -->
+              <button onclick="loadDefaultDosenSample()" class="text-xs font-bold text-unpam-700 bg-unpam-50 hover:bg-unpam-100 border border-unpam-200 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 whitespace-nowrap" title="Muat laporan Kelompok 6 PT Gama Setia Waspada">
+                <i class="fa-solid fa-rotate-left text-unpam-600"></i>
+                <span>Contoh Dosen</span>
+              </button>
+            </div>
           </div>
 
           <!-- DROP ZONE -->
-          <label for="fileUploadInput" id="dropZoneArea" class="upload-zone-active cursor-pointer group flex flex-col items-center justify-center border-2 border-dashed border-unpam-500 bg-gradient-to-b from-unpam-50/60 to-slate-50/80 hover:from-unpam-100/70 hover:to-unpam-50/90 transition-all duration-300 rounded-2xl p-7 text-center">
-            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-unpam-700 to-blue-500 text-white flex items-center justify-center text-3xl shadow-lg shadow-unpam-700/20 mb-3 group-hover:scale-105 transition-transform duration-300">
+          <div id="dropZoneArea" class="upload-zone-active cursor-pointer group flex flex-col items-center justify-center border-2 border-dashed border-unpam-500 bg-gradient-to-b from-unpam-50/60 to-slate-50/80 hover:from-unpam-100/70 hover:to-unpam-50/90 transition-all duration-300 rounded-2xl p-7 text-center">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-unpam-700 to-blue-500 text-white flex items-center justify-center text-3xl shadow-lg shadow-unpam-700/20 mb-3 group-hover:scale-105 transition-transform duration-300 pointer-events-none">
               <i class="fa-solid fa-cloud-arrow-up"></i>
             </div>
-            <div class="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-unpam-700 transition">
+            <div class="text-base sm:text-lg font-extrabold text-slate-900 group-hover:text-unpam-700 transition pointer-events-none">
               Tarik & Lepas File Laporan ke Sini
             </div>
-            <p class="text-xs text-slate-500 mt-1 max-w-md">
+            <p class="text-xs text-slate-500 mt-1 max-w-md pointer-events-none">
               atau klik tombol di bawah untuk memilih file <b>.pdf</b> atau <b>.docx</b> dari laptop Anda.
             </p>
-            <div class="mt-4 inline-flex items-center gap-2 bg-unpam-600 group-hover:bg-unpam-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition">
-              <i class="fa-regular fa-folder-open"></i>
-              <span>Pilih File dari Komputer</span>
+            
+            <div class="mt-4 flex flex-wrap items-center justify-center gap-2">
+              <label for="fileUploadInput" class="cursor-pointer inline-flex items-center gap-2 bg-unpam-600 hover:bg-unpam-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md transition">
+                <i class="fa-regular fa-folder-open"></i>
+                <span>Pilih File dari Komputer</span>
+              </label>
+              <button onclick="openPasteModal()" type="button" class="inline-flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold px-4 py-2.5 rounded-xl transition">
+                <i class="fa-solid fa-file-pen"></i>
+                <span>Atau Tempel Teks Laporan</span>
+              </button>
             </div>
-            <p id="uploadProgressText" class="text-xs font-semibold text-unpam-700 mt-3 hidden flex items-center gap-2">
-              <i class="fa-solid fa-circle-notch fa-spin"></i>
-              <span id="uploadProgressDetail">Sedang mengekstrak dan membedah struktur laporan...</span>
-            </p>
-            <input id="fileUploadInput" type="file" accept=".pdf,.docx,.doc" class="hidden" onchange="handleFileUpload(event)" />
-          </label>
+
+            <!-- Progress Bar -->
+            <div id="uploadProgressContainer" class="w-full max-w-md mt-4 hidden">
+              <div class="flex items-center justify-between text-[11px] font-bold text-unpam-800 mb-1">
+                <span id="uploadProgressDetail">Memeriksa isi file...</span>
+                <span id="uploadProgressPercent">0%</span>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div id="uploadProgressBar" class="bg-unpam-600 h-2 rounded-full transition-all duration-200" style="width: 0%"></div>
+              </div>
+            </div>
+
+            <input id="fileUploadInput" type="file" accept=".pdf,.docx,.doc,.txt" class="hidden" onclick="this.value=null" onchange="handleFileUpload(event)" />
+          </div>
 
           <!-- Current Active File Status -->
           <div id="fileBadgeStatus" class="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 border border-slate-200 p-3.5 rounded-2xl text-xs">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm">
+              <div id="currentFileIconBox" class="w-8 h-8 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold text-sm">
                 <i class="fa-solid fa-file-pdf"></i>
               </div>
               <div>
@@ -315,7 +338,7 @@
                 </div>
               </div>
             </div>
-            <span class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full text-[11px] self-start sm:self-auto">
+            <span id="currentStatusBadge" class="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full text-[11px] self-start sm:self-auto">
               <i class="fa-solid fa-circle-check"></i> Data Terbaca
             </span>
           </div>
@@ -787,6 +810,50 @@
     </div>
 
   </main>
+
+  <!-- ================= MODAL TEMPEL TEKS MANUAL ================= -->
+  <div id="pasteTextModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-paste"></i>
+          </span>
+          <h3 class="text-base font-extrabold text-slate-900">Tempel Teks Laporan Mandiri</h3>
+        </div>
+        <button onclick="closePasteModal()" class="text-slate-400 hover:text-slate-700 font-bold text-lg p-1">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-500">
+        Jika file PDF Anda hasil scan gambar atau terproteksi, Anda dapat langsung menyalin (Ctrl+A lalu Ctrl+C) seluruh isi dokumen dari Word dan menempelkannya di kotak berikut.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label class="text-[11px] font-bold text-slate-700">Nama Laporan / File:</label>
+          <input type="text" id="pasteDocTitleInput" value="Laporan KP Kelompok.docx" class="w-full mt-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none" />
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-slate-700">Estimasi Total Halaman Bab I–IV:</label>
+          <input type="number" id="pasteDocPagesInput" value="52" min="1" max="200" class="w-full mt-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none" />
+        </div>
+      </div>
+
+      <div>
+        <label class="text-[11px] font-bold text-slate-700">Teks Dokumen Laporan:</label>
+        <textarea id="pasteDocContentInput" rows="8" placeholder="Paste teks Bab I, Bab II, Bab III, Bab IV, dan Daftar Pustaka di sini..." class="w-full mt-1 p-3 text-xs font-mono border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none bg-slate-50/60"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closePasteModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition">Batal</button>
+        <button onclick="processPastedText()" class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-unpam-600 hover:bg-unpam-700 transition flex items-center gap-2">
+          <i class="fa-solid fa-magnifying-glass-chart"></i>
+          <span>Jalankan Audit Teks Ini</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= PRINT SHEET VIEW (PRINT ONLY) ================= -->
   <div class="print-only p-8 text-black bg-white max-w-4xl mx-auto space-y-6">
@@ -1664,11 +1731,7 @@
       document.getElementById("labelScoreInstansi").textContent = `${instansi} (${getLetter(instansi)})`;
       document.getElementById("labelScoreDosen").textContent = `${dosen} (${getLetter(dosen)})`;
 
-      // Bab VI Hal. 8:
-      // Nilai Ujian Sidang: 40% Pemahaman + 20% Penulisan Laporan + 40% Keaktifan
       const nilaiSidang = (pemahaman * 0.40) + (laporan * 0.20) + (keaktifan * 0.40);
-
-      // Nilai Akhir Total: Penilaian Perusahaan + Dosen Pembimbing + Rekomendasi Penguji (Rata-rata 3 Komponen)
       const finalScore = (instansi + dosen + nilaiSidang) / 3;
 
       document.getElementById("simulasiGradeNumber").textContent = finalScore.toFixed(1);
@@ -1699,59 +1762,167 @@
     }
 
     // =========================================================================
-    // FILE UPLOAD PARSER (.PDF & .DOCX)
+    // ROBUST CLIENT-SIDE PDF PARSER (BLOB WORKER + BINARY FALLBACK)
     // =========================================================================
-    async function handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (!file) return;
+    async function extractTextFromPDF(arrayBuffer, updateProgress) {
+      let fullText = "";
+      let totalPages = 0;
 
-      const progressEl = document.getElementById("uploadProgressText");
-      const progressDetail = document.getElementById("uploadProgressDetail");
-      progressEl.classList.remove("hidden");
-      progressDetail.textContent = `Membaca file "${file.name}"...`;
+      // Method 1: PDF.js with same-origin Blob Worker (bypass CORS on GitHub Pages)
+      if (window.pdfjsLib) {
+        try {
+          if (!pdfjsLib.GlobalWorkerOptions.workerSrc || !pdfjsLib.GlobalWorkerOptions.workerSrc.startsWith('blob:')) {
+            try {
+              const workerBlob = new Blob([
+                `importScripts('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js');`
+              ], { type: 'application/javascript' });
+              pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(workerBlob);
+            } catch (blobErr) {
+              console.warn("Blob worker fallback:", blobErr);
+              pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            }
+          }
 
-      try {
-        let fullText = "";
-        let totalPages = 1;
+          const loadingTask = pdfjsLib.getDocument({
+            data: arrayBuffer,
+            cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+            cMapPacked: true,
+            standardFontDataUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/standard_fonts/'
+          });
 
-        if (file.name.toLowerCase().endsWith(".pdf")) {
-          const arrayBuffer = await file.arrayBuffer();
-          pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          const pdf = await loadingTask.promise;
           totalPages = pdf.numPages;
 
           for (let i = 1; i <= totalPages; i++) {
-            progressDetail.textContent = `Membaca halaman ${i} dari ${totalPages}...`;
-            const page = await pdf.getPage(i);
-            const content = await page.getTextContent();
-            const textItems = content.items.map(it => it.str).join(" ");
-            fullText += `\n[Halaman ${i}] ` + textItems;
+            if (updateProgress) updateProgress(i, totalPages);
+            try {
+              const page = await pdf.getPage(i);
+              const textContent = await page.getTextContent();
+              const pageText = textContent.items.map(item => item.str).join(" ");
+              fullText += `\n[Halaman ${i}] ` + pageText;
+            } catch (pageErr) {
+              console.warn(`Halaman ${i} tidak dapat diekstrak penuh:`, pageErr);
+            }
           }
-        } else if (file.name.toLowerCase().endsWith(".docx")) {
+
+          if (fullText.trim().length > 60) {
+            return { text: fullText, totalPages: Math.max(1, totalPages) };
+          }
+        } catch (pdfJsErr) {
+          console.warn("PDF.js extractor issue, beralih ke Fallback Binary Parser:", pdfJsErr);
+        }
+      }
+
+      // Method 2: Fallback Binary Text Extractor (Native String Tokenizer)
+      try {
+        const uint8 = new Uint8Array(arrayBuffer);
+        const rawString = new TextDecoder('latin1').decode(uint8);
+
+        // Count pages via /Type /Page
+        const pageMatches = rawString.match(/\/Type\s*\/Page\b/g);
+        totalPages = pageMatches ? pageMatches.length : (totalPages || 1);
+
+        const textPieces = [];
+        const tjRegex = /\(([^)]{2,})\)\s*Tj/g;
+        let match;
+        while ((match = tjRegex.exec(rawString)) !== null) {
+          textPieces.push(match[1]);
+        }
+
+        const tjArrayRegex = /\[([^\]]+)\]\s*TJ/g;
+        while ((match = tjArrayRegex.exec(rawString)) !== null) {
+          const inner = match[1].replace(/\(([^)]+)\)/g, "$1 ").replace(/-\d+/g, "");
+          if (inner.length > 1) textPieces.push(inner);
+        }
+
+        if (textPieces.length > 15) {
+          fullText = textPieces.join(" ");
+        }
+      } catch (binErr) {
+        console.error("Binary fallback extractor error:", binErr);
+      }
+
+      return { text: fullText, totalPages: Math.max(1, totalPages) };
+    }
+
+    // =========================================================================
+    // FILE UPLOAD HANDLER
+    // =========================================================================
+    async function handleFileUpload(event) {
+      const file = event.target.files ? event.target.files[0] : null;
+      if (!file) return;
+      await processSelectedFile(file);
+    }
+
+    async function processSelectedFile(file) {
+      const progressContainer = document.getElementById("uploadProgressContainer");
+      const progressDetail = document.getElementById("uploadProgressDetail");
+      const progressBar = document.getElementById("uploadProgressBar");
+      const progressPercent = document.getElementById("uploadProgressPercent");
+
+      progressContainer.classList.remove("hidden");
+      progressBar.style.width = "10%";
+      progressPercent.textContent = "10%";
+      progressDetail.textContent = `Membaca file "${file.name}"...`;
+
+      try {
+        let extractedText = "";
+        let totalPages = 1;
+
+        const fileNameLower = file.name.toLowerCase();
+
+        if (fileNameLower.endsWith(".pdf")) {
           const arrayBuffer = await file.arrayBuffer();
-          progressDetail.textContent = "Mengekstrak teks dokumen Word...";
+          const result = await extractTextFromPDF(arrayBuffer, (current, total) => {
+            const pct = Math.round((current / total) * 85);
+            progressBar.style.width = `${pct}%`;
+            progressPercent.textContent = `${pct}%`;
+            progressDetail.textContent = `Membaca halaman ${current} dari ${total}...`;
+          });
+
+          extractedText = result.text;
+          totalPages = result.totalPages;
+        } else if (fileNameLower.endsWith(".docx")) {
+          const arrayBuffer = await file.arrayBuffer();
+          progressDetail.textContent = "Mengekstrak teks dokumen Word (.docx)...";
+          progressBar.style.width = "50%";
+          progressPercent.textContent = "50%";
           const res = await mammoth.extractRawText({ arrayBuffer });
-          fullText = res.value || "";
-          totalPages = Math.max(1, Math.round(fullText.split(/\s+/).length / 280));
+          extractedText = res.value || "";
+          totalPages = Math.max(1, Math.round(extractedText.split(/\s+/).length / 280));
+        } else if (fileNameLower.endsWith(".txt") || fileNameLower.endsWith(".doc")) {
+          extractedText = await file.text();
+          totalPages = Math.max(1, Math.round(extractedText.split(/\s+/).length / 280));
         } else {
-          alert("Silakan upload file berformat PDF (.pdf) atau Word (.docx)");
-          progressEl.classList.add("hidden");
+          alert("Format file belum didukung. Silakan gunakan format .PDF, .DOCX, atau .TXT");
+          progressContainer.classList.add("hidden");
           return;
         }
 
-        progressDetail.textContent = "Menganalisis pedoman & mengecek kata asing...";
-        parseAndAuditDocument(file.name, fullText, totalPages);
-        progressEl.classList.add("hidden");
-        showToast(`File "${file.name}" berhasil dianalisis!`, "success");
+        progressBar.style.width = "95%";
+        progressPercent.textContent = "95%";
+        progressDetail.textContent = "Melakukan audit kesesuaian Pedoman KP 2026...";
+
+        setTimeout(() => {
+          parseAndAuditDocument(file.name, extractedText, totalPages);
+          progressContainer.classList.add("hidden");
+          progressBar.style.width = "0%";
+          showToast(`File "${file.name}" berhasil diaudit!`, "success");
+        }, 350);
+
       } catch (err) {
-        console.error(err);
-        progressEl.classList.add("hidden");
-        alert("Gagal membaca file. Pastikan dokumen tidak terenkripsi kata sandi.");
+        console.error("Upload error:", err);
+        progressContainer.classList.add("hidden");
+        alert("Terjadi kendala saat membaca file. Anda dapat menggunakan tombol 'Tempel Teks' untuk hasil audit instan.");
       }
     }
 
+    // =========================================================================
+    // DYNAMIC AUDIT LOGIC (FOR UPLOADED FILES)
+    // =========================================================================
     function parseAndAuditDocument(fileName, text, totalPages) {
       const lower = text.toLowerCase();
+      const isScannedOrLittleText = text.trim().length < 150;
 
       // Hitung Jurnal & Buku dari teks
       const years5 = ["2021", "2022", "2023", "2024", "2025", "2026"];
@@ -1774,10 +1945,15 @@
       });
 
       // Deteksi istilah asing dinamis
-      const foreignList = ["online", "real-time", "human error", "security", "website", "login", "logout", "dashboard", "database", "blackbox", "user", "client", "input", "output", "wireframe", "tools", "flowchart"];
+      const foreignDictionary = [
+        "online", "real-time", "human error", "security", "website", "login", "logout", 
+        "dashboard", "database", "blackbox", "user", "client", "input", "output", 
+        "wireframe", "tools", "flowchart", "software", "hardware", "interface", 
+        "framework", "agile", "waterfall", "use case", "activity diagram"
+      ];
       let detectedForeign = [];
 
-      foreignList.forEach(w => {
+      foreignDictionary.forEach(w => {
         const regex = new RegExp(`\\b${w}\\b`, "gi");
         const matches = text.match(regex);
         if (matches && matches.length > 0) {
@@ -1790,26 +1966,184 @@
         }
       });
 
-      // Update state
-      docAnalysis.fileName = fileName;
-      docAnalysis.totalDocPages = totalPages;
-      docAnalysis.totalPagesBab1To4 = Math.min(totalPages, Math.max(1, totalPages - 15)); // estimasi halaman Bab I-IV
-      docAnalysis.journalCountValid = journalCount;
-      docAnalysis.bookCountValid = bookCount;
-      if (detectedForeign.length > 0) {
-        docAnalysis.foreignWords = detectedForeign;
-      }
+      // Estimasi halaman Bab I–IV
+      const bab1To4Pages = Math.min(totalPages, Math.max(1, totalPages > 12 ? totalPages - 12 : totalPages));
 
       // Check Sub-Bab Bab I
       const has11 = lower.includes("latar belakang");
       const has12 = lower.includes("identifikasi masalah");
       const has13 = lower.includes("rumusan masalah");
       const has14 = lower.includes("batasan masalah");
+      const has15 = lower.includes("tujuan") && lower.includes("manfaat");
       const hasBab1Complete = (has11 && has12 && has13 && has14);
 
       // Check Bab II
       const has22 = lower.includes("tinjauan pustaka");
       const has25 = lower.includes("kerangka berfikir") || lower.includes("kerangka berpikir");
+
+      // Check Lampiran
+      const hasSIUP = lower.includes("siup") || lower.includes("nib") || lower.includes("operasional");
+      const hasIA = lower.includes("implementation arrangement") || lower.includes("siskerma");
+      const hasBimbingan = lower.includes("bimbingan") || lower.includes("konsultasi");
+
+      // GENERATE DYNAMIC ISSUES LIST
+      let dynamicIssues = [];
+      let issIndex = 1;
+
+      if (!hasBab1Complete && !isScannedOrLittleText) {
+        let missing = [];
+        if (!has11) missing.push("1.1 Latar Belakang");
+        if (!has12) missing.push("1.2 Identifikasi Masalah");
+        if (!has13) missing.push("1.3 Rumusan Masalah");
+        if (!has14) missing.push("1.4 Batasan Masalah");
+
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab1",
+          babLabel: "BAB I",
+          page: "BAB I Pendahuluan",
+          category: "Kelengkapan Sub-Bab",
+          title: `Ada sub-bab wajib BAB I yang belum lengkap (${missing.join(", ")})`,
+          explanation: "Pedoman KP 2026 Hal. 11 mewajibkan 9 sub-bab terstruktur mulai dari 1.1 s/d 1.9.",
+          fix: `Lengkapi sub-bab ${missing.join(", ")} pada draft BAB I dokumen laporan Anda.`,
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11"
+        });
+      }
+
+      if (detectedForeign.length > 0) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab1",
+          babLabel: "Semua Bab",
+          page: "Seluruh Teks Laporan",
+          category: "Istilah Asing",
+          title: `Ditemukan ${detectedForeign.length} jenis istilah asing yang berpotensi belum dicetak miring (italic)`,
+          explanation: `Kata teknis seperti "${detectedForeign.slice(0, 3).map(d => d.word).join(', ')}" wajib dicetak miring sesuai Pedoman Hal. 9 Poin g.1.`,
+          fix: "Gunakan fitur Ctrl+H (Find & Replace) di Microsoft Word untuk memiringkan semua istilah asing ini secara otomatis.",
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1"
+        });
+      }
+
+      if (lower.includes("n.d.") || lower.includes("no date")) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab1",
+          babLabel: "BAB I / Dafpus",
+          page: "Kutipan Laporan",
+          category: "Sitasi Ilmiah",
+          title: "Ditemukan kutipan '(n.d.)' / tanpa tahun terbit pada teks",
+          explanation: "Dosen pembimbing dan penguji menolak sitasi tanpa tahun karena tidak dapat diverifikasi kemutakhirannya.",
+          fix: "Lengkapi tahun terbit asli jurnal atau ganti dengan jurnal bereputasi 5 tahun terakhir (2021–2026).",
+          pedomanRef: "Standar Sitasi Ilmiah UNPAM"
+        });
+      }
+
+      if (!has22 && !isScannedOrLittleText) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab2",
+          babLabel: "BAB II",
+          page: "BAB II (Setelah 2.1)",
+          category: "Struktur Wajib",
+          title: "Sub-Bab 2.2 Tinjauan Pustaka belum terdeteksi di BAB II",
+          explanation: "Sesuai Pedoman KP 2026 Hal. 12, setelah profil perusahaan wajib mencantumkan sub-bab 2.2 Tinjauan Pustaka (penelitian terdahulu).",
+          fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka berupa tabel komparasi penelitian/jurnal terdahulu yang relevan.",
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+        });
+      }
+
+      if (!has25 && !isScannedOrLittleText) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab2",
+          babLabel: "BAB II",
+          page: "BAB II (Akhir Bab)",
+          category: "Struktur Wajib",
+          title: "Sub-Bab 2.5 Kerangka Berfikir belum terdeteksi di BAB II",
+          explanation: "Pedoman KP 2026 Hal. 12 mewajibkan alur diagram kerangka berfikir sebelum masuk ke perancangan BAB III.",
+          fix: "Tambahkan sub-bab 2.5 Kerangka Berfikir lengkap dengan bagan diagram alur pemecahan masalah.",
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+        });
+      }
+
+      if (journalCount < 20) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab2",
+          babLabel: "BAB II & Dafpus",
+          page: "Daftar Pustaka",
+          category: "Jumlah Literatur",
+          title: `Jumlah Jurnal Ilmiah (2021–2026) baru terdeteksi ${journalCount} (Syarat minimal 20 Jurnal)`,
+          explanation: "Syarat mutlak laporan KP Prodi Sistem Informasi adalah minimal mengutip 20 jurnal dalam rentang 5 tahun terakhir.",
+          fix: "Cari jurnal relevan di Google Scholar / Sinta / Garuda lalu tambahkan kutipannya di Bab II dan Daftar Pustaka.",
+          pedomanRef: "Standar Akreditasi & Pedoman Dosen SI"
+        });
+      }
+
+      if (bookCount < 5) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab2",
+          babLabel: "BAB II & Dafpus",
+          page: "Daftar Pustaka",
+          category: "Jumlah Literatur",
+          title: `Jumlah Buku Teks (2016–2026) baru terdeteksi ${bookCount} (Syarat minimal 5 Buku)`,
+          explanation: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit maksimal 10 tahun terakhir (2016–2026).",
+          fix: "Tambahkan 5 buku referensi perancangan sistem/pemrograman/basis data terbitan 2016 ke atas di Daftar Pustaka.",
+          pedomanRef: "Standar Referensi Buku Teks Prodi SI"
+        });
+      }
+
+      if (bab1To4Pages < 50) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "all",
+          babLabel: "Ketebalan Laporan",
+          page: "BAB I s/d IV",
+          category: "Syarat Halaman",
+          title: `Ketebalan BAB I s/d BAB IV baru ${bab1To4Pages} Halaman (Kurang ${50 - bab1To4Pages} Hal)`,
+          explanation: "Pedoman BAB VII Hal. 9 Poin 1 menegaskan: 'Laporan dibuat minimal 50 halaman (dari Bab I Pendahuluan s/d Bab IV Penutup)'.",
+          fix: "Perdalam pembahasan analisis kebutuhan, diagram UML, mockup layar UI/UX, dan tabel pengujian BlackBox di Bab III.",
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin 1"
+        });
+      }
+
+      if (!hasSIUP) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "all",
+          babLabel: "Lampiran",
+          page: "Lampiran Dokumen",
+          category: "Kelengkapan Lampiran",
+          title: "Lampiran wajib SIUP / NIB / Surat Keterangan Operasional Perusahaan belum terdeteksi",
+          explanation: "Pedoman Hal. 13 Poin c mewajibkan lampiran bukti izin legalitas perusahaan (SIUP/NIB/SK Operasional).",
+          fix: "Minta scan surat legalitas/NIB instansi tempat Anda KP dan sertakan sebagai Lampiran 3.",
+          pedomanRef: "Pedoman KP 2026 BAB II Hal. 3 & Hal. 13 Poin c"
+        });
+      }
+
+      if (isScannedOrLittleText) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "bab1",
+          babLabel: "Info Parser",
+          page: "Format File",
+          category: "Info Dokumen",
+          title: "Dokumen terdeteksi sebagai hasil scan gambar atau teks digital terbatas",
+          explanation: `Total halaman terdeteksi sebanyak ${totalPages} halaman, namun teks digital yang dapat dibaca sangat minim.`,
+          fix: "Gunakan tombol 'Tempel Teks' di bagian atas jika ingin mengaudit kata asing dan sub-bab secara mendalam.",
+          pedomanRef: "Optimasi Parser Dokumen"
+        });
+      }
+
+      // Update state
+      docAnalysis.fileName = fileName;
+      docAnalysis.totalDocPages = totalPages;
+      docAnalysis.totalPagesBab1To4 = bab1To4Pages;
+      docAnalysis.journalCountValid = journalCount;
+      docAnalysis.bookCountValid = bookCount;
+      if (detectedForeign.length > 0) docAnalysis.foreignWords = detectedForeign;
+      docAnalysis.issues = dynamicIssues.length > 0 ? dynamicIssues : DEFAULT_DOSEN_DATASET.issues;
 
       // Update Checklist Items
       if (docAnalysis.chapterChecklist.bab1[5]) {
@@ -1837,7 +2171,49 @@
         docAnalysis.chapterChecklist.bab2[4].badge = `${bookCount} / 5 Buku (2016–2026)`;
       }
 
+      if (docAnalysis.chapterChecklist.all[0]) {
+        docAnalysis.chapterChecklist.all[0].status = bab1To4Pages >= 50 ? "pass" : "fail";
+        docAnalysis.chapterChecklist.all[0].badge = `${bab1To4Pages} Hal (${bab1To4Pages >= 50 ? 'Memenuhi >= 50' : 'Kurang dari 50'})`;
+      }
+
+      if (docAnalysis.chapterChecklist.all[3]) {
+        docAnalysis.chapterChecklist.all[3].status = hasSIUP ? "pass" : "fail";
+        docAnalysis.chapterChecklist.all[3].badge = hasSIUP ? "SIUP/NIB Ada" : "SIUP/NIB Belum Ada";
+      }
+
+      appState.checkedIssues = {};
+      saveState();
       renderAll();
+    }
+
+    // =========================================================================
+    // MODAL PASTE TEXT LOGIC
+    // =========================================================================
+    function openPasteModal() {
+      const modal = document.getElementById("pasteTextModal");
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    }
+
+    function closePasteModal() {
+      const modal = document.getElementById("pasteTextModal");
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+
+    function processPastedText() {
+      const title = document.getElementById("pasteDocTitleInput").value.trim() || "Laporan KP Mandiri.docx";
+      const pages = parseInt(document.getElementById("pasteDocPagesInput").value) || 50;
+      const content = document.getElementById("pasteDocContentInput").value.trim();
+
+      if (!content || content.length < 50) {
+        alert("Silakan tempel teks laporan Anda minimal beberapa paragraf untuk dapat diaudit.");
+        return;
+      }
+
+      closePasteModal();
+      parseAndAuditDocument(title, content, pages);
+      showToast("Teks laporan berhasil diaudit!", "success");
     }
 
     function loadDefaultDosenSample() {
@@ -1846,6 +2222,44 @@
       saveState();
       renderAll();
       showToast("Data Laporan Contoh Dosen (Kelompok 6) berhasil dimuat kembali.", "info");
+    }
+
+    // =========================================================================
+    // DRAG AND DROP SETUP
+    // =========================================================================
+    function setupDragAndDrop() {
+      const dropZone = document.getElementById("dropZoneArea");
+      if (!dropZone) return;
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => {
+          dropZone.classList.add('border-unpam-700', 'bg-unpam-100/90', 'scale-[1.01]');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => {
+          dropZone.classList.remove('border-unpam-700', 'bg-unpam-100/90', 'scale-[1.01]');
+        }, false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files && files.length > 0) {
+          processSelectedFile(files[0]);
+        }
+      }, false);
     }
 
     // =========================================================================
@@ -1882,7 +2296,7 @@
       // Update File display badge
       document.getElementById("currentFileNameDisplay").textContent = docAnalysis.fileName;
       document.getElementById("currentFileMetaDisplay").textContent = 
-        `${docAnalysis.totalPagesBab1To4} Halaman Bab I–IV • ${docAnalysis.totalDocPages} Halaman Total • ${docAnalysis.companyName}`;
+        `${docAnalysis.totalPagesBab1To4} Halaman Bab I–IV • ${docAnalysis.totalDocPages} Halaman Total`;
 
       // Update KPI Metrics Cards
       document.getElementById("metricPageCount").textContent = docAnalysis.totalPagesBab1To4;
@@ -1925,6 +2339,7 @@
 
     // Run on startup
     window.addEventListener("DOMContentLoaded", () => {
+      setupDragAndDrop();
       renderAll();
     });
   </script>
