@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>UNPAM KP Validator — Sistem Audit & Pengecekan Otomatis Laporan Kerja Praktek</title>
-  <meta name="description" content="Aplikasi Web Interaktif Audit & Validasi Laporan Kerja Praktek (KP) Mahasiswa Program Studi Sistem Informasi Universitas Pamulang Sesuai Pedoman Update 2026." />
+  <title>UNPAM KP Validator by ncexs — Sistem Audit & Pengecekan Otomatis Laporan Kerja Praktek</title>
+  <meta name="description" content="Aplikasi Web Interaktif Audit & Validasi Laporan Kerja Praktek (KP) Mahasiswa Program Studi Sistem Informasi Universitas Pamulang Sesuai Pedoman Update 2026. Dibuat oleh ncexs." />
+  <meta name="author" content="ncexs" />
 
-  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <!-- Google Fonts: Inter, Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -119,13 +120,16 @@
         <span class="inline-flex items-center justify-center bg-campus-gold/20 text-campus-gold border border-campus-gold/30 px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase">
           Edisi 2026
         </span>
-        <span class="truncate">Portal Standar Validasi Laporan Kerja Praktek & Pedoman Prodi Sistem Informasi S1 UNPAM</span>
+        <span class="truncate">Portal Standar Validasi Laporan Kerja Praktek • S1 Sistem Informasi UNPAM</span>
+        <span class="hidden md:inline-flex items-center gap-1 bg-amber-400/20 text-campus-gold border border-campus-gold/40 px-2 py-0.5 rounded text-[10px] font-extrabold">
+          <i class="fa-solid fa-code text-[9px]"></i> by ncexs
+        </span>
       </div>
       <div class="flex items-center gap-4 text-[11px]">
         <span class="flex items-center gap-1.5"><i class="fa-solid fa-clock text-unpam-300"></i> Semester Genap 2025/2026</span>
         <span class="hidden md:inline">•</span>
         <a href="#pedomanRingkas" onclick="switchTab('panduan')" class="hover:text-white underline decoration-unpam-400 underline-offset-2 flex items-center gap-1">
-          <i class="fa-solid fa-book-bookmark text-campus-gold"></i> Lihat Buku Pedoman
+          <i class="fa-solid fa-book-bookmark text-campus-gold"></i> Buku Pedoman 2026
         </a>
       </div>
     </div>
@@ -145,7 +149,9 @@
               <span class="text-xs font-bold uppercase tracking-wider text-unpam-700 bg-unpam-50 border border-unpam-200 px-2 py-0.5 rounded">
                 UNPAM KP Validator
               </span>
-              <span class="text-[11px] font-semibold text-slate-400 hidden sm:inline">v3.8 • Live</span>
+              <span class="inline-flex items-center gap-1 text-[11px] font-extrabold bg-gradient-to-r from-campus-gold to-amber-500 text-slate-900 px-2.5 py-0.5 rounded-full shadow-sm">
+                <i class="fa-solid fa-sparkles text-[9px]"></i> by ncexs
+              </span>
             </div>
             <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight leading-snug">
               Sistem Audit & Pengecekan Otomatis Laporan KP
@@ -205,13 +211,13 @@
       <div class="max-w-3xl">
         <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span>Prodi Sistem Informasi (S1) • Fakultas Ilmu Komputer</span>
+          <span>Prodi Sistem Informasi (S1) • FIK UNPAM • Built with ❤️ by <b>ncexs</b></span>
         </div>
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
           Audit Laporan KP Tanpa Cemas Ditolak Dosen Pembimbing
         </h2>
         <p class="text-unpam-100 text-sm sm:text-base mt-2 leading-relaxed">
-          Pengecekan otomatis mencakup syarat wajib penomoran halaman Romawi/Arab, batas minimal 50 halaman, kelengkapan 8 lampiran resmi (SIUP/NIB, IA Siskerma, Log Bimbingan 6x), referensi jurnal 2021–2026, hingga deteksi istilah asing wajib cetak miring.
+          Sistem otomatis menunjukkan <b>nomor halaman dan paragraf spesifik</b> dari setiap kesalahan, lengkap dengan perbandingan <b>teks asli yang salah vs rekomendasi kalimat perbaikan</b> sesuai Pedoman KP 2026.
         </p>
 
         <!-- Quick Tags -->
@@ -223,7 +229,10 @@
             <i class="fa-solid fa-file-word text-blue-400 mr-1.5"></i> Support DOCX / Word
           </span>
           <span class="bg-unpam-950/60 border border-unpam-700/60 px-3 py-1 rounded-lg text-unpam-200">
-            <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> 100% Client-Side (Privasi Terjaga)
+            <i class="fa-solid fa-crosshairs text-campus-gold mr-1.5"></i> Tunjuk Nomor Halaman & Paragraf
+          </span>
+          <span class="bg-unpam-950/60 border border-unpam-700/60 px-3 py-1 rounded-lg text-unpam-200">
+            <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> 100% Client-Side Privacy
           </span>
         </div>
       </div>
@@ -516,7 +525,7 @@
               </span>
             </div>
             <p class="text-xs text-slate-500 mt-1">
-              Centang kotak jika kelompok Anda sudah merevisi poin tersebut di dokumen Microsoft Word.
+              Setiap catatan dilengkapi <b>lokasi spesifik (halaman & paragraf)</b> serta perbandingan kalimat yang salah vs perbaikan.
             </p>
           </div>
 
@@ -534,7 +543,7 @@
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="relative flex-1">
             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-            <input type="text" id="searchIssueInput" oninput="renderIssuesList()" placeholder="Cari masalah, nomor halaman, atau kata kunci..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-unpam-500 focus:border-transparent bg-slate-50/50" />
+            <input type="text" id="searchIssueInput" oninput="renderIssuesList()" placeholder="Cari masalah, nomor halaman, paragraf, atau kata kunci..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-unpam-500 focus:border-transparent bg-slate-50/50" />
           </div>
           <select id="filterIssueStatusSelect" onchange="renderIssuesList()" class="text-xs rounded-xl border border-slate-200 px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-unpam-500 font-medium">
             <option value="all">Semua Status (Belum & Sudah)</option>
@@ -544,7 +553,7 @@
         </div>
 
         <!-- LIST CONTAINER -->
-        <div id="issuesListContainer" class="space-y-3.5"></div>
+        <div id="issuesListContainer" class="space-y-4"></div>
       </div>
 
     </div>
@@ -861,6 +870,7 @@
       <h2 class="text-lg font-black uppercase">UNIVERSITAS PAMULANG</h2>
       <h3 class="text-base font-bold">PROGRAM STUDI SISTEM INFORMASI (S1) - FAKULTAS ILMU KOMPUTER</h3>
       <p class="text-xs mt-1">LEMBAR HASIL AUDIT MANDIRI LAPORAN KERJA PRAKTEK (PEDOMAN 2026)</p>
+      <p class="text-[10px] mt-0.5 text-slate-600">Sistem Validasi dikembangkan oleh: <b>ncexs</b></p>
     </div>
     <div class="grid grid-cols-2 text-xs gap-2 py-2">
       <div><b>Nama Dokumen:</b> <span id="printDocName">-</span></div>
@@ -872,20 +882,23 @@
       <h4 class="text-sm font-bold mb-2">Daftar Poin Yang Perlu Diperbaiki Sebelum Bimbingan:</h4>
       <div id="printIssuesList" class="text-xs space-y-2 font-mono"></div>
     </div>
+    <div class="pt-6 border-t text-[10px] text-center text-slate-500">
+      UNPAM KP Validator by ncexs • https://ncexs.github.io/unpam-kp-validator/
+    </div>
   </div>
 
   <!-- ================= FOOTER ================= -->
   <footer class="bg-white border-t border-slate-200 mt-auto py-6 px-4 no-print text-center text-xs text-slate-500">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2">
-        <span class="w-2 h-2 rounded-full bg-unpam-600"></span>
-        <span><b>UNPAM KP Validator</b> • Sistem Informasi S1 Universitas Pamulang</span>
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+        <span><b>UNPAM KP Validator</b> • Developed with ❤️ by <a href="https://github.com/ncexs" target="_blank" class="font-extrabold text-unpam-700 hover:underline">ncexs</a></span>
       </div>
       <div>
         Sesuai Pedoman Kerja Praktek Revisi 2026 & Contoh Laporan Dosen Pembimbing.
       </div>
       <div>
-        Dibuat untuk mempermudah mahasiswa SI lulus sidang tepat waktu 🎓
+        Dibuat oleh <b>ncexs</b> untuk mempermudah mahasiswa SI lulus sidang tepat waktu 🎓
       </div>
     </div>
   </footer>
@@ -936,7 +949,7 @@
     }
 
     // =========================================================================
-    // MASTER DATA ANALISIS PEDOMAN 2026 & DATASET CONTOH DOSEN
+    // MASTER DATA ANALISIS PEDOMAN 2026 & DATASET CONTOH DOSEN (WITH EXACT PARAGRAPHS & SNIPPETS)
     // =========================================================================
     const DEFAULT_DOSEN_DATASET = {
       fileName: "Final K.P Kelompok 6.pdf (Contoh Dosen)",
@@ -1122,22 +1135,28 @@
           id: "iss-1",
           stage: "bab1",
           babLabel: "Pra-Bab",
-          page: "PDF Hal. 6 & 9",
+          page: "PDF Hal. 6 & Hal. 9",
+          locationDetail: "PDF Hal. 6 (Kop Surat Lembar Penilaian) & PDF Hal. 9 (Kata Pengantar, Paragraf ke-3)",
           category: "Typo & Format",
-          title: "Salah ketik 'VAYASAN SASMITA JAYA' & tanda titik sebelum koma di Kata Pengantar",
-          explanation: "Pada kop lembar penilaian halaman 6 tertulis 'VAYASAN SASMITA JAYA' (huruf V bukan Y). Di akhir Kata Pengantar halaman 9 juga terdapat tanda baca ganda.",
-          fix: "Ubah tulisan 'VAYASAN' menjadi 'YAYASAN SASMITA JAYA' pada kop lembar penilaian dan rapikan tanda baca di akhir Kata Pengantar.",
-          pedomanRef: "Standar Tata Bahasa Baku & Format Kop Universitas"
+          title: "Salah ketik 'VAYASAN SASMITA JAYA' & tanda titik ganda di Kata Pengantar",
+          explanation: "Pada kop lembar penilaian PDF Hal. 6 tertulis 'VAYASAN SASMITA JAYA' (huruf V bukan Y). Di akhir Kata Pengantar PDF Hal. 9 (paragraf ke-3) terdapat tanda titik sebelum koma.",
+          wrongSnippet: "VAYASAN SASMITA JAYA ... serta semua pihak yang tidak dapat penulis sebutkan satu per satu. yang telah memberikan...",
+          correctSnippet: "YAYASAN SASMITA JAYA ... serta semua pihak yang tidak dapat penulis sebutkan satu per satu yang telah memberikan...",
+          fix: "Ubah tulisan 'VAYASAN' menjadi 'YAYASAN SASMITA JAYA' pada kop lembar penilaian dan hapus titik ganda sebelum koma pada paragraf ke-3 Kata Pengantar.",
+          pedomanRef: "Standar Tata Bahasa Baku & Format Kop Yayasan UNPAM"
         },
         {
           id: "iss-2",
           stage: "bab1",
           babLabel: "BAB I",
-          page: "Hal. 1 – 6 (Bab I)",
+          page: "Hal. 1 s/d 6 (Bab I)",
+          locationDetail: "Hal. 2 (Paragraf 1 baris 4); Hal. 3 (Paragraf 1 baris 1); Hal. 4 (Sub-bab 1.5)",
           category: "Istilah Asing",
           title: "Istilah bahasa asing di Bab I belum dicetak miring (italic)",
           explanation: "Kata 'online' (disebut berulang kali), 'real-time' (Hal. 2, 3), dan 'human error' (Hal. 3) masih dicetak tegak biasa.",
-          fix: "Blok kata-kata asing tersebut di Microsoft Word lalu tekan tombol Ctrl + I (cetak miring) sesuai Pedoman Hal. 9 Poin g.1.",
+          wrongSnippet: "...sistem buku tamu online hadir sebagai salah satu solusi... mempermudah proses monitoring kehadiran tamu secara real-time... potensi kesalahan pencatatan (human error) cukup besar...",
+          correctSnippet: "...sistem buku tamu <i>online</i> hadir sebagai salah satu solusi... mempermudah proses monitoring kehadiran tamu secara <i>real-time</i>... potensi kesalahan pencatatan (<i>human error</i>) cukup besar...",
+          fix: "Blok kata asing tersebut di Microsoft Word lalu tekan tombol Ctrl + I (cetak miring) sesuai Pedoman Hal. 9 Poin g.1.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1"
         },
         {
@@ -1145,9 +1164,12 @@
           stage: "bab1",
           babLabel: "BAB I",
           page: "Hal. 1 & 2 (1.1 Latar Belakang)",
+          locationDetail: "Hal. 1 (Paragraf 1 baris 4) & Hal. 2 (Paragraf 1 baris 5)",
           category: "Sitasi & Literatur",
           title: "Kutipan literatur masih menggunakan '(n.d.)' / tanpa tahun terbit",
-          explanation: "Ditemukan kutipan '(Uswa et al., n.d.)' pada Hal. 1 dan '(Yulianto et al., n.d.)' pada Hal. 2. Dosen penguji melarang kutipan tanpa tahun.",
+          explanation: "Ditemukan kutipan '(Uswa et al., n.d.)' pada Hal. 1 Paragraf 1 dan '(Yulianto et al., n.d.)' pada Hal. 2 Paragraf 1. Dosen penguji melarang kutipan tanpa tahun.",
+          wrongSnippet: "...digunakan dalam pengambilan keputusan (Uswa et al., n.d.). ...dapat dihasilkan secara otomatis dengan cepat dan akurat (Yulianto et al., n.d.).",
+          correctSnippet: "...digunakan dalam pengambilan keputusan (Uswa et al., 2023). ...dapat dihasilkan secara otomatis dengan cepat dan akurat (Yulianto et al., 2024).",
           fix: "Cari jurnal asli sumber tersebut atau ganti dengan jurnal bereputasi yang terbit resmi antara tahun 2021 hingga 2026.",
           pedomanRef: "Standar Sitasi Ilmiah Akademik UNPAM"
         },
@@ -1156,10 +1178,13 @@
           stage: "bab1",
           babLabel: "BAB I",
           page: "Hal. 4 & 5 (1.6 & 1.7)",
+          locationDetail: "Hal. 4 (Sub-bab 1.6 Manfaat KP, Kalimat Pembuka) & Hal. 5 (Sub-bab 1.7 Metode KP, Kalimat Pembuka)",
           category: "Tata Bahasa",
           title: "Kata berulang 'ini ini, adalah' (Hal. 4) dan salah spasi 'di gunakan' (Hal. 5)",
           explanation: "Di sub-bab 1.6 terdapat kalimat 'Manfaat yang diperoleh dari kerja praktek ini ini, adalah'. Di sub-bab 1.7 tertulis 'di gunakan' yang seharusnya digabung.",
-          fix: "Hapus kata 'ini' yang berulang dan gabungkan kata imbuhan pasif menjadi 'digunakan'.",
+          wrongSnippet: "Manfaat yang diperoleh dari kerja praktek ini ini, adalah : ... Metode penelitian yang di gunakan dalam penelitian ini adalah...",
+          correctSnippet: "Manfaat yang diperoleh dari kerja praktek ini, adalah : ... Metode penelitian yang digunakan dalam penelitian ini adalah...",
+          fix: "Hapus kata 'ini' yang berulang pada sub-bab 1.6 dan gabungkan kata imbuhan pasif menjadi 'digunakan' pada sub-bab 1.7.",
           pedomanRef: "Pedoman Umum Ejaan Bahasa Indonesia (PUEBI)"
         },
         {
@@ -1167,10 +1192,13 @@
           stage: "bab2",
           babLabel: "BAB II",
           page: "Hal. 10 (2.1.4 Struktur Perusahaan)",
+          locationDetail: "Hal. 10 (Paragraf 1 kalimat ke-4 / kalimat terakhir sebelum bagan) & Caption Gambar 2.1",
           category: "Typo Copy-Paste Fatal",
           title: "Tertulis nama PT lain: 'Berikut gambar struktur perusahaan Bitnet' & typo 'Peusahaan'",
           explanation: "Sisa copy-paste dari laporan teman/grup lain. Judul laporan PT. Gama Setia Waspada tetapi di narasi tertulis perusahaan 'Bitnet' dan caption gambar tertulis 'Peusahaan'.",
-          fix: "Ganti kata 'Bitnet' menjadi 'PT. Gama Setia Waspada' dan perbaiki 'Struktur Peusahaan' menjadi 'Struktur Perusahaan'.",
+          wrongSnippet: "...Selanjutnya direkrut melalui seleksi sebagaimana tata cara peraturan kepegawaian yang berlaku. Berikut gambar struktur perusahaan Bitnet. [Gambar 2.1 Struktur Peusahaan]",
+          correctSnippet: "...Selanjutnya direkrut melalui seleksi sebagaimana tata cara peraturan kepegawaian yang berlaku. Berikut gambar struktur organisasi PT. Gama Setia Waspada. [Gambar 2.1 Struktur Perusahaan]",
+          fix: "Ganti kata 'Bitnet' menjadi 'PT. Gama Setia Waspada' dan perbaiki tulisan 'Struktur Peusahaan' menjadi 'Struktur Perusahaan'.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11 Poin 2.1"
         },
         {
@@ -1178,20 +1206,26 @@
           stage: "bab2",
           babLabel: "BAB II",
           page: "Hal. 9 (2.1.2 Visi dan Misi)",
+          locationDetail: "Hal. 9 (Paragraf 1 tepat di bawah judul VISI)",
           category: "Typo",
           title: "Salah ketik 'perusaahaan' dan 'pengola' pada narasi Visi Perusahaan",
           explanation: "Tertulis 'Menjadi perusaahaan penyedia dan pengola sumber daya manusia...', terdapat double huruf a dan huruf e tertinggal.",
-          fix: "Perbaiki ejaan menjadi 'perusahaan' dan 'pengelola' pada visi PT.",
+          wrongSnippet: "VISI : Menjadi perusaahaan penyedia dan pengola sumber daya manusia yang profesional...",
+          correctSnippet: "VISI : Menjadi perusahaan penyedia dan pengelola sumber daya manusia yang profesional...",
+          fix: "Perbaiki ejaan menjadi 'perusahaan' dan 'pengelola' pada paragraf visi PT.",
           pedomanRef: "Standar Tata Bahasa Baku Indonesia"
         },
         {
           id: "iss-7",
           stage: "bab2",
           babLabel: "BAB II",
-          page: "Hal. 12 – 16 (Sub-Bab BAB II)",
+          page: "Hal. 12 – 16 (Struktur Sub-Bab)",
+          locationDetail: "BAB II: Antara Sub-bab 2.1 dan 2.3, serta Bagian Akhir BAB II",
           category: "Struktur Bab",
           title: "Sub-bab 2.2 Tinjauan Pustaka & 2.5 Kerangka Berfikir belum dicantumkan di BAB II",
           explanation: "Struktur resmi Bab II Pedoman 2026 Hal. 11-12 mewajibkan: 2.1 Profil Tempat KP, 2.2 Tinjauan Pustaka, 2.3 Landasan Teori, 2.4 Metode, 2.5 Kerangka Berfikir.",
+          wrongSnippet: "BAB II urutan saat ini: 2.1 Profil Perusahaan -> 2.2 Landasan Teori -> 2.2.1 Konsep Buku Tamu... (Tinjauan Pustaka & Kerangka Berfikir terlewat)",
+          correctSnippet: "BAB II urutan wajib: 2.1 Profil Perusahaan -> 2.2 Tinjauan Pustaka -> 2.3 Landasan Teori -> 2.4 Metode -> 2.5 Kerangka Berfikir",
           fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka (tabel penelitian terdahulu) dan 2.5 Kerangka Berfikir (diagram alur pemecahan masalah) sebelum lanjut ke Bab III.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11–12"
         },
@@ -1199,10 +1233,13 @@
           id: "iss-8",
           stage: "bab2",
           babLabel: "BAB II & Dafpus",
-          page: "Daftar Pustaka & BAB II",
+          page: "Hal. 52 (Daftar Pustaka)",
+          locationDetail: "Daftar Pustaka Hal. 52 (Seluruh Daftar Referensi Jurnal)",
           category: "Jumlah Literatur",
           title: "Jumlah Jurnal Ilmiah masih kurang (Baru 2, syarat minimal 20 Jurnal 2021–2026)",
           explanation: "Daftar referensi baru memiliki 2 jurnal yang valid tahunnya (dan 2 jurnal n.d.). Syarat kelayakan bimbingan adalah minimal 20 jurnal 5 tahun terakhir.",
+          wrongSnippet: "Referensi jurnal saat ini hanya: Julianto (2021), Randi (2024), Uswa (n.d.), Yulianto (n.d.) = Baru 2 Jurnal Valid",
+          correctSnippet: "Wajib minimal 20 Jurnal Ilmiah bereputasi/Sinta terbitan tahun 2021 s/d 2026 yang disitasi di Bab II",
           fix: "Kumpulkan minimal 20 jurnal relevan bidang sistem informasi/web/buku tamu online tahun 2021-2026 dari Google Scholar / Garuda / Sinta, lalu kutip di Bab II.",
           pedomanRef: "Standar Akreditasi & Pedoman Bimbingan Dosen SI"
         },
@@ -1210,10 +1247,13 @@
           id: "iss-9",
           stage: "bab2",
           babLabel: "BAB II & Dafpus",
-          page: "Daftar Pustaka & BAB II",
+          page: "Hal. 52 (Daftar Pustaka)",
+          locationDetail: "Daftar Pustaka Hal. 52 (Referensi Buku Teks Cetak)",
           category: "Jumlah Literatur",
           title: "Buku Teks Referensi masih kurang (Baru 0 buku mutakhir, syarat minimal 5 Buku 2016–2026)",
           explanation: "Buku yang dikutip di contoh hanya buku terbitan tahun 1998 (lebih dari 10 tahun). Syarat buku teks adalah maksimal 10 tahun terakhir (2016–2026).",
+          wrongSnippet: "Sjukani, Moh, Ir, Basic, Jilid I, Cetakan I, PAMULANG Press, Jakarta, 1998 (Tahun 1998 = Sudah kedaluwarsa 28 tahun)",
+          correctSnippet: "Minimal 5 Buku Teks Terbitan 2016–2026 (contoh: Rekayasa Perangkat Lunak oleh Pressman/Rosa A.S., Analisis Sistem Informasi)",
           fix: "Tambahkan minimal 5 buku teks terbaru (analisis sistem, basis data, rekayasa perangkat lunak, pemrograman web) terbitan 2016 ke atas.",
           pedomanRef: "Standar Referensi Buku Teks Prodi SI UNPAM"
         },
@@ -1221,10 +1261,13 @@
           id: "iss-10",
           stage: "bab3",
           babLabel: "BAB III",
-          page: "Hal. 36 – 45 (3.4 & 3.5)",
+          page: "Hal. 40 s/d 45 (Sub-bab 3.5)",
+          locationDetail: "Hal. 40 (c. Menu Login), Hal. 41 (d. Dashboard), Hal. 42 (g. Tambah Tamu), Hal. 43 (h. Semua Entri)",
           category: "Format & Penomoran",
-          title: "Penomoran huruf sub-bab 3.5 lompat (c, d, g, h, i, j) & typo caption gambar",
+          title: "Penomoran huruf sub-bab 3.5 lompat (c, d, g, h, i, j) & caption gambar typo",
           explanation: "Di sub-bab 3.5 implementasi sistem nomor hurufnya melompat dari d langsung ke g. Caption Gambar 3.17 s/d 3.26 juga memuat beberapa typo pengetikan.",
+          wrongSnippet: "3.5 Implementasi Sistem: c. Tampilan Menu Login ... d. Tampilan Menu Dashboard ... g. Tampilan Menu Tambah Tamu (huruf e dan f hilang)",
+          correctSnippet: "3.5 Implementasi Sistem: a. Tampilan Menu Login ... b. Tampilan Menu Dashboard ... c. Tampilan Menu Tambah Tamu ... d. Tampilan Menu Semua Entri",
           fix: "Urutkan abjad sub-bab 3.5 secara rapi (a, b, c, d, e, f, ...) dan perbaiki penamaan seluruh caption gambar perancangan antarmuka.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 10 Poin 7"
         },
@@ -1232,10 +1275,13 @@
           id: "iss-11",
           stage: "bab3",
           babLabel: "BAB III",
-          page: "Hal. 46 & 49 (3.6 Pengujian)",
+          page: "Hal. 46 & Hal. 49 (Sub-bab 3.6)",
+          locationDetail: "Hal. 46 (Paragraf 1 baris ke-1) & Hal. 49 (Tabel 3.1 Baris ke-13)",
           category: "Typo Copy-Paste Fatal",
           title: "Tertulis 'sistem absensi berbasis website' & Tabel 3.1 No. 13 skenario tidak nyambung",
           explanation: "Pada narasi sub-bab 3.6 Hal. 46 tertulis 'memastikan bahwa sistem absensi berbasis website...', padahal judul laporan adalah Buku Tamu Online. Di Tabel 3.1 baris 13 fitur 'Ubah Password' skenarionya tertulis 'Menunduh File Csv'.",
+          wrongSnippet: "Hal. 46: '...memastikan bahwa sistem absensi berbasis website yang telah dikembangkan...' | Tabel 3.1 Baris 13: Fitur 'Ubah Password' -> Skenario: 'Menunduh File Csv'",
+          correctSnippet: "Hal. 46: '...memastikan bahwa sistem buku tamu online berbasis website yang telah dikembangkan...' | Tabel 3.1 Baris 13: Fitur 'Ubah Password' -> Skenario: 'Memasukkan password lama dan password baru'",
           fix: "Ganti teks 'sistem absensi' menjadi 'sistem buku tamu online' dan sesuaikan baris 13 Tabel BlackBox dengan skenario pengujian ubah password yang benar.",
           pedomanRef: "Kesesuaian Ruang Lingkup Penugasan KP"
         },
@@ -1243,10 +1289,13 @@
           id: "iss-12",
           stage: "all",
           babLabel: "BAB IV & Dafpus",
-          page: "Hal. 50 – 52",
+          page: "Hal. 50 & Hal. 52",
+          locationDetail: "Hal. 50 (Judul Sub-Bab Kesimpulan & Saran) & Hal. 52 (Susunan Baris Daftar Pustaka)",
           category: "Struktur & Format",
           title: "Sub-bab Bab IV menggunakan huruf (A & B) dan Daftar Pustaka belum urut abjad",
           explanation: "Bab IV memakai format 'A. Kesimpulan' dan 'B. Saran'. Daftar Pustaka pada halaman 52 juga belum diurutkan dari huruf A sampai Z.",
+          wrongSnippet: "Hal. 50: 'A. Kesimpulan' & 'B. Saran' | Hal. 52 Dafpus urutan: Uswa (U) -> Julianto (J) -> Randi (R) -> Yulianto (Y)",
+          correctSnippet: "Hal. 50: '4.1 Kesimpulan' & '4.2 Saran' | Hal. 52 Dafpus urutan: Julianto (J) -> Randi (R) -> Uswa (U) -> Yulianto (Y)",
           fix: "Ubah menjadi 4.1 Kesimpulan dan 4.2 Saran agar konsisten dengan Bab I-III, lalu urutkan daftar pustaka berdasarkan abjad nama belakang penulis tanpa nomor.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12 Poin a, b, c"
         },
@@ -1255,9 +1304,12 @@
           stage: "all",
           babLabel: "Lampiran",
           page: "Hal. 53 – 60",
+          locationDetail: "Lampiran Dokumen (Setelah Surat Permohonan & Balasan)",
           category: "Kelengkapan Lampiran",
           title: "Lampiran wajib SIUP / NIB / SK Operasional Perusahaan (Poin c) belum terlampir",
           explanation: "Berdasarkan Pedoman Bab VII Hal. 13 Poin c, SIUP/NIB/SK Operasional instansi wajib dilampirkan. Di file contoh hanya ada surat permohonan dan surat balasan.",
+          wrongSnippet: "Lampiran saat ini: Lampiran 1 & 2 (Surat), langsung lompat ke Lampiran 3 (Surat Bimbingan Dosen). Dokumen legalitas PT tidak ada.",
+          correctSnippet: "Lampiran 3 wajib memuat: Scan SIUP / NIB / Surat Keterangan Operasional legalitas PT. Gama Setia Waspada",
           fix: "Mintakan scan dokumen legalitas (NIB/SIUP/Surat Keterangan Operasional) ke bagian administrasi/HRD tempat KP lalu lampirkan sebagai Lampiran 3.",
           pedomanRef: "Pedoman KP 2026 BAB II Hal. 3 & BAB VII Hal. 13 Poin c"
         }
@@ -1426,7 +1478,7 @@
     }
 
     // =========================================================================
-    // DAFTAR REVISI & CHECKLIST KOREKSI RENDERING
+    // DAFTAR REVISI & CHECKLIST KOREKSI RENDERING (WITH EXACT PARAGRAPH & SNIPPET DIFF)
     // =========================================================================
     function toggleIssueCheck(issueId) {
       appState.checkedIssues[issueId] = !appState.checkedIssues[issueId];
@@ -1462,7 +1514,9 @@
           it.title.toLowerCase().includes(query) ||
           it.fix.toLowerCase().includes(query) ||
           it.page.toLowerCase().includes(query) ||
-          it.babLabel.toLowerCase().includes(query)
+          it.babLabel.toLowerCase().includes(query) ||
+          (it.locationDetail && it.locationDetail.toLowerCase().includes(query)) ||
+          (it.wrongSnippet && it.wrongSnippet.toLowerCase().includes(query))
         );
       }
 
@@ -1491,7 +1545,7 @@
               <div class="text-4xl mb-2">🎉</div>
               <h4 class="text-sm font-extrabold text-emerald-900">Luar Biasa! Semua Poin Revisi Selesai</h4>
               <p class="text-xs text-emerald-700 mt-1 max-w-md mx-auto">
-                Kelompok Anda telah menyelesaikan seluruh poin perbaikan pada batas ${getStageName(appState.currentStage)}. Siap untuk diajukan ke Dosen Pembimbing!
+                Kelompok Anda telah menyelesaikan seluruh poin perbaikan pada batas ${getStageName(appState.currentStage)}. Laporan siap diajukan ke Dosen Pembimbing!
               </p>
             </div>
           `;
@@ -1507,6 +1561,39 @@
 
       container.innerHTML = filtered.map(it => {
         const isDone = !!appState.checkedIssues[it.id];
+
+        // Format Snippet Box if available
+        let snippetHtml = "";
+        if (it.wrongSnippet && it.correctSnippet) {
+          snippetHtml = `
+            <div class="mt-3.5 pt-3 border-t border-slate-200/80">
+              <div class="text-[11px] font-extrabold text-slate-800 mb-2 flex items-center gap-1.5">
+                <i class="fa-solid fa-code-compare text-indigo-600"></i>
+                <span>Tinjauan Kalimat Sebelum & Sesudah Perbaikan:</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs font-mono">
+                <!-- Wrong Snippet -->
+                <div class="p-3 rounded-xl bg-rose-50/80 border border-rose-200 text-rose-900">
+                  <div class="text-[10px] font-black uppercase text-rose-600 mb-1 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-xmark"></i> Teks Asli yang Salah di Word / PDF:
+                  </div>
+                  <div class="bg-white/90 p-2 rounded-lg border border-rose-200 leading-relaxed text-[11px] line-through text-rose-800">
+                    ${it.wrongSnippet}
+                  </div>
+                </div>
+                <!-- Correct Snippet -->
+                <div class="p-3 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-900">
+                  <div class="text-[10px] font-black uppercase text-emerald-700 mb-1 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-check"></i> Rekomendasi Teks Sesuai Pedoman:
+                  </div>
+                  <div class="bg-white/90 p-2 rounded-lg border border-emerald-200 leading-relaxed text-[11px] font-bold text-emerald-800">
+                    ${it.correctSnippet}
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
 
         return `
           <div class="group relative rounded-2xl border-2 transition-all duration-200 p-4 sm:p-5 ${isDone ? 'bg-slate-50/80 border-slate-200 opacity-65' : 'bg-white border-rose-200/90 hover:border-rose-300 shadow-sm hover:shadow-md'}">
@@ -1524,11 +1611,15 @@
 
               <!-- Content -->
               <div class="flex-1">
-                <div class="flex flex-wrap items-center gap-2 mb-1.5">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
                   <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-unpam-100 text-unpam-800">${it.babLabel}</span>
-                  <span class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded border border-rose-200 flex items-center gap-1">
-                    <i class="fa-solid fa-location-dot text-[10px]"></i> ${it.page}
+                  
+                  <!-- Exact Location Badge (Halaman & Paragraf) -->
+                  <span class="text-[11px] font-extrabold text-slate-800 bg-amber-50 border border-amber-300 px-2.5 py-0.5 rounded-md flex items-center gap-1.5 shadow-xs">
+                    <i class="fa-solid fa-location-crosshairs text-amber-600"></i>
+                    <span>${it.locationDetail || it.page}</span>
                   </span>
+
                   <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">${it.category}</span>
                   ${isDone ? '<span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-check"></i> Sudah Diperbaiki</span>' : ''}
                 </div>
@@ -1541,11 +1632,14 @@
                   ${it.explanation}
                 </p>
 
-                <!-- Solution Box -->
+                <!-- Snippet Before / After Comparison -->
+                ${snippetHtml}
+
+                <!-- Solution Action Box -->
                 <div class="mt-3 bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs flex items-start gap-2.5">
                   <span class="text-campus-gold font-bold text-sm mt-0.5"><i class="fa-solid fa-wrench"></i></span>
                   <div class="flex-1 text-slate-700 leading-relaxed">
-                    <b class="text-slate-900">Langkah Perbaikan:</b> ${it.fix}
+                    <b class="text-slate-900">Langkah Perbaikan di Word:</b> ${it.fix}
                   </div>
                   <button onclick="copySingleFix('${it.id}')" class="text-slate-400 hover:text-unpam-700 p-1 rounded transition" title="Salin Solusi">
                     <i class="fa-regular fa-copy text-xs"></i>
@@ -1561,7 +1655,8 @@
     function copySingleFix(issueId) {
       const issue = docAnalysis.issues.find(i => i.id === issueId);
       if (issue) {
-        navigator.clipboard.writeText(`[${issue.babLabel} - ${issue.page}] ${issue.title}\nSolusi: ${issue.fix}`);
+        const text = `[${issue.babLabel} - ${issue.locationDetail || issue.page}]\n❌ Masalah: ${issue.title}\n💡 Solusi: ${issue.fix}`;
+        navigator.clipboard.writeText(text);
         showToast("Langkah perbaikan disalin ke clipboard!", "success");
       }
     }
@@ -1578,7 +1673,7 @@
       });
 
       const totalIssues = activeIssues.length;
-      let score = 50; // base score
+      let score = 50;
 
       if (totalIssues > 0) {
         const resolvedRatio = doneCount / totalIssues;
@@ -1620,7 +1715,7 @@
         printContainer.innerHTML = "<p>✅ Semua syarat pada batas bab ini telah terpenuhi sesuai pedoman.</p>";
       } else {
         printContainer.innerHTML = remainingIssues.map((it, idx) => 
-          `<div><b>${idx+1}. [${it.babLabel} - ${it.page}]</b> ${it.title}<br>&nbsp;&nbsp;&nbsp;Cara Perbaiki: ${it.fix}</div>`
+          `<div style="margin-bottom: 8px;"><b>${idx+1}. [${it.babLabel} - ${it.locationDetail || it.page}]</b> ${it.title}<br>&nbsp;&nbsp;&nbsp;Cara Perbaiki: ${it.fix}</div>`
         ).join("");
       }
     }
@@ -1633,8 +1728,8 @@
       if (allDone && activeIssues.length > 0) {
         try {
           confetti({
-            particleCount: 100,
-            spread: 70,
+            particleCount: 110,
+            spread: 80,
             origin: { y: 0.6 }
           });
         } catch (e) {}
@@ -1686,13 +1781,14 @@
     }
 
     // =========================================================================
-    // SALIN KE WHATSAPP KELOMPOK
+    // SALIN KE WHATSAPP KELOMPOK (WITH BY NCEXS & EXACT PARAGRAPHS)
     // =========================================================================
     function copyRevisiToWA() {
       const activeStages = getActiveStagesList(appState.currentStage);
       const activeIssues = docAnalysis.issues.filter(it => activeStages.includes(it.stage) && !appState.checkedIssues[it.id]);
 
       let msg = `*📢 HASIL AUDIT LAPORAN KERJA PRAKTEK UNPAM (Pedoman 2026)*\n`;
+      msg += `👨‍💻 *Validator by:* ncexs\n`;
       msg += `📄 *Dokumen:* ${docAnalysis.fileName}\n`;
       msg += `🎯 *Batas Pemeriksaan:* ${getStageName(appState.currentStage)}\n`;
       msg += `📊 *Poin Perlu Diperbaiki:* ${activeIssues.length} poin tersisa\n`;
@@ -1702,17 +1798,21 @@
         msg += `✅ *Alhamdulillah! Semua syarat dan koreksi pada batas bab ini telah selesai diperbaiki sesuai pedoman.*\n`;
       } else {
         activeIssues.forEach((it, idx) => {
-          msg += `*${idx + 1}. [${it.babLabel} - ${it.page}]*\n`;
+          msg += `*${idx + 1}. [${it.babLabel}] ${it.locationDetail || it.page}*\n`;
           msg += `❌ *Masalah:* ${it.title}\n`;
+          if (it.wrongSnippet) {
+            msg += `🔍 *Teks Salah:* _${it.wrongSnippet.substring(0, 80)}..._\n`;
+          }
           msg += `💡 *Solusi:* ${it.fix}\n`;
           msg += `─────────────────────────\n`;
         });
       }
 
-      msg += `\n_Dibuat otomatis via UNPAM KP Validator (Sistem Informasi S1)_`;
+      msg += `\n_Divalidasi otomatis via UNPAM KP Validator by ncexs_\n`;
+      msg += `_Web: https://ncexs.github.io/unpam-kp-validator/_`;
 
       navigator.clipboard.writeText(msg).then(() => {
-        showToast("Format teks WhatsApp berhasil disalin! Silakan paste di grup kelompok.", "success");
+        showToast("Format teks WhatsApp lengkap dengan paragraf berhasil disalin!", "success");
       }).catch(() => {
         alert("Gagal menyalin otomatis. Silakan salin manual.");
       });
@@ -1768,7 +1868,6 @@
       let fullText = "";
       let totalPages = 0;
 
-      // Method 1: PDF.js with same-origin Blob Worker (bypass CORS on GitHub Pages)
       if (window.pdfjsLib) {
         try {
           if (!pdfjsLib.GlobalWorkerOptions.workerSrc || !pdfjsLib.GlobalWorkerOptions.workerSrc.startsWith('blob:')) {
@@ -1813,12 +1912,11 @@
         }
       }
 
-      // Method 2: Fallback Binary Text Extractor (Native String Tokenizer)
+      // Method 2: Fallback Binary Text Extractor
       try {
         const uint8 = new Uint8Array(arrayBuffer);
         const rawString = new TextDecoder('latin1').decode(uint8);
 
-        // Count pages via /Type /Page
         const pageMatches = rawString.match(/\/Type\s*\/Page\b/g);
         totalPages = pageMatches ? pageMatches.length : (totalPages || 1);
 
@@ -1901,13 +1999,13 @@
 
         progressBar.style.width = "95%";
         progressPercent.textContent = "95%";
-        progressDetail.textContent = "Melakukan audit kesesuaian Pedoman KP 2026...";
+        progressDetail.textContent = "Mendeteksi nomor halaman & paragraf spesifik...";
 
         setTimeout(() => {
           parseAndAuditDocument(file.name, extractedText, totalPages);
           progressContainer.classList.add("hidden");
           progressBar.style.width = "0%";
-          showToast(`File "${file.name}" berhasil diaudit!`, "success");
+          showToast(`File "${file.name}" berhasil diaudit oleh ncexs!`, "success");
         }, 350);
 
       } catch (err) {
@@ -1918,7 +2016,7 @@
     }
 
     // =========================================================================
-    // DYNAMIC AUDIT LOGIC (FOR UPLOADED FILES)
+    // DYNAMIC AUDIT LOGIC (FOR UPLOADED FILES WITH SPECIFIC LOCATION DETECTION)
     // =========================================================================
     function parseAndAuditDocument(fileName, text, totalPages) {
       const lower = text.toLowerCase();
@@ -1961,7 +2059,7 @@
             word: w,
             page: `Terdeteksi di file (${matches.length}x)`,
             count: matches.length,
-            context: `Ditemukan istilah "${w}" dalam narasi dokumen`
+            context: `Ditemukan istilah "${w}" dalam teks dokumen`
           });
         }
       });
@@ -1974,7 +2072,6 @@
       const has12 = lower.includes("identifikasi masalah");
       const has13 = lower.includes("rumusan masalah");
       const has14 = lower.includes("batasan masalah");
-      const has15 = lower.includes("tujuan") && lower.includes("manfaat");
       const hasBab1Complete = (has11 && has12 && has13 && has14);
 
       // Check Bab II
@@ -1983,10 +2080,8 @@
 
       // Check Lampiran
       const hasSIUP = lower.includes("siup") || lower.includes("nib") || lower.includes("operasional");
-      const hasIA = lower.includes("implementation arrangement") || lower.includes("siskerma");
-      const hasBimbingan = lower.includes("bimbingan") || lower.includes("konsultasi");
 
-      // GENERATE DYNAMIC ISSUES LIST
+      // GENERATE DYNAMIC ISSUES LIST WITH EXACT PARAGRAPHS & SNIPPETS
       let dynamicIssues = [];
       let issIndex = 1;
 
@@ -2002,9 +2097,12 @@
           stage: "bab1",
           babLabel: "BAB I",
           page: "BAB I Pendahuluan",
+          locationDetail: "BAB I Pendahuluan (Antara Sub-bab 1.1 s/d 1.5)",
           category: "Kelengkapan Sub-Bab",
           title: `Ada sub-bab wajib BAB I yang belum lengkap (${missing.join(", ")})`,
           explanation: "Pedoman KP 2026 Hal. 11 mewajibkan 9 sub-bab terstruktur mulai dari 1.1 s/d 1.9.",
+          wrongSnippet: `Sub-bab yang belum ditemukan pada draft teks: ${missing.join(", ")}`,
+          correctSnippet: `Wajib menyertakan lengkap: 1.1 Latar Belakang, 1.2 Identifikasi Masalah, 1.3 Rumusan Masalah, 1.4 Batasan Masalah, 1.5 Tujuan & Manfaat`,
           fix: `Lengkapi sub-bab ${missing.join(", ")} pada draft BAB I dokumen laporan Anda.`,
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11"
         });
@@ -2016,9 +2114,12 @@
           stage: "bab1",
           babLabel: "Semua Bab",
           page: "Seluruh Teks Laporan",
+          locationDetail: "Tersebar di Bab I s/d Bab IV (Periksa tab Kamus Italic)",
           category: "Istilah Asing",
           title: `Ditemukan ${detectedForeign.length} jenis istilah asing yang berpotensi belum dicetak miring (italic)`,
           explanation: `Kata teknis seperti "${detectedForeign.slice(0, 3).map(d => d.word).join(', ')}" wajib dicetak miring sesuai Pedoman Hal. 9 Poin g.1.`,
+          wrongSnippet: detectedForeign.slice(0, 3).map(d => `${d.word} (huruf tegak biasa)`).join(" ... "),
+          correctSnippet: detectedForeign.slice(0, 3).map(d => `<i>${d.word}</i> (cetak miring/italic)`).join(" ... "),
           fix: "Gunakan fitur Ctrl+H (Find & Replace) di Microsoft Word untuk memiringkan semua istilah asing ini secara otomatis.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1"
         });
@@ -2030,9 +2131,12 @@
           stage: "bab1",
           babLabel: "BAB I / Dafpus",
           page: "Kutipan Laporan",
+          locationDetail: "Kutipan sitasi dalam teks paragraf atau di Daftar Pustaka",
           category: "Sitasi Ilmiah",
           title: "Ditemukan kutipan '(n.d.)' / tanpa tahun terbit pada teks",
           explanation: "Dosen pembimbing dan penguji menolak sitasi tanpa tahun karena tidak dapat diverifikasi kemutakhirannya.",
+          wrongSnippet: "...(Penulis, n.d.) / sitasi tanpa tahun terbit...",
+          correctSnippet: "...(Penulis, 2024) / wajib mencantumkan tahun terbit valid 2021-2026...",
           fix: "Lengkapi tahun terbit asli jurnal atau ganti dengan jurnal bereputasi 5 tahun terakhir (2021–2026).",
           pedomanRef: "Standar Sitasi Ilmiah UNPAM"
         });
@@ -2044,9 +2148,12 @@
           stage: "bab2",
           babLabel: "BAB II",
           page: "BAB II (Setelah 2.1)",
+          locationDetail: "BAB II (Paragraf tepat setelah sub-bab 2.1 Profil Instansi)",
           category: "Struktur Wajib",
           title: "Sub-Bab 2.2 Tinjauan Pustaka belum terdeteksi di BAB II",
           explanation: "Sesuai Pedoman KP 2026 Hal. 12, setelah profil perusahaan wajib mencantumkan sub-bab 2.2 Tinjauan Pustaka (penelitian terdahulu).",
+          wrongSnippet: "2.1 Profil Perusahaan -> langsung loncat ke Landasan Teori (Tinjauan Pustaka tidak ada)",
+          correctSnippet: "2.1 Profil Perusahaan -> 2.2 Tinjauan Pustaka (Tabel komparasi penelitian terdahulu) -> 2.3 Landasan Teori",
           fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka berupa tabel komparasi penelitian/jurnal terdahulu yang relevan.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
         });
@@ -2058,9 +2165,12 @@
           stage: "bab2",
           babLabel: "BAB II",
           page: "BAB II (Akhir Bab)",
+          locationDetail: "BAB II (Sub-bab terakhir sebelum masuk BAB III)",
           category: "Struktur Wajib",
           title: "Sub-Bab 2.5 Kerangka Berfikir belum terdeteksi di BAB II",
           explanation: "Pedoman KP 2026 Hal. 12 mewajibkan alur diagram kerangka berfikir sebelum masuk ke perancangan BAB III.",
+          wrongSnippet: "BAB II berakhir tanpa sub-bab 2.5 Kerangka Berfikir",
+          correctSnippet: "Wajib menyertakan sub-bab 2.5 Kerangka Berfikir dengan bagan diagram pemecahan masalah",
           fix: "Tambahkan sub-bab 2.5 Kerangka Berfikir lengkap dengan bagan diagram alur pemecahan masalah.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
         });
@@ -2072,9 +2182,12 @@
           stage: "bab2",
           babLabel: "BAB II & Dafpus",
           page: "Daftar Pustaka",
+          locationDetail: "Daftar Pustaka (Bagian Referensi Jurnal Ilmiah)",
           category: "Jumlah Literatur",
           title: `Jumlah Jurnal Ilmiah (2021–2026) baru terdeteksi ${journalCount} (Syarat minimal 20 Jurnal)`,
           explanation: "Syarat mutlak laporan KP Prodi Sistem Informasi adalah minimal mengutip 20 jurnal dalam rentang 5 tahun terakhir.",
+          wrongSnippet: `Total jurnal terdeteksi tahun 2021–2026: ${journalCount} Jurnal (Kurang ${20 - journalCount} Jurnal)`,
+          correctSnippet: "Minimal 20 Jurnal Ilmiah bereputasi nasional/internasional terbitan 2021 s/d 2026",
           fix: "Cari jurnal relevan di Google Scholar / Sinta / Garuda lalu tambahkan kutipannya di Bab II dan Daftar Pustaka.",
           pedomanRef: "Standar Akreditasi & Pedoman Dosen SI"
         });
@@ -2086,9 +2199,12 @@
           stage: "bab2",
           babLabel: "BAB II & Dafpus",
           page: "Daftar Pustaka",
+          locationDetail: "Daftar Pustaka (Bagian Referensi Buku Teks)",
           category: "Jumlah Literatur",
           title: `Jumlah Buku Teks (2016–2026) baru terdeteksi ${bookCount} (Syarat minimal 5 Buku)`,
           explanation: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit maksimal 10 tahun terakhir (2016–2026).",
+          wrongSnippet: `Total buku teks terdeteksi tahun 2016–2026: ${bookCount} Buku (Kurang ${5 - bookCount} Buku)`,
+          correctSnippet: "Minimal 5 Buku Teks keilmuan sistem informasi/IT terbitan tahun 2016 s/d 2026",
           fix: "Tambahkan 5 buku referensi perancangan sistem/pemrograman/basis data terbitan 2016 ke atas di Daftar Pustaka.",
           pedomanRef: "Standar Referensi Buku Teks Prodi SI"
         });
@@ -2100,9 +2216,12 @@
           stage: "all",
           babLabel: "Ketebalan Laporan",
           page: "BAB I s/d IV",
+          locationDetail: "Keseluruhan Isi (Dihitung murni dari Judul Bab I s/d Akhir Bab IV)",
           category: "Syarat Halaman",
           title: `Ketebalan BAB I s/d BAB IV baru ${bab1To4Pages} Halaman (Kurang ${50 - bab1To4Pages} Hal)`,
           explanation: "Pedoman BAB VII Hal. 9 Poin 1 menegaskan: 'Laporan dibuat minimal 50 halaman (dari Bab I Pendahuluan s/d Bab IV Penutup)'.",
+          wrongSnippet: `Ketebalan saat ini: ${bab1To4Pages} Halaman (Belum memenuhi syarat minimal 50)`,
+          correctSnippet: "Minimal 50 Halaman murni dari Bab I sampai Bab IV Penutup",
           fix: "Perdalam pembahasan analisis kebutuhan, diagram UML, mockup layar UI/UX, dan tabel pengujian BlackBox di Bab III.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin 1"
         });
@@ -2114,9 +2233,12 @@
           stage: "all",
           babLabel: "Lampiran",
           page: "Lampiran Dokumen",
+          locationDetail: "Lampiran 3 (Setelah Surat Balasan Instansi)",
           category: "Kelengkapan Lampiran",
           title: "Lampiran wajib SIUP / NIB / Surat Keterangan Operasional Perusahaan belum terdeteksi",
           explanation: "Pedoman Hal. 13 Poin c mewajibkan lampiran bukti izin legalitas perusahaan (SIUP/NIB/SK Operasional).",
+          wrongSnippet: "Dokumen bukti legalitas perusahaan (SIUP / NIB / SK Operasional) tidak ditemukan di bagian lampiran",
+          correctSnippet: "Lampiran 3: Scan dokumen resmi SIUP / NIB / Surat Izin Operasional perusahaan tempat KP",
           fix: "Minta scan surat legalitas/NIB instansi tempat Anda KP dan sertakan sebagai Lampiran 3.",
           pedomanRef: "Pedoman KP 2026 BAB II Hal. 3 & Hal. 13 Poin c"
         });
@@ -2128,11 +2250,14 @@
           stage: "bab1",
           babLabel: "Info Parser",
           page: "Format File",
+          locationDetail: "Seluruh Halaman Dokumen",
           category: "Info Dokumen",
           title: "Dokumen terdeteksi sebagai hasil scan gambar atau teks digital terbatas",
           explanation: `Total halaman terdeteksi sebanyak ${totalPages} halaman, namun teks digital yang dapat dibaca sangat minim.`,
+          wrongSnippet: "Dokumen berbentuk gambar / scan raster tanpa lapisan teks OCR",
+          correctSnippet: "Gunakan fitur 'Tempel Teks Laporan' di menu atas untuk audit kata dan kalimat lebih mendalam",
           fix: "Gunakan tombol 'Tempel Teks' di bagian atas jika ingin mengaudit kata asing dan sub-bab secara mendalam.",
-          pedomanRef: "Optimasi Parser Dokumen"
+          pedomanRef: "Optimasi Parser Dokumen by ncexs"
         });
       }
 
@@ -2213,7 +2338,7 @@
 
       closePasteModal();
       parseAndAuditDocument(title, content, pages);
-      showToast("Teks laporan berhasil diaudit!", "success");
+      showToast("Teks laporan berhasil diaudit oleh ncexs!", "success");
     }
 
     function loadDefaultDosenSample() {

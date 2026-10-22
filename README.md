@@ -1,11 +1,12 @@
-# 🎓 UNPAM KP Validator — Sistem Audit & Pengecekan Otomatis Laporan Kerja Praktek
+# 🎓 UNPAM KP Validator by ncexs — Sistem Audit & Pengecekan Otomatis Laporan Kerja Praktek
 
-[![GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-2563eb?style=for-the-badge&logo=github)](https://username.github.io/unpam-kp-validator/)
+[![GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-2563eb?style=for-the-badge&logo=github)](https://ncexs.github.io/unpam-kp-validator/)
+[![Author: ncexs](https://img.shields.io/badge/Developer-ncexs-f59e0b?style=for-the-badge&logo=github)](https://github.com/ncexs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)](LICENSE)
 [![Prodi](https://img.shields.io/badge/Prodi-Sistem_Informasi_S1-blue?style=for-the-badge)](https://unpam.ac.id)
 [![Pedoman](https://img.shields.io/badge/Pedoman_KP-Edisi_2026-amber?style=for-the-badge)](#)
 
-> **Aplikasi Web Interaktif (Single Page Application)** untuk membantu mahasiswa **Universitas Pamulang (UNPAM) Program Studi Sistem Informasi S1** mengaudit, memeriksa format penulisan, kelengkapan sub-bab, sitasi literatur, istilah asing, dan lampiran laporan Kerja Praktek (KP) secara otomatis sebelum diajukan ke Dosen Pembimbing & Penguji.
+> **Aplikasi Web Interaktif (Single Page Application)** yang dikembangkan oleh **ncexs** untuk membantu mahasiswa **Universitas Pamulang (UNPAM) Program Studi Sistem Informasi S1** mengaudit, memeriksa format penulisan, kelengkapan sub-bab, sitasi literatur, istilah asing, dan lampiran laporan Kerja Praktek (KP) secara otomatis sebelum diajukan ke Dosen Pembimbing & Penguji.
 
 ---
 
@@ -18,12 +19,14 @@ Seringkali laporan Kerja Praktek mahasiswa ditolak atau mendapatkan banyak revis
 - Masih menyisakan kata bekas copy-paste laporan lain (seperti nama PT yang tertukar atau istilah "sistem absensi" pada laporan buku tamu).
 - Lampiran wajib tidak lengkap, terutama dokumen **SIUP/NIB** dan **Implementation Arrangement (IA) Siskerma**.
 
-**UNPAM KP Validator** hadir sebagai solusi mandiri berbasis web yang cepat, transparan, dan interaktif untuk memastikan laporan Anda 100% layak sebelum diserahkan!
+**UNPAM KP Validator by ncexs** hadir sebagai solusi mandiri berbasis web yang cepat, transparan, dan interaktif untuk memastikan laporan Anda 100% layak sebelum diserahkan!
 
 ---
 
-## ✨ Fitur Utama
+## ✨ Fitur Unggulan
 
+- 🎯 **Tunjuk Nomor Halaman & Paragraf Spesifik**:
+  Setiap catatan koreksi kini langsung menunjukkan **halaman dan paragraf ke berapa** yang keliru, lengkap dengan perbandingan **Teks Asli yang Salah vs Rekomendasi Teks Sesuai Pedoman**.
 - 📂 **Multi-Format Document Parser (.PDF & .DOCX)**:
   Membaca dan memindai teks dokumen secara langsung di browser (*100% Client-Side*, aman dan menjaga privasi data kelompok).
 - 🎯 **Multi-Stage Audit (Pilih Batas BAB)**:
@@ -49,47 +52,22 @@ Seringkali laporan Kerja Praktek mahasiswa ditolak atau mendapatkan banyak revis
 - **HTML5** — Semantik & struktur SPA yang ringan.
 - **Tailwind CSS (CDN)** — Tata letak responsif, modern, dan palet warna kampus profesional.
 - **Vanilla JavaScript (ES6+)** — Logika interaktif murni tanpa framework rumit.
-- **PDF.js** — Ekstraksi teks dokumen PDF langsung di sisi klien.
+- **PDF.js (Blob Worker Safe)** — Ekstraksi teks dokumen PDF langsung di sisi klien bebas CORS.
 - **Mammoth.js** — Ekstraksi dokumen Microsoft Word (.docx).
 - **Font Awesome 6 & Google Fonts** — Ikonografi akademik dan tipografi Plus Jakarta Sans.
 
 ---
 
-## 🚀 Cara Menjalankan Secara Lokal
-
-Aplikasi ini tidak memerlukan instalasi backend / server Node.js. Cukup:
-
-1. **Clone repository ini:**
-   ```bash
-   git clone https://github.com/username/unpam-kp-validator.git
-   cd unpam-kp-validator
-   ```
-2. **Buka file `index.html`:**
-   - Cukup klik dua kali (double click) file `index.html`, atau
-   - Buka melalui browser favorit Anda (Google Chrome, Microsoft Edge, Mozilla Firefox).
+## 🌐 Demo Online
+Aplikasi ini dapat diakses secara gratis di:  
+🔗 **[https://ncexs.github.io/unpam-kp-validator/](https://ncexs.github.io/unpam-kp-validator/)**
 
 ---
 
-## 🌐 Cara Mengaktifkan GitHub Pages (Online Gratis)
-Agar web ini bisa dibuka oleh teman sekelompok atau mahasiswa lain melalui link internet gratis:
-
-1. Buka repository Anda di GitHub.
-2. Klik tab **Settings** (di menu atas).
-3. Di panel menu kiri, klik **Pages**.
-4. Pada bagian **Build and deployment** > **Branch**:
-   - Pilih branch `main` (atau `master`).
-   - Pilih folder `/ (root)`.
-   - Klik **Save**.
-5. Tunggu sekitar 1–2 menit, link website Anda akan aktif di:
-   `https://<username-github>.github.io/<nama-repo>/`
-
----
-
-## 📖 Rujukan Resmi
-- **Buku Pedoman Kerja Praktek Program Studi Sistem Informasi S1**, Fakultas Ilmu Komputer, Universitas Pamulang (Edisi Revisi 2026).
-- Catatan dan temuan hasil bimbingan dosen pembimbing KP Universitas Pamulang.
+## 👨‍💻 Pengembang
+Dikembangkan dengan penuh dedikasi oleh **[ncexs](https://github.com/ncexs)** untuk seluruh rekan mahasiswa Program Studi Sistem Informasi Universitas Pamulang.
 
 ---
 
 ## 📄 Lisensi
-Didistribusikan di bawah Lisensi MIT. Silakan gunakan dan kembangkan untuk kemanfaatan seluruh mahasiswa Universitas Pamulang!
+Didistribusikan di bawah Lisensi MIT. Silakan gunakan dan kembangkan untuk kemanfaatan seluruh civitas akademika Universitas Pamulang!
