@@ -360,64 +360,33 @@
               <span class="bg-indigo-100 text-indigo-800 text-xs font-black px-2.5 py-1 rounded-lg">LANGKAH 2</span>
               <h3 class="text-lg font-extrabold text-slate-900">Batas Progres Bimbingan</h3>
             </div>
-            <p class="text-xs text-slate-500 mb-4">
-              Pilih sampai BAB berapa laporan Anda saat ini. Sistem tidak akan menyalahkan bab yang belum dibuat.
+            <p class="text-xs text-slate-500 mb-3">
+              Pilih bab yang sedang dikerjakan. Anda bisa cek <b>Bab 2 saja</b> atau <b>Bab 3 saja</b> tanpa perlu upload Bab 1 atau Lampiran!
             </p>
 
+            <!-- Mode Switcher: Per Bab Saja vs Kumulatif -->
+            <div class="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl mb-3 text-xs font-extrabold gap-1">
+              <button type="button" onclick="setStageScopeMode('single')" id="scopeModeSingleBtn" class="py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-unpam-900 shadow-sm border border-slate-200/80">
+                <i class="fa-solid fa-bullseye text-unpam-600"></i>
+                <span>Per Bab Saja</span>
+              </button>
+              <button type="button" onclick="setStageScopeMode('cumulative')" id="scopeModeCumBtn" class="py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800">
+                <i class="fa-solid fa-layer-group text-slate-400"></i>
+                <span>Kumulatif / Lengkap</span>
+              </button>
+            </div>
+
+            <!-- Dynamic Buttons Container -->
             <div class="space-y-2.5" id="stageButtonsContainer">
-              <!-- Stage 1 -->
-              <button onclick="setStage('bab1')" id="btnStage-bab1" class="stage-btn w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between group">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm stage-icon-box">1</div>
-                  <div>
-                    <div class="text-xs font-extrabold stage-title">Baru Sampai BAB I</div>
-                    <div class="text-[11px] opacity-75 stage-desc">Cover, Pra-Bab & 9 Sub-Bab Pendahuluan</div>
-                  </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs opacity-60"></i>
-              </button>
-
-              <!-- Stage 2 -->
-              <button onclick="setStage('bab2')" id="btnStage-bab2" class="stage-btn w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between group">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm stage-icon-box">2</div>
-                  <div>
-                    <div class="text-xs font-extrabold stage-title">Sampai BAB II</div>
-                    <div class="text-[11px] opacity-75 stage-desc">Profil PT, Tinjauan Pustaka, 20 Jurnal & 5 Buku</div>
-                  </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs opacity-60"></i>
-              </button>
-
-              <!-- Stage 3 -->
-              <button onclick="setStage('bab3')" id="btnStage-bab3" class="stage-btn w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between group">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm stage-icon-box">3</div>
-                  <div>
-                    <div class="text-xs font-extrabold stage-title">Sampai BAB III</div>
-                    <div class="text-[11px] opacity-75 stage-desc">Analisis Kebutuhan, UML, UI/UX & BlackBox</div>
-                  </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs opacity-60"></i>
-              </button>
-
-              <!-- Stage 4 -->
-              <button onclick="setStage('all')" id="btnStage-all" class="stage-btn w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between group">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm stage-icon-box">4</div>
-                  <div>
-                    <div class="text-xs font-extrabold stage-title">Lengkap (BAB I–IV Full + Lampiran)</div>
-                    <div class="text-[11px] opacity-75 stage-desc">Min. 50 Hal, Kesimpulan, Dafpus & 8 Lampiran</div>
-                  </div>
-                </div>
-                <i class="fa-solid fa-chevron-right text-xs opacity-60"></i>
-              </button>
+              <!-- Rendered dynamically by renderStageButtons() -->
             </div>
           </div>
 
-          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-500">
-            <span>Batas Aktif: <b id="activeStageLabel" class="text-unpam-700">BAB I Pendahuluan</b></span>
-            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold">Audit Otomatis Sinkron</span>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-slate-500">
+            <div>Batas Aktif: <b id="activeStageLabel" class="text-unpam-700">Hanya BAB II Saja</b></div>
+            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold self-start sm:self-auto flex items-center gap-1">
+              <i class="fa-solid fa-check-double text-[10px]"></i> Bisa Cek Bab Terpisah
+            </span>
           </div>
         </div>
 
@@ -433,7 +402,7 @@
           </div>
           <div class="my-2">
             <span id="metricPageCount" class="text-2xl sm:text-3xl font-black text-slate-900">51</span>
-            <span class="text-xs text-slate-400 font-semibold">/ Min 50 Hal</span>
+            <span id="metricPageSubtext" class="text-xs text-slate-400 font-semibold">/ Min 50 Hal</span>
           </div>
           <div id="metricPageStatus" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start">
             <i class="fa-solid fa-check"></i> Memenuhi Syarat
@@ -525,7 +494,7 @@
               </span>
             </div>
             <p class="text-xs text-slate-500 mt-1">
-              Setiap catatan dilengkapi <b>lokasi spesifik (halaman & paragraf)</b> serta perbandingan kalimat yang salah vs perbaikan.
+              Setiap catatan dilengkapi <b>lokasi spesifik (halaman & paragraf)</b> dan langkah perbaikan ringkas yang to the point.
             </p>
           </div>
 
@@ -838,14 +807,25 @@
         Jika file PDF Anda hasil scan gambar atau terproteksi, Anda dapat langsung menyalin (Ctrl+A lalu Ctrl+C) seluruh isi dokumen dari Word dan menempelkannya di kotak berikut.
       </p>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label class="text-[11px] font-bold text-slate-700">Nama Laporan / File:</label>
-          <input type="text" id="pasteDocTitleInput" value="Laporan KP Kelompok.docx" class="w-full mt-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none" />
+          <input type="text" id="pasteDocTitleInput" value="Draf Laporan KP.docx" class="w-full mt-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none" />
         </div>
         <div>
-          <label class="text-[11px] font-bold text-slate-700">Estimasi Total Halaman Bab I–IV:</label>
-          <input type="number" id="pasteDocPagesInput" value="52" min="1" max="200" class="w-full mt-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none" />
+          <label class="text-[11px] font-bold text-slate-700">Cakupan Bab yang Ditempel:</label>
+          <select id="pasteDocScopeSelect" class="w-full mt-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none bg-white font-medium">
+            <option value="auto">🤖 Deteksi Otomatis dari Teks</option>
+            <option value="bab2_only">Hanya BAB II Saja (Tanpa Bab 1 / Lampiran)</option>
+            <option value="bab3_only">Hanya BAB III Saja (Tanpa Bab 1-2 / Lampiran)</option>
+            <option value="bab1_only">Hanya BAB I Saja</option>
+            <option value="bab4_only">Hanya BAB IV & Dafpus</option>
+            <option value="all">Laporan Lengkap (Semua Bab + Lampiran)</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-slate-700">Estimasi Total Halaman Bab:</label>
+          <input type="number" id="pasteDocPagesInput" value="18" min="1" max="200" class="w-full mt-1 px-3 py-2 text-xs border border-slate-200 rounded-xl focus:ring-2 focus:ring-unpam-500 outline-none" />
         </div>
       </div>
 
@@ -920,7 +900,8 @@
     
     let appState = {
       activeTab: "audit",
-      currentStage: "bab1",
+      stageScopeMode: "single", // "single" (Per Bab Saja) or "cumulative" (Kumulatif/Lengkap)
+      currentStage: "bab2_only",
       checklistFilter: "all",
       checkedIssues: {}
     };
@@ -931,7 +912,8 @@
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed) {
-          appState.currentStage = parsed.currentStage || "bab1";
+          appState.currentStage = parsed.currentStage || "bab2_only";
+          appState.stageScopeMode = parsed.stageScopeMode || (["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage) ? "single" : "cumulative");
           appState.checkedIssues = parsed.checkedIssues || {};
         }
       }
@@ -942,6 +924,7 @@
     function saveState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          stageScopeMode: appState.stageScopeMode,
           currentStage: appState.currentStage,
           checkedIssues: appState.checkedIssues
         }));
@@ -1094,16 +1077,7 @@
             status: "fail",
             badge: "Ada Typo 'Sistem Absensi'"
           }
-        ],
-        all: [
-          {
-            id: "chk-15",
-            title: "15. Ketentuan Tebal Minimal 50 Halaman (BAB I–IV)",
-            pedomanRef: "BAB VII Hal. 9 Poin 1",
-            desc: "Dihitung murni dari Bab I Pendahuluan sampai Bab IV Penutup minimal 50 halaman. Di laporan contoh tercatat 51 halaman.",
-            status: "pass",
-            badge: "51 Halaman (Lolos >= 50)"
-          },
+        bab4: [
           {
             id: "chk-16",
             title: "16. Sistematika BAB IV Penutup (Kesimpulan & Saran)",
@@ -1119,6 +1093,16 @@
             desc: "Wajib diurutkan alfabetis nama keluarga pengarang (A-Z) dan tidak mencantumkan nomor urut 1, 2, 3.",
             status: "fail",
             badge: "Belum Urut Abjad"
+          }
+        ],
+        all: [
+          {
+            id: "chk-15",
+            title: "15. Ketentuan Tebal Minimal 50 Halaman (BAB I–IV)",
+            pedomanRef: "BAB VII Hal. 9 Poin 1",
+            desc: "Dihitung murni dari Bab I Pendahuluan sampai Bab IV Penutup minimal 50 halaman. Di laporan contoh tercatat 51 halaman.",
+            status: "pass",
+            badge: "51 Halaman (Lolos >= 50)"
           },
           {
             id: "chk-18",
@@ -1265,7 +1249,7 @@
         },
         {
           id: "iss-12",
-          stage: "all",
+          stage: "bab4",
           babLabel: "BAB IV & Dafpus",
           page: "Hal. 50 & 52",
           locationDetail: "Hal. 50 (Bab IV, Poin A & B) & Hal. 52 (Daftar Pustaka)",
@@ -1320,46 +1304,165 @@
     // =========================================================================
     function setStage(stage) {
       appState.currentStage = stage;
+      if (["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(stage)) {
+        appState.stageScopeMode = "single";
+      } else if (["bab2", "bab3", "all"].includes(stage)) {
+        appState.stageScopeMode = "cumulative";
+      }
       saveState();
       renderAll();
-      showToast(`Batas pemeriksaan dialihkan ke: ${getStageName(stage)}`, "info");
+      showToast(`Pemeriksaan dialihkan ke: ${getStageName(stage)}`, "info");
+    }
+
+    function setStageScopeMode(mode) {
+      appState.stageScopeMode = mode;
+      if (mode === "single") {
+        if (!["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage)) {
+          if (appState.currentStage === "bab2") appState.currentStage = "bab2_only";
+          else if (appState.currentStage === "bab3") appState.currentStage = "bab3_only";
+          else if (appState.currentStage === "bab1") appState.currentStage = "bab1_only";
+          else appState.currentStage = "bab2_only";
+        }
+      } else {
+        if (["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage)) {
+          if (appState.currentStage === "bab2_only") appState.currentStage = "bab2";
+          else if (appState.currentStage === "bab3_only") appState.currentStage = "bab3";
+          else if (appState.currentStage === "bab1_only") appState.currentStage = "bab1";
+          else appState.currentStage = "all";
+        }
+      }
+      saveState();
+      renderAll();
+      showToast(`Mode audit: ${mode === 'single' ? 'Fokus Per Bab Saja' : 'Kumulatif / Lengkap'}`, "info");
     }
 
     function getStageName(stage) {
-      if (stage === "bab1") return "BAB I (Cover & Pendahuluan)";
-      if (stage === "bab2") return "Sampai BAB II (Profil & Teori)";
-      if (stage === "bab3") return "Sampai BAB III (UML & UI/UX)";
-      return "Lengkap (BAB I–IV & Lampiran)";
+      if (stage === "bab1_only" || stage === "bab1") return "Hanya BAB I (Cover & Pendahuluan)";
+      if (stage === "bab2_only") return "Hanya BAB II (Profil PT, Teori, 20 Jurnal & 5 Buku)";
+      if (stage === "bab3_only") return "Hanya BAB III (UML, Mockup UI/UX & BlackBox)";
+      if (stage === "bab4_only") return "Hanya BAB IV & Dafpus (Kesimpulan, Saran & Dafpus)";
+      if (stage === "bab2") return "Sampai BAB II (Bab 1 + Bab 2)";
+      if (stage === "bab3") return "Sampai BAB III (Bab 1 s/d Bab 3)";
+      return "Lengkap (BAB I–IV & 8 Lampiran)";
     }
 
     function getActiveStagesList(stage) {
-      if (stage === "bab1") return ["bab1"];
+      if (stage === "bab1_only" || stage === "bab1") return ["bab1"];
+      if (stage === "bab2_only") return ["bab2"];
+      if (stage === "bab3_only") return ["bab3"];
+      if (stage === "bab4_only") return ["bab4"];
       if (stage === "bab2") return ["bab1", "bab2"];
       if (stage === "bab3") return ["bab1", "bab2", "bab3"];
-      return ["bab1", "bab2", "bab3", "all"];
+      return ["bab1", "bab2", "bab3", "bab4", "all"];
     }
 
     function renderStageButtons() {
-      const stages = ["bab1", "bab2", "bab3", "all"];
-      stages.forEach(st => {
-        const btn = document.getElementById("btnStage-" + st);
-        if (!btn) return;
-        const iconBox = btn.querySelector(".stage-icon-box");
-        const title = btn.querySelector(".stage-title");
-        const desc = btn.querySelector(".stage-desc");
+      const container = document.getElementById("stageButtonsContainer");
+      if (!container) return;
 
-        if (appState.currentStage === st) {
-          btn.className = "stage-btn w-full text-left p-3.5 rounded-2xl border-2 border-unpam-600 bg-unpam-600 text-white shadow-md shadow-unpam-600/20 transition-all flex items-center justify-between";
-          if (iconBox) iconBox.className = "w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm stage-icon-box bg-white text-unpam-800 shadow-sm";
-          if (title) title.className = "text-xs font-extrabold stage-title text-white";
-          if (desc) desc.className = "text-[11px] stage-desc text-unpam-100";
-        } else {
-          btn.className = "stage-btn w-full text-left p-3.5 rounded-2xl border-2 border-slate-200 bg-white hover:border-unpam-300 hover:bg-unpam-50/50 text-slate-800 transition-all flex items-center justify-between";
-          if (iconBox) iconBox.className = "w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm stage-icon-box bg-slate-100 text-slate-700";
-          if (title) title.className = "text-xs font-extrabold stage-title text-slate-900";
-          if (desc) desc.className = "text-[11px] stage-desc text-slate-500";
-        }
-      });
+      const singleBtn = document.getElementById("scopeModeSingleBtn");
+      const cumBtn = document.getElementById("scopeModeCumBtn");
+
+      if (appState.stageScopeMode === "single") {
+        if (singleBtn) singleBtn.className = "py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-unpam-900 shadow-sm border border-slate-200/80";
+        if (cumBtn) cumBtn.className = "py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800";
+
+        const singleStages = [
+          {
+            id: "bab1_only",
+            num: "I",
+            title: "Hanya BAB I",
+            desc: "Cover, Pra-Bab & 9 Sub-Bab Pendahuluan"
+          },
+          {
+            id: "bab2_only",
+            num: "II",
+            title: "Hanya BAB II Saja",
+            desc: "Profil PT, Tinjauan Pustaka, 20 Jurnal & 5 Buku",
+            tag: "Bebas Bab 1 & Lampiran"
+          },
+          {
+            id: "bab3_only",
+            num: "III",
+            title: "Hanya BAB III Saja",
+            desc: "Analisis Kebutuhan, UML, UI/UX & BlackBox",
+            tag: "Bebas Bab 1-2 & Lampiran"
+          },
+          {
+            id: "bab4_only",
+            num: "IV",
+            title: "Hanya BAB IV & Dafpus",
+            desc: "Kesimpulan, Saran & Format Daftar Pustaka A-Z"
+          }
+        ];
+
+        container.innerHTML = singleStages.map(st => {
+          const isActive = appState.currentStage === st.id || (st.id === "bab1_only" && appState.currentStage === "bab1");
+          return `
+            <button onclick="setStage('${st.id}')" class="stage-btn w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between group ${isActive ? 'border-unpam-600 bg-unpam-600 text-white shadow-md shadow-unpam-600/20' : 'border-slate-200 bg-white hover:border-unpam-300 hover:bg-unpam-50/50 text-slate-800'}">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm ${isActive ? 'bg-white text-unpam-800 shadow-sm' : 'bg-slate-100 text-slate-700'}">${st.num}</div>
+                <div>
+                  <div class="text-xs font-extrabold flex items-center gap-1.5 ${isActive ? 'text-white' : 'text-slate-900'}">
+                    <span>${st.title}</span>
+                    ${st.tag ? `<span class="text-[9px] font-black px-1.5 py-0.5 rounded ${isActive ? 'bg-amber-400 text-amber-950' : 'bg-amber-100 text-amber-800'}">${st.tag}</span>` : ''}
+                  </div>
+                  <div class="text-[11px] ${isActive ? 'text-unpam-100' : 'text-slate-500'}">${st.desc}</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs ${isActive ? 'text-white opacity-80' : 'text-slate-400 opacity-60'}"></i>
+            </button>
+          `;
+        }).join("");
+
+      } else {
+        if (cumBtn) cumBtn.className = "py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-unpam-900 shadow-sm border border-slate-200/80";
+        if (singleBtn) singleBtn.className = "py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800";
+
+        const cumStages = [
+          {
+            id: "bab1",
+            num: "1",
+            title: "Sampai BAB I",
+            desc: "Cover, Pra-Bab & 9 Sub-Bab Pendahuluan"
+          },
+          {
+            id: "bab2",
+            num: "2",
+            title: "Sampai BAB II (Bab 1 + 2)",
+            desc: "Profil PT, Tinjauan Pustaka, 20 Jurnal & 5 Buku"
+          },
+          {
+            id: "bab3",
+            num: "3",
+            title: "Sampai BAB III (Bab 1 s/d 3)",
+            desc: "Analisis Kebutuhan, UML, UI/UX & BlackBox"
+          },
+          {
+            id: "all",
+            num: "4",
+            title: "Lengkap (BAB I–IV Full + 8 Lampiran)",
+            desc: "Min. 50 Hal, Kesimpulan, Dafpus & SIUP / NIB Legalitas"
+          }
+        ];
+
+        container.innerHTML = cumStages.map(st => {
+          const isActive = appState.currentStage === st.id;
+          return `
+            <button onclick="setStage('${st.id}')" class="stage-btn w-full text-left p-3.5 rounded-2xl border-2 transition-all flex items-center justify-between group ${isActive ? 'border-unpam-600 bg-unpam-600 text-white shadow-md shadow-unpam-600/20' : 'border-slate-200 bg-white hover:border-unpam-300 hover:bg-unpam-50/50 text-slate-800'}">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm ${isActive ? 'bg-white text-unpam-800 shadow-sm' : 'bg-slate-100 text-slate-700'}">${st.num}</div>
+                <div>
+                  <div class="text-xs font-extrabold ${isActive ? 'text-white' : 'text-slate-900'}">${st.title}</div>
+                  <div class="text-[11px] ${isActive ? 'text-unpam-100' : 'text-slate-500'}">${st.desc}</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-chevron-right text-xs ${isActive ? 'text-white opacity-80' : 'text-slate-400 opacity-60'}"></i>
+            </button>
+          `;
+        }).join("");
+      }
+
       document.getElementById("activeStageLabel").textContent = getStageName(appState.currentStage);
     }
 
@@ -1385,12 +1488,16 @@
     function renderMandatoryChecklist() {
       const activeStages = getActiveStagesList(appState.currentStage);
       const stageTitles = {
-        bab1: "Syarat Wajib Format & Struktur (Cover s/d BAB I Pendahuluan)",
-        bab2: "Syarat Wajib Format & Struktur (Cover s/d BAB II Profil & Teori)",
-        bab3: "Syarat Wajib Format & Struktur (Cover s/d BAB III Perancangan)",
-        all: "Syarat Wajib Format & Struktur (BAB I–IV, Daftar Pustaka & 8 Lampiran)"
+        bab1_only: "Syarat Wajib Khusus BAB I Pendahuluan (Pedoman 2026)",
+        bab1: "Syarat Wajib BAB I Pendahuluan (Pedoman 2026)",
+        bab2_only: "Syarat Wajib Khusus BAB II (Profil PT, Teori, 20 Jurnal & 5 Buku)",
+        bab3_only: "Syarat Wajib Khusus BAB III (UML, Mockup UI/UX & BlackBox Testing)",
+        bab4_only: "Syarat Wajib Khusus BAB IV & Format Daftar Pustaka",
+        bab2: "Syarat Wajib Kumulatif (Cover s/d BAB II Profil & Teori)",
+        bab3: "Syarat Wajib Kumulatif (Cover s/d BAB III Perancangan)",
+        all: "Syarat Wajib Laporan Lengkap (BAB I–IV & 8 Lampiran Wajib)"
       };
-      document.getElementById("syaratBabTitle").textContent = stageTitles[appState.currentStage];
+      document.getElementById("syaratBabTitle").textContent = stageTitles[appState.currentStage] || "Syarat Wajib Format & Struktur Pedoman 2026";
 
       let items = [];
       activeStages.forEach(st => {
@@ -1952,9 +2059,44 @@
     // =========================================================================
     // DYNAMIC AUDIT LOGIC (FOR UPLOADED FILES WITH SPECIFIC LOCATION DETECTION)
     // =========================================================================
-    function parseAndAuditDocument(fileName, text, totalPages) {
+    function parseAndAuditDocument(fileName, text, totalPages, forcedScope = null) {
       const lower = text.toLowerCase();
       const isScannedOrLittleText = text.trim().length < 150;
+
+      // Deteksi bab mana saja yang ada di dalam teks
+      const hasBab1 = lower.includes("latar belakang") || lower.includes("1.1 latar belakang") || lower.includes("bab i") || lower.includes("bab 1 pendahuluan");
+      const hasBab2 = lower.includes("bab ii") || lower.includes("bab 2") || lower.includes("profil perusahaan") || lower.includes("profil instansi") || lower.includes("landasan teori");
+      const hasBab3 = lower.includes("bab iii") || lower.includes("bab 3") || lower.includes("perancangan sistem") || lower.includes("use case") || lower.includes("activity diagram") || lower.includes("black box");
+      const hasBab4 = lower.includes("bab iv") || lower.includes("bab 4") || lower.includes("kesimpulan dan saran") || lower.includes("daftar pustaka");
+      const hasLampiran = lower.includes("lampiran") || lower.includes("siup") || lower.includes("nib");
+
+      const isBab2Only = hasBab2 && !hasBab1 && !hasBab3;
+      const isBab3Only = hasBab3 && !hasBab1 && !hasBab2;
+      const isBab1Only = hasBab1 && !hasBab2 && !hasBab3;
+
+      // Menentukan target scope
+      let targetScope = forcedScope;
+      if (!targetScope || targetScope === "auto") {
+        if (isBab2Only) {
+          targetScope = "bab2_only";
+        } else if (isBab3Only) {
+          targetScope = "bab3_only";
+        } else if (isBab1Only) {
+          targetScope = "bab1_only";
+        } else if (hasBab4 && !hasBab1 && !hasBab2 && !hasBab3) {
+          targetScope = "bab4_only";
+        } else {
+          targetScope = ["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage) ? appState.currentStage : "all";
+        }
+      }
+
+      // Atur scope mode
+      if (["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(targetScope)) {
+        appState.stageScopeMode = "single";
+      } else {
+        appState.stageScopeMode = "cumulative";
+      }
+      appState.currentStage = targetScope;
 
       // Hitung Jurnal & Buku dari teks
       const years5 = ["2021", "2022", "2023", "2024", "2025", "2026"];
@@ -2001,175 +2143,202 @@
       // Estimasi halaman Bab I–IV
       const bab1To4Pages = Math.min(totalPages, Math.max(1, totalPages > 12 ? totalPages - 12 : totalPages));
 
-      // Check Sub-Bab Bab I
+      // Flags
       const has11 = lower.includes("latar belakang");
       const has12 = lower.includes("identifikasi masalah");
       const has13 = lower.includes("rumusan masalah");
       const has14 = lower.includes("batasan masalah");
       const hasBab1Complete = (has11 && has12 && has13 && has14);
 
-      // Check Bab II
       const has22 = lower.includes("tinjauan pustaka");
       const has25 = lower.includes("kerangka berfikir") || lower.includes("kerangka berpikir");
-
-      // Check Lampiran
+      const hasUML = lower.includes("use case") || lower.includes("activity diagram") || lower.includes("sequence diagram");
+      const hasTesting = lower.includes("black box") || lower.includes("blackbox") || lower.includes("pengujian");
       const hasSIUP = lower.includes("siup") || lower.includes("nib") || lower.includes("operasional");
 
-      // GENERATE DYNAMIC ISSUES LIST WITH EXACT PARAGRAPHS & SNIPPETS
+      // Bangun issues berdasarkan scope yang aktif
       let dynamicIssues = [];
       let issIndex = 1;
 
-      if (!hasBab1Complete && !isScannedOrLittleText) {
-        let missing = [];
-        if (!has11) missing.push("1.1 Latar Belakang");
-        if (!has12) missing.push("1.2 Identifikasi Masalah");
-        if (!has13) missing.push("1.3 Rumusan Masalah");
-        if (!has14) missing.push("1.4 Batasan Masalah");
+      const isBab2Focus = targetScope === "bab2_only" || targetScope === "bab2";
+      const isBab3Focus = targetScope === "bab3_only" || targetScope === "bab3";
+      const isBab1Focus = targetScope === "bab1_only" || targetScope === "bab1";
+      const isFullScope = targetScope === "all";
 
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "bab1",
-          babLabel: "BAB I",
-          page: "BAB I Pendahuluan",
-          locationDetail: "BAB I Pendahuluan (Antara Sub-bab 1.1 s/d 1.5)",
-          category: "Kelengkapan Sub-Bab",
-          title: `Ada sub-bab wajib BAB I yang belum lengkap (${missing.join(", ")})`,
-          explanation: "Pedoman KP 2026 Hal. 11 mewajibkan 9 sub-bab terstruktur mulai dari 1.1 s/d 1.9.",
-          wrongSnippet: `Sub-bab yang belum ditemukan pada draft teks: ${missing.join(", ")}`,
-          correctSnippet: `Wajib menyertakan lengkap: 1.1 Latar Belakang, 1.2 Identifikasi Masalah, 1.3 Rumusan Masalah, 1.4 Batasan Masalah, 1.5 Tujuan & Manfaat`,
-          fix: `Lengkapi sub-bab ${missing.join(", ")} pada draft BAB I dokumen laporan Anda.`,
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11"
-        });
+      // 1. ISU BAB I (hanya jika scope bab1, kumulatif bab2/bab3, atau all)
+      if ((isBab1Focus || isFullScope || targetScope === "bab2" || targetScope === "bab3") && !isBab2Only && !isBab3Only) {
+        if (!hasBab1Complete && !isScannedOrLittleText) {
+          let missing = [];
+          if (!has11) missing.push("1.1 Latar Belakang");
+          if (!has12) missing.push("1.2 Identifikasi Masalah");
+          if (!has13) missing.push("1.3 Rumusan Masalah");
+          if (!has14) missing.push("1.4 Batasan Masalah");
+
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab1",
+            babLabel: "BAB I",
+            page: "BAB I Pendahuluan",
+            locationDetail: "BAB I Pendahuluan (Antara Sub-bab 1.1 s/d 1.5)",
+            category: "Kelengkapan Sub-Bab",
+            title: `Ada sub-bab wajib BAB I yang belum lengkap (${missing.join(", ")})`,
+            explanation: "Pedoman KP 2026 Hal. 11 mewajibkan 9 sub-bab terstruktur mulai dari 1.1 s/d 1.9.",
+            fix: `Lengkapi sub-bab ${missing.join(", ")} pada draft BAB I dokumen laporan Anda.`,
+            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11"
+          });
+        }
       }
 
+      // 2. ISU BAB II (jika scope bab2_only, bab2, bab3, atau all)
+      if (isBab2Focus || targetScope === "bab3" || isFullScope) {
+        if (!has22 && !isScannedOrLittleText) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab2",
+            babLabel: "BAB II",
+            page: "BAB II (Setelah 2.1)",
+            locationDetail: "BAB II (Setelah Sub-Bab 2.1)",
+            category: "Struktur Wajib",
+            title: "Sub-Bab 2.2 Tinjauan Pustaka belum terdeteksi di BAB II",
+            explanation: "Sesuai Pedoman KP 2026 Hal. 12, setelah profil perusahaan wajib mencantumkan sub-bab 2.2 Tinjauan Pustaka (penelitian terdahulu).",
+            fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka berupa tabel komparasi penelitian/jurnal terdahulu yang relevan.",
+            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+          });
+        }
+
+        if (!has25 && !isScannedOrLittleText) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab2",
+            babLabel: "BAB II",
+            page: "BAB II (Akhir Bab)",
+            locationDetail: "BAB II (Sub-bab terakhir sebelum BAB III)",
+            category: "Struktur Wajib",
+            title: "Sub-Bab 2.5 Kerangka Berfikir belum terdeteksi di BAB II",
+            explanation: "Pedoman KP 2026 Hal. 12 mewajibkan alur diagram kerangka berfikir sebelum masuk ke perancangan BAB III.",
+            fix: "Tambahkan sub-bab 2.5 Kerangka Berfikir lengkap dengan bagan diagram alur pemecahan masalah.",
+            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+          });
+        }
+
+        if (journalCount < 20) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab2",
+            babLabel: "BAB II & Dafpus",
+            page: "Daftar Pustaka",
+            locationDetail: "Daftar Pustaka (Referensi Jurnal)",
+            category: "Jumlah Literatur",
+            title: `Jumlah Jurnal Ilmiah (2021–2026) baru terdeteksi ${journalCount} (Syarat minimal 20 Jurnal)`,
+            explanation: "Syarat mutlak laporan KP Prodi Sistem Informasi adalah minimal mengutip 20 jurnal dalam rentang 5 tahun terakhir.",
+            fix: "Cari jurnal relevan di Google Scholar / Sinta / Garuda lalu tambahkan kutipannya di Bab II dan Daftar Pustaka.",
+            pedomanRef: "Standar Akreditasi & Pedoman Dosen SI"
+          });
+        }
+
+        if (bookCount < 5) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab2",
+            babLabel: "BAB II & Dafpus",
+            page: "Daftar Pustaka",
+            locationDetail: "Daftar Pustaka (Referensi Buku Teks)",
+            category: "Jumlah Literatur",
+            title: `Jumlah Buku Teks (2016–2026) baru terdeteksi ${bookCount} (Syarat minimal 5 Buku)`,
+            explanation: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit maksimal 10 tahun terakhir (2016–2026).",
+            fix: "Tambahkan 5 buku referensi perancangan sistem/pemrograman/basis data terbitan 2016 ke atas di Daftar Pustaka.",
+            pedomanRef: "Standar Referensi Buku Teks Prodi SI"
+          });
+        }
+      }
+
+      // 3. ISU BAB III (jika scope bab3_only, bab3, atau all)
+      if (isBab3Focus || isFullScope) {
+        if (!hasUML && !isScannedOrLittleText) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab3",
+            babLabel: "BAB III",
+            page: "BAB III (Perancangan)",
+            locationDetail: "BAB III (Sub-bab Diagram UML)",
+            category: "Struktur Wajib",
+            title: "Diagram UML (Use Case, Activity, Sequence Diagram) belum terdeteksi",
+            explanation: "Pedoman KP 2026 mewajibkan dokumentasi diagram UML lengkap untuk rancangan sistem.",
+            fix: "Sertakan diagram Use Case, Activity, Sequence, dan Class Diagram di BAB III.",
+            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+          });
+        }
+
+        if (!hasTesting && !isScannedOrLittleText) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab3",
+            babLabel: "BAB III",
+            page: "BAB III (Pengujian)",
+            locationDetail: "BAB III (Sub-bab 3.6 Pengujian BlackBox)",
+            category: "Pengujian Sistem",
+            title: "Matriks Pengujian Sistem (BlackBox Testing) belum terdeteksi",
+            explanation: "Wajib menyertakan tabel matriks pengujian fungsionalitas sistem (skenario uji dan hasil).",
+            fix: "Tambahkan sub-bab pengujian sistem menggunakan metode Black Box Testing di akhir BAB III.",
+            pedomanRef: "Standar Laporan KP Prodi SI"
+          });
+        }
+      }
+
+      // 4. ISU UMUM / ISTILAH ASING
       if (detectedForeign.length > 0) {
+        const foreignStage = (targetScope === "bab2_only" ? "bab2" : (targetScope === "bab3_only" ? "bab3" : "bab1"));
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
-          stage: "bab1",
-          babLabel: "Semua Bab",
-          page: "Seluruh Teks Laporan",
-          locationDetail: "Tersebar di Bab I s/d Bab IV (Periksa tab Kamus Italic)",
+          stage: foreignStage,
+          babLabel: (targetScope === "bab2_only" ? "BAB II" : (targetScope === "bab3_only" ? "BAB III" : "Semua Bab")),
+          page: "Teks Dokumen",
+          locationDetail: "Tersebar di teks dokumen (Periksa tab Kamus Italic)",
           category: "Istilah Asing",
           title: `Ditemukan ${detectedForeign.length} jenis istilah asing yang berpotensi belum dicetak miring (italic)`,
           explanation: `Kata teknis seperti "${detectedForeign.slice(0, 3).map(d => d.word).join(', ')}" wajib dicetak miring sesuai Pedoman Hal. 9 Poin g.1.`,
-          wrongSnippet: detectedForeign.slice(0, 3).map(d => `${d.word} (huruf tegak biasa)`).join(" ... "),
-          correctSnippet: detectedForeign.slice(0, 3).map(d => `<i>${d.word}</i> (cetak miring/italic)`).join(" ... "),
           fix: "Gunakan fitur Ctrl+H (Find & Replace) di Microsoft Word untuk memiringkan semua istilah asing ini secara otomatis.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1"
         });
       }
 
-      if (lower.includes("n.d.") || lower.includes("no date")) {
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "bab1",
-          babLabel: "BAB I / Dafpus",
-          page: "Kutipan Laporan",
-          locationDetail: "Kutipan sitasi dalam teks paragraf atau di Daftar Pustaka",
-          category: "Sitasi Ilmiah",
-          title: "Ditemukan kutipan '(n.d.)' / tanpa tahun terbit pada teks",
-          explanation: "Dosen pembimbing dan penguji menolak sitasi tanpa tahun karena tidak dapat diverifikasi kemutakhirannya.",
-          wrongSnippet: "...(Penulis, n.d.) / sitasi tanpa tahun terbit...",
-          correctSnippet: "...(Penulis, 2024) / wajib mencantumkan tahun terbit valid 2021-2026...",
-          fix: "Lengkapi tahun terbit asli jurnal atau ganti dengan jurnal bereputasi 5 tahun terakhir (2021–2026).",
-          pedomanRef: "Standar Sitasi Ilmiah UNPAM"
-        });
-      }
+      // 5. ISU LENGKAP SAJA (HANYA JIKA MODE ALL / LAPORAN LENGKAP)
+      if (isFullScope) {
+        if (bab1To4Pages < 50) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "all",
+            babLabel: "Ketebalan Laporan",
+            page: "BAB I s/d IV",
+            locationDetail: "Keseluruhan Dokumen (Bab I s/d Bab IV)",
+            category: "Syarat Halaman",
+            title: `Ketebalan BAB I s/d BAB IV baru ${bab1To4Pages} Halaman (Kurang ${50 - bab1To4Pages} Hal)`,
+            explanation: "Pedoman BAB VII Hal. 9 Poin 1 menegaskan: 'Laporan dibuat minimal 50 halaman (dari Bab I Pendahuluan s/d Bab IV Penutup)'.",
+            fix: "Perdalam pembahasan analisis kebutuhan, diagram UML, mockup layar UI/UX, dan tabel pengujian BlackBox di Bab III.",
+            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin 1"
+          });
+        }
 
-      if (!has22 && !isScannedOrLittleText) {
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "bab2",
-          babLabel: "BAB II",
-          page: "BAB II (Setelah 2.1)",
-          locationDetail: "BAB II (Setelah Sub-Bab 2.1)",
-          category: "Struktur Wajib",
-          title: "Sub-Bab 2.2 Tinjauan Pustaka belum terdeteksi di BAB II",
-          explanation: "Sesuai Pedoman KP 2026 Hal. 12, setelah profil perusahaan wajib mencantumkan sub-bab 2.2 Tinjauan Pustaka (penelitian terdahulu).",
-          fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka berupa tabel komparasi penelitian/jurnal terdahulu yang relevan.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
-        });
-      }
-
-      if (!has25 && !isScannedOrLittleText) {
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "bab2",
-          babLabel: "BAB II",
-          page: "BAB II (Akhir Bab)",
-          locationDetail: "BAB II (Sub-bab terakhir sebelum BAB III)",
-          category: "Struktur Wajib",
-          title: "Sub-Bab 2.5 Kerangka Berfikir belum terdeteksi di BAB II",
-          explanation: "Pedoman KP 2026 Hal. 12 mewajibkan alur diagram kerangka berfikir sebelum masuk ke perancangan BAB III.",
-          fix: "Tambahkan sub-bab 2.5 Kerangka Berfikir lengkap dengan bagan diagram alur pemecahan masalah.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
-        });
-      }
-
-      if (journalCount < 20) {
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "bab2",
-          babLabel: "BAB II & Dafpus",
-          page: "Daftar Pustaka",
-          locationDetail: "Daftar Pustaka (Referensi Jurnal)",
-          category: "Jumlah Literatur",
-          title: `Jumlah Jurnal Ilmiah (2021–2026) baru terdeteksi ${journalCount} (Syarat minimal 20 Jurnal)`,
-          explanation: "Syarat mutlak laporan KP Prodi Sistem Informasi adalah minimal mengutip 20 jurnal dalam rentang 5 tahun terakhir.",
-          fix: "Cari jurnal relevan di Google Scholar / Sinta / Garuda lalu tambahkan kutipannya di Bab II dan Daftar Pustaka.",
-          pedomanRef: "Standar Akreditasi & Pedoman Dosen SI"
-        });
-      }
-
-      if (bookCount < 5) {
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "bab2",
-          babLabel: "BAB II & Dafpus",
-          page: "Daftar Pustaka",
-          locationDetail: "Daftar Pustaka (Referensi Buku Teks)",
-          category: "Jumlah Literatur",
-          title: `Jumlah Buku Teks (2016–2026) baru terdeteksi ${bookCount} (Syarat minimal 5 Buku)`,
-          explanation: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit maksimal 10 tahun terakhir (2016–2026).",
-          fix: "Tambahkan 5 buku referensi perancangan sistem/pemrograman/basis data terbitan 2016 ke atas di Daftar Pustaka.",
-          pedomanRef: "Standar Referensi Buku Teks Prodi SI"
-        });
-      }
-
-      if (bab1To4Pages < 50) {
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "all",
-          babLabel: "Ketebalan Laporan",
-          page: "BAB I s/d IV",
-          locationDetail: "Keseluruhan Dokumen (Bab I s/d Bab IV)",
-          category: "Syarat Halaman",
-          title: `Ketebalan BAB I s/d BAB IV baru ${bab1To4Pages} Halaman (Kurang ${50 - bab1To4Pages} Hal)`,
-          explanation: "Pedoman BAB VII Hal. 9 Poin 1 menegaskan: 'Laporan dibuat minimal 50 halaman (dari Bab I Pendahuluan s/d Bab IV Penutup)'.",
-          fix: "Perdalam pembahasan analisis kebutuhan, diagram UML, mockup layar UI/UX, dan tabel pengujian BlackBox di Bab III.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin 1"
-        });
-      }
-
-      if (!hasSIUP) {
-        dynamicIssues.push({
-          id: `dyn-${issIndex++}`,
-          stage: "all",
-          babLabel: "Lampiran",
-          page: "Lampiran Dokumen",
-          locationDetail: "Lampiran 3 (Legalitas Perusahaan)",
-          category: "Kelengkapan Lampiran",
-          title: "Lampiran wajib SIUP / NIB / Surat Keterangan Operasional Perusahaan belum terdeteksi",
-          explanation: "Pedoman Hal. 13 Poin c mewajibkan lampiran bukti izin legalitas perusahaan (SIUP/NIB/SK Operasional).",
-          fix: "Minta scan surat legalitas/NIB instansi tempat Anda KP dan sertakan sebagai Lampiran 3.",
-          pedomanRef: "Pedoman KP 2026 BAB II Hal. 3 & Hal. 13 Poin c"
-        });
+        if (!hasSIUP) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "all",
+            babLabel: "Lampiran",
+            page: "Lampiran Dokumen",
+            locationDetail: "Lampiran 3 (Legalitas Perusahaan)",
+            category: "Kelengkapan Lampiran",
+            title: "Lampiran wajib SIUP / NIB / Surat Keterangan Operasional Perusahaan belum terdeteksi",
+            explanation: "Pedoman Hal. 13 Poin c mewajibkan lampiran bukti izin legalitas perusahaan (SIUP/NIB/SK Operasional).",
+            fix: "Minta scan surat legalitas/NIB instansi tempat Anda KP dan sertakan sebagai Lampiran 3.",
+            pedomanRef: "Pedoman KP 2026 BAB II Hal. 3 & Hal. 13 Poin c"
+          });
+        }
       }
 
       if (isScannedOrLittleText) {
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
-          stage: "bab1",
+          stage: (targetScope === "bab2_only" ? "bab2" : (targetScope === "bab3_only" ? "bab3" : "bab1")),
           babLabel: "Info Parser",
           page: "Format File",
           locationDetail: "Seluruh Halaman Dokumen",
@@ -2188,42 +2357,52 @@
       docAnalysis.journalCountValid = journalCount;
       docAnalysis.bookCountValid = bookCount;
       if (detectedForeign.length > 0) docAnalysis.foreignWords = detectedForeign;
-      docAnalysis.issues = dynamicIssues.length > 0 ? dynamicIssues : DEFAULT_DOSEN_DATASET.issues;
+      docAnalysis.issues = dynamicIssues;
 
       // Update Checklist Items
-      if (docAnalysis.chapterChecklist.bab1[5]) {
+      if (docAnalysis.chapterChecklist.bab1 && docAnalysis.chapterChecklist.bab1[5]) {
         docAnalysis.chapterChecklist.bab1[5].status = hasBab1Complete ? "pass" : "fail";
         docAnalysis.chapterChecklist.bab1[5].badge = hasBab1Complete ? "9 Sub-Bab Lengkap" : "Ada Sub-Bab Belum Ditemukan";
       }
 
-      if (docAnalysis.chapterChecklist.bab2[1]) {
+      if (docAnalysis.chapterChecklist.bab2 && docAnalysis.chapterChecklist.bab2[1]) {
         docAnalysis.chapterChecklist.bab2[1].status = has22 ? "pass" : "fail";
         docAnalysis.chapterChecklist.bab2[1].badge = has22 ? "2.2 Tinjauan Pustaka Ada" : "Belum Ada Sub-Bab 2.2";
       }
 
-      if (docAnalysis.chapterChecklist.bab2[2]) {
+      if (docAnalysis.chapterChecklist.bab2 && docAnalysis.chapterChecklist.bab2[2]) {
         docAnalysis.chapterChecklist.bab2[2].status = has25 ? "pass" : "fail";
         docAnalysis.chapterChecklist.bab2[2].badge = has25 ? "2.5 Kerangka Berfikir Ada" : "Belum Ada Sub-Bab 2.5";
       }
 
-      if (docAnalysis.chapterChecklist.bab2[3]) {
+      if (docAnalysis.chapterChecklist.bab2 && docAnalysis.chapterChecklist.bab2[3]) {
         docAnalysis.chapterChecklist.bab2[3].status = journalCount >= 20 ? "pass" : "fail";
         docAnalysis.chapterChecklist.bab2[3].badge = `${journalCount} / 20 Jurnal (2021–2026)`;
       }
 
-      if (docAnalysis.chapterChecklist.bab2[4]) {
+      if (docAnalysis.chapterChecklist.bab2 && docAnalysis.chapterChecklist.bab2[4]) {
         docAnalysis.chapterChecklist.bab2[4].status = bookCount >= 5 ? "pass" : "fail";
         docAnalysis.chapterChecklist.bab2[4].badge = `${bookCount} / 5 Buku (2016–2026)`;
       }
 
-      if (docAnalysis.chapterChecklist.all[0]) {
+      if (docAnalysis.chapterChecklist.bab3 && docAnalysis.chapterChecklist.bab3[1]) {
+        docAnalysis.chapterChecklist.bab3[1].status = hasUML ? "pass" : "fail";
+        docAnalysis.chapterChecklist.bab3[1].badge = hasUML ? "Diagram UML Terdeteksi" : "UML Belum Terdeteksi";
+      }
+
+      if (docAnalysis.chapterChecklist.bab3 && docAnalysis.chapterChecklist.bab3[2]) {
+        docAnalysis.chapterChecklist.bab3[2].status = hasTesting ? "pass" : "fail";
+        docAnalysis.chapterChecklist.bab3[2].badge = hasTesting ? "Pengujian BlackBox Ada" : "BlackBox Belum Terdeteksi";
+      }
+
+      if (docAnalysis.chapterChecklist.all && docAnalysis.chapterChecklist.all[0]) {
         docAnalysis.chapterChecklist.all[0].status = bab1To4Pages >= 50 ? "pass" : "fail";
         docAnalysis.chapterChecklist.all[0].badge = `${bab1To4Pages} Hal (${bab1To4Pages >= 50 ? 'Memenuhi >= 50' : 'Kurang dari 50'})`;
       }
 
-      if (docAnalysis.chapterChecklist.all[3]) {
-        docAnalysis.chapterChecklist.all[3].status = hasSIUP ? "pass" : "fail";
-        docAnalysis.chapterChecklist.all[3].badge = hasSIUP ? "SIUP/NIB Ada" : "SIUP/NIB Belum Ada";
+      if (docAnalysis.chapterChecklist.all && docAnalysis.chapterChecklist.all[1]) {
+        docAnalysis.chapterChecklist.all[1].status = hasSIUP ? "pass" : "fail";
+        docAnalysis.chapterChecklist.all[1].badge = hasSIUP ? "SIUP/NIB Ada" : "SIUP/NIB Belum Ada";
       }
 
       appState.checkedIssues = {};
@@ -2247,9 +2426,10 @@
     }
 
     function processPastedText() {
-      const title = document.getElementById("pasteDocTitleInput").value.trim() || "Laporan KP Mandiri.docx";
-      const pages = parseInt(document.getElementById("pasteDocPagesInput").value) || 50;
+      const title = document.getElementById("pasteDocTitleInput").value.trim() || "Draf Laporan KP.docx";
+      const pages = parseInt(document.getElementById("pasteDocPagesInput").value) || 18;
       const content = document.getElementById("pasteDocContentInput").value.trim();
+      const scope = document.getElementById("pasteDocScopeSelect") ? document.getElementById("pasteDocScopeSelect").value : "auto";
 
       if (!content || content.length < 50) {
         alert("Silakan tempel teks laporan Anda minimal beberapa paragraf untuk dapat diaudit.");
@@ -2257,7 +2437,7 @@
       }
 
       closePasteModal();
-      parseAndAuditDocument(title, content, pages);
+      parseAndAuditDocument(title, content, pages, scope);
       showToast("Teks laporan berhasil diaudit oleh ncexs!", "success");
     }
 
@@ -2343,35 +2523,82 @@
       document.getElementById("currentFileMetaDisplay").textContent = 
         `${docAnalysis.totalPagesBab1To4} Halaman Bab I–IV • ${docAnalysis.totalDocPages} Halaman Total`;
 
-      // Update KPI Metrics Cards
+      const isSingleBab = ["bab1_only", "bab1", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage);
+      const isBab3Only = appState.currentStage === "bab3_only";
+      const isBab1Only = appState.currentStage === "bab1_only" || appState.currentStage === "bab1";
+      const isBab4Only = appState.currentStage === "bab4_only";
+
+      // 1. Metric Halaman Bab
       document.getElementById("metricPageCount").textContent = docAnalysis.totalPagesBab1To4;
       const metricPageStatus = document.getElementById("metricPageStatus");
-      if (docAnalysis.totalPagesBab1To4 >= 50) {
-        metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
-        metricPageStatus.innerHTML = '<i class="fa-solid fa-check"></i> Memenuhi Syarat';
+      const metricPageSubtext = document.getElementById("metricPageSubtext");
+
+      if (isSingleBab) {
+        if (metricPageSubtext) metricPageSubtext.textContent = "/ Draf Bab Ini";
+        metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md self-start";
+        metricPageStatus.innerHTML = '<i class="fa-solid fa-bullseye"></i> Fokus Bab Terpisah (Bebas 50 Hal)';
       } else {
-        metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
-        metricPageStatus.innerHTML = `<i class="fa-solid fa-xmark"></i> Kurang ${50 - docAnalysis.totalPagesBab1To4} Halaman`;
+        if (metricPageSubtext) metricPageSubtext.textContent = "/ Min 50 Hal";
+        if (docAnalysis.totalPagesBab1To4 >= 50) {
+          metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
+          metricPageStatus.innerHTML = '<i class="fa-solid fa-check"></i> Memenuhi Syarat';
+        } else {
+          metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
+          metricPageStatus.innerHTML = `<i class="fa-solid fa-xmark"></i> Kurang ${50 - docAnalysis.totalPagesBab1To4} Halaman`;
+        }
       }
 
+      // 2. Metric Jurnal
       document.getElementById("metricJournalCount").textContent = docAnalysis.journalCountValid;
       const metricJournalStatus = document.getElementById("metricJournalStatus");
-      if (docAnalysis.journalCountValid >= 20) {
-        metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
-        metricJournalStatus.innerHTML = '<i class="fa-solid fa-check"></i> 20+ Jurnal Valid';
+      if (isBab3Only || isBab1Only || isBab4Only) {
+        metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md self-start";
+        metricJournalStatus.innerHTML = '<i class="fa-solid fa-circle-minus text-slate-400"></i> Diuji Khusus di BAB II';
       } else {
-        metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
-        metricJournalStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Kurang ${20 - docAnalysis.journalCountValid} Jurnal`;
+        if (docAnalysis.journalCountValid >= 20) {
+          metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
+          metricJournalStatus.innerHTML = '<i class="fa-solid fa-check"></i> 20+ Jurnal Valid';
+        } else {
+          metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
+          metricJournalStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Kurang ${20 - docAnalysis.journalCountValid} Jurnal`;
+        }
       }
 
+      // 3. Metric Buku
       document.getElementById("metricBookCount").textContent = docAnalysis.bookCountValid;
       const metricBookStatus = document.getElementById("metricBookStatus");
-      if (docAnalysis.bookCountValid >= 5) {
-        metricBookStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
-        metricBookStatus.innerHTML = '<i class="fa-solid fa-check"></i> 5+ Buku Valid';
+      if (isBab3Only || isBab1Only || isBab4Only) {
+        metricBookStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md self-start";
+        metricBookStatus.innerHTML = '<i class="fa-solid fa-circle-minus text-slate-400"></i> Diuji Khusus di BAB II';
       } else {
-        metricBookStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
-        metricBookStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Kurang ${5 - docAnalysis.bookCountValid} Buku`;
+        if (docAnalysis.bookCountValid >= 5) {
+          metricBookStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
+          metricBookStatus.innerHTML = '<i class="fa-solid fa-check"></i> 5+ Buku Valid';
+        } else {
+          metricBookStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
+          metricBookStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Kurang ${5 - docAnalysis.bookCountValid} Buku`;
+        }
+      }
+
+      // 4. Metric Lampiran Wajib
+      const metricLampiranCount = document.getElementById("metricLampiranCount");
+      const metricLampiranStatus = document.getElementById("metricLampiranStatus");
+      if (metricLampiranCount && metricLampiranStatus) {
+        if (isSingleBab) {
+          metricLampiranCount.textContent = "—";
+          metricLampiranStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
+          metricLampiranStatus.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Bebas Syarat Lampiran';
+        } else {
+          const lCount = docAnalysis.lampiranCount || 7;
+          metricLampiranCount.textContent = lCount;
+          if (lCount >= 8) {
+            metricLampiranStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
+            metricLampiranStatus.innerHTML = '<i class="fa-solid fa-check"></i> 8 Lampiran Lengkap';
+          } else {
+            metricLampiranStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md self-start";
+            metricLampiranStatus.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> SIUP/NIB Belum Ada';
+          }
+        }
       }
 
       renderStageButtons();
