@@ -417,7 +417,7 @@
           </div>
           <div class="my-2">
             <span id="metricJournalCount" class="text-2xl sm:text-3xl font-black text-rose-600">2</span>
-            <span class="text-xs text-slate-400 font-semibold">/ Min 20 Jurnal</span>
+            <span class="text-xs text-slate-400 font-semibold">/ Target 20 Jurnal (Min 5)</span>
           </div>
           <div id="metricJournalStatus" class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start">
             <i class="fa-solid fa-triangle-exclamation"></i> Kurang 18 Jurnal
@@ -988,8 +988,8 @@
           {
             id: "chk-4",
             title: "4. Istilah Asing Wajib Dicetak Miring (Italic)",
-            pedomanRef: "BAB VII Hal. 9 Poin g.1",
-            desc: "Seluruh istilah asing (seperti online, real-time, database, website, human error) wajib dicetak miring / italic.",
+            pedomanRef: "BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
+            desc: "Seluruh istilah asing atau kata teknis TI yang belum diserap baku di KBBI (misal: online, real-time, database, website) wajib dicetak miring / italic.",
             status: "fail",
             badge: "Ditemukan Belum Italic"
           },
@@ -1135,10 +1135,16 @@
           page: "Hal. 2 s/d 4",
           locationDetail: "Hal. 2 (Paragraf 1), Hal. 3 (Paragraf 1), Hal. 4 (Paragraf 2)",
           category: "Istilah Asing",
-          title: "Istilah bahasa asing di Bab I belum dicetak miring (italic)",
-          explanation: "Kata 'online' (disebut berulang kali), 'real-time' (Hal. 2, 3), dan 'human error' (Hal. 3) masih dicetak tegak biasa.",
-          fix: "Blok kata asing tersebut di Microsoft Word lalu tekan tombol Ctrl + I (cetak miring) sesuai Pedoman Hal. 9 Poin g.1.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1"
+          title: "Daftar kata asing di Bab I yang wajib dimiringkan (italic)",
+          explanation: "Kata-kata teknis bahasa Inggris berikut terdeteksi masih dicetak tegak biasa pada naskah Bab I Anda: 'online' (Hal. 2, 4), 'real-time' (Hal. 2, 3), 'human error' (Hal. 3), dan 'website' (Hal. 4). Seluruh kata ini wajib dicetak miring.",
+          fix: "Klik tombol kata di bawah untuk otomatis menyalin ke clipboard, lalu di Microsoft Word tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I).",
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
+          foreignItems: [
+            { word: "online", page: "Hal. 2, 4", count: 8 },
+            { word: "real-time", page: "Hal. 2, 3", count: 4 },
+            { word: "human error", page: "Hal. 3", count: 2 },
+            { word: "website", page: "Hal. 4", count: 5 }
+          ]
         },
         {
           id: "iss-3",
@@ -1642,6 +1648,7 @@
 
       container.innerHTML = filtered.map(it => {
         const isDone = !!appState.checkedIssues[it.id];
+        const foreignItems = it.foreignItems || (it.category === "Istilah Asing" ? docAnalysis.foreignWords : null);
 
         return `
           <div class="group relative rounded-2xl border-2 transition-all duration-200 p-4 sm:p-5 ${isDone ? 'bg-slate-50/80 border-slate-200 opacity-65' : 'bg-white border-slate-200 hover:border-unpam-300 shadow-sm hover:shadow-md'}">
@@ -1679,6 +1686,40 @@
                 <p class="text-xs text-slate-600 mt-1 leading-relaxed">
                   ${it.explanation}
                 </p>
+
+                ${(foreignItems && foreignItems.length > 0) ? `
+                  <div class="mt-3 p-3.5 bg-amber-50/90 border border-amber-200/90 rounded-xl space-y-2.5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-amber-950">
+                      <span class="flex items-center gap-1.5">
+                        <i class="fa-solid fa-spell-check text-amber-600"></i>
+                        <span>Daftar Kata Asing Pasti yang Harus Dicari di Word (${foreignItems.length} Kata):</span>
+                      </span>
+                      <button onclick="switchTab('italic')" class="text-[11px] font-extrabold text-unpam-700 hover:text-unpam-900 underline flex items-center gap-1">
+                        <span>Buka Tab Kamus</span> &rarr;
+                      </button>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1.5">
+                      ${foreignItems.map(f => `
+                        <button 
+                          type="button"
+                          onclick="copySingleWord('${f.word}')" 
+                          title="Klik untuk salin kata '${f.word}' lalu cari di Word" 
+                          class="inline-flex items-center gap-1.5 bg-white hover:bg-amber-100/70 border border-amber-300 hover:border-amber-400 text-slate-800 text-xs px-2.5 py-1.5 rounded-lg font-medium shadow-2xs transition group/btn cursor-pointer"
+                        >
+                          <span class="font-bold font-mono italic text-unpam-800">${f.word}</span>
+                          <span class="text-[10px] bg-amber-100 group-hover/btn:bg-amber-200 text-amber-900 font-black px-1.5 py-0.5 rounded-full">${f.count}x</span>
+                          ${f.page ? `<span class="text-[10px] text-slate-500 font-normal">(${f.page})</span>` : ''}
+                          <i class="fa-regular fa-copy text-[11px] text-slate-400 group-hover/btn:text-amber-700"></i>
+                        </button>
+                      `).join('')}
+                    </div>
+
+                    <p class="text-[11px] text-amber-900/90 leading-tight">
+                      💡 <b>Tinggal klik salah satu kata di atas</b> untuk menyalin otomatis ke clipboard, lalu buka Word & tekan <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + F</kbd> (Cari) atau <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + H</kbd> (Replace) untuk langsung memiringkannya.
+                    </p>
+                  </div>
+                ` : ''}
 
                 <!-- Solution Action Box -->
                 <div class="mt-3 bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs flex items-start gap-2.5">
@@ -1845,6 +1886,13 @@
         activeIssues.forEach((it, idx) => {
           msg += `*${idx + 1}. [${it.babLabel}] 📍 ${it.locationDetail || it.page}*\n`;
           msg += `❌ *Masalah:* ${it.title}\n`;
+          const fItems = it.foreignItems || (it.category === "Istilah Asing" ? docAnalysis.foreignWords : null);
+          if (fItems && fItems.length > 0) {
+            msg += `🔍 *Daftar Kata Asing Pasti yang Harus Dicari di Word:*\n`;
+            fItems.forEach(f => {
+              msg += `   • _${f.word}_ (${f.count}x${f.page ? ` - ${f.page}` : ''})\n`;
+            });
+          }
           msg += `💡 *Cara Perbaiki:* ${it.fix}\n`;
           msg += `─────────────────────────\n`;
         });
@@ -2124,7 +2172,7 @@
         "online", "real-time", "human error", "security", "website", "login", "logout", 
         "dashboard", "database", "blackbox", "user", "client", "input", "output", 
         "wireframe", "tools", "flowchart", "software", "hardware", "interface", 
-        "framework", "agile", "waterfall", "use case", "activity diagram"
+        "framework", "agile", "waterfall", "use case", "activity diagram", "backend", "frontend"
       ];
       let detectedForeign = [];
 
@@ -2132,11 +2180,49 @@
         const regex = new RegExp(`\\b${w}\\b`, "gi");
         const matches = text.match(regex);
         if (matches && matches.length > 0) {
+          // Cari nomor halaman spesifik jika format PDF
+          let foundPages = [];
+          const pageSections = text.split(/\[Halaman\s+(\d+)\]/i);
+          if (pageSections.length > 1) {
+            for (let i = 1; i < pageSections.length; i += 2) {
+              const pNum = pageSections[i];
+              const pContent = pageSections[i+1] || "";
+              if (new RegExp(`\\b${w}\\b`, "i").test(pContent)) {
+                foundPages.push(`Hal. ${pNum}`);
+              }
+            }
+          }
+
+          let pageStr = "";
+          if (foundPages.length > 0) {
+            pageStr = foundPages.length <= 4 
+              ? foundPages.join(", ") 
+              : `${foundPages.slice(0, 3).join(", ")} (+${foundPages.length - 3} hal lain)`;
+          } else {
+            pageStr = `Muncul ${matches.length}x di naskah`;
+          }
+
+          // Ambil kutipan kalimat asli untuk preview konteks
+          let contextSnippet = "";
+          const sentences = text.split(/[.\n\r]+/);
+          for (const s of sentences) {
+            if (new RegExp(`\\b${w}\\b`, "i").test(s)) {
+              const cleanS = s.trim().replace(/\[Halaman\s+\d+\]/gi, "").replace(/\s+/g, " ");
+              if (cleanS.length >= 15 && cleanS.length <= 160) {
+                contextSnippet = `"${cleanS}"`;
+                break;
+              }
+            }
+          }
+          if (!contextSnippet) {
+            contextSnippet = `Ditemukan kata "${w}" sebanyak ${matches.length}x dalam teks laporan`;
+          }
+
           detectedForeign.push({
             word: w,
-            page: `Terdeteksi di file (${matches.length}x)`,
+            page: pageStr,
             count: matches.length,
-            context: `Ditemukan istilah "${w}" dalam teks dokumen`
+            context: contextSnippet
           });
         }
       });
@@ -2289,17 +2375,21 @@
       // 4. ISU UMUM / ISTILAH ASING
       if (detectedForeign.length > 0) {
         const foreignStage = (targetScope === "bab2_only" ? "bab2" : (targetScope === "bab3_only" ? "bab3" : "bab1"));
+        const wordSummary = detectedForeign.map(d => `"${d.word}" (${d.count}x)`).join(", ");
+        const firstPages = detectedForeign.filter(d => d.page && !d.page.startsWith("Muncul")).map(d => `${d.word}: ${d.page}`).slice(0, 3).join("; ");
+
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: foreignStage,
           babLabel: (targetScope === "bab2_only" ? "BAB II" : (targetScope === "bab3_only" ? "BAB III" : "Semua Bab")),
           page: "Teks Dokumen",
-          locationDetail: "Tersebar di teks dokumen (Periksa tab Kamus Italic)",
+          locationDetail: firstPages || "Tersebar di naskah (Klik tombol kata di bawah)",
           category: "Istilah Asing",
-          title: `Ditemukan ${detectedForeign.length} jenis istilah asing yang berpotensi belum dicetak miring (italic)`,
-          explanation: `Kata teknis seperti "${detectedForeign.slice(0, 3).map(d => d.word).join(', ')}" wajib dicetak miring sesuai Pedoman Hal. 9 Poin g.1.`,
-          fix: "Gunakan fitur Ctrl+H (Find & Replace) di Microsoft Word untuk memiringkan semua istilah asing ini secara otomatis.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1"
+          title: `Ditemukan ${detectedForeign.length} kata asing yang WAJIB dimiringkan (italic)`,
+          explanation: `Kata-kata teknis bahasa Inggris berikut pasti ditemukan dalam teks naskah Anda dan terdeteksi belum dicetak miring: ${wordSummary}. Seluruh istilah asing wajib dicetak miring (italic) sesuai Pedoman Bab VII Hal. 9.`,
+          fix: "Klik tombol kata di bawah untuk menyalin kata ke clipboard, lalu buka Word dan tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I).",
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
+          foreignItems: detectedForeign
         });
       }
 
@@ -2539,13 +2629,16 @@
         metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md self-start";
         metricPageStatus.innerHTML = '<i class="fa-solid fa-bullseye"></i> Fokus Bab Terpisah (Bebas 50 Hal)';
       } else {
-        if (metricPageSubtext) metricPageSubtext.textContent = "/ Min 50 Hal";
+        if (metricPageSubtext) metricPageSubtext.textContent = "/ Target 50 Hal";
         if (docAnalysis.totalPagesBab1To4 >= 50) {
           metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
-          metricPageStatus.innerHTML = '<i class="fa-solid fa-check"></i> Memenuhi Syarat';
+          metricPageStatus.innerHTML = '<i class="fa-solid fa-check"></i> Memenuhi Target Dosen (>= 50 Hal)';
+        } else if (docAnalysis.totalPagesBab1To4 >= 35) {
+          metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md self-start";
+          metricPageStatus.innerHTML = `<i class="fa-solid fa-circle-check"></i> Lolos Rata-rata KP (${docAnalysis.totalPagesBab1To4} Hal)`;
         } else {
           metricPageStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
-          metricPageStatus.innerHTML = `<i class="fa-solid fa-xmark"></i> Kurang ${50 - docAnalysis.totalPagesBab1To4} Halaman`;
+          metricPageStatus.innerHTML = `<i class="fa-solid fa-xmark"></i> Kurang ${50 - docAnalysis.totalPagesBab1To4} Hal (Target 50)`;
         }
       }
 
@@ -2558,10 +2651,13 @@
       } else {
         if (docAnalysis.journalCountValid >= 20) {
           metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start";
-          metricJournalStatus.innerHTML = '<i class="fa-solid fa-check"></i> 20+ Jurnal Valid';
+          metricJournalStatus.innerHTML = '<i class="fa-solid fa-check"></i> 20+ Jurnal (Target Ideal A)';
+        } else if (docAnalysis.journalCountValid >= 5) {
+          metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md self-start";
+          metricJournalStatus.innerHTML = `<i class="fa-solid fa-circle-check"></i> Lolos Standar Prodi (${docAnalysis.journalCountValid} Jurnal)`;
         } else {
           metricJournalStatus.className = "inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start";
-          metricJournalStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Kurang ${20 - docAnalysis.journalCountValid} Jurnal`;
+          metricJournalStatus.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Baru ${docAnalysis.journalCountValid} (Min. 5 Jurnal)`;
         }
       }
 
