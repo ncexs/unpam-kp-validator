@@ -392,67 +392,17 @@
 
       </div>
 
-      <!-- AUDIT METRICS DASHBOARD CARDS -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <!-- Metric 1: Halaman Bab 1-4 -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-slate-500 text-xs">
-            <span>Halaman BAB I–IV</span>
-            <i class="fa-regular fa-file-lines text-unpam-600 text-base"></i>
-          </div>
-          <div class="my-2">
-            <span id="metricPageCount" class="text-2xl sm:text-3xl font-black text-slate-900">51</span>
-            <span id="metricPageSubtext" class="text-xs text-slate-400 font-semibold">/ Min 50 Hal</span>
-          </div>
-          <div id="metricPageStatus" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md self-start">
-            <i class="fa-solid fa-check"></i> Memenuhi Syarat
-          </div>
-        </div>
-
-        <!-- Metric 2: Jurnal (5 Tahun Terakhir) -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-slate-500 text-xs">
-            <span>Jurnal (2021–2026)</span>
-            <i class="fa-solid fa-book-journal-whills text-indigo-600 text-base"></i>
-          </div>
-          <div class="my-2">
-            <span id="metricJournalCount" class="text-2xl sm:text-3xl font-black text-rose-600">2</span>
-            <span class="text-xs text-slate-400 font-semibold">/ Target 20 Jurnal (Min 5)</span>
-          </div>
-          <div id="metricJournalStatus" class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start">
-            <i class="fa-solid fa-triangle-exclamation"></i> Kurang 18 Jurnal
-          </div>
-        </div>
-
-        <!-- Metric 3: Buku Referensi -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-slate-500 text-xs">
-            <span>Buku (2016–2026)</span>
-            <i class="fa-solid fa-book text-amber-600 text-base"></i>
-          </div>
-          <div class="my-2">
-            <span id="metricBookCount" class="text-2xl sm:text-3xl font-black text-rose-600">0</span>
-            <span class="text-xs text-slate-400 font-semibold">/ Min 5 Buku</span>
-          </div>
-          <div id="metricBookStatus" class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-md self-start">
-            <i class="fa-solid fa-triangle-exclamation"></i> Kurang 5 Buku
-          </div>
-        </div>
-
-        <!-- Metric 4: Lampiran Wajib -->
-        <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm flex flex-col justify-between">
-          <div class="flex items-center justify-between text-slate-500 text-xs">
-            <span>8 Lampiran Wajib</span>
-            <i class="fa-solid fa-paperclip text-campus-gold text-base"></i>
-          </div>
-          <div class="my-2">
-            <span id="metricLampiranCount" class="text-2xl sm:text-3xl font-black text-amber-600">7</span>
-            <span class="text-xs text-slate-400 font-semibold">/ 8 Lampiran</span>
-          </div>
-          <div id="metricLampiranStatus" class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md self-start">
-            <i class="fa-solid fa-circle-exclamation"></i> SIUP/NIB Belum Ada
-          </div>
-        </div>
+      <!-- AUDIT METRICS FALLBACK (DISEMBUNYIKAN KARENA SUDAH LENGKAP DI LEMBAR AUDIT TERPADU) -->
+      <div class="hidden" id="legacyMetricsHidden">
+        <span id="metricPageCount"></span>
+        <span id="metricPageSubtext"></span>
+        <div id="metricPageStatus"></div>
+        <span id="metricJournalCount"></span>
+        <div id="metricJournalStatus"></div>
+        <span id="metricBookCount"></span>
+        <div id="metricBookStatus"></div>
+        <span id="metricLampiranCount"></span>
+        <div id="metricLampiranStatus"></div>
       </div>
 
       <!-- SECTION: LEMBAR AUDIT & REKOMENDASI REVISI TERPADU (UNIFIED 3 JADI 1) -->
