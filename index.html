@@ -366,12 +366,12 @@
 
             <!-- Mode Switcher: Per Bab Saja vs Kumulatif -->
             <div class="grid grid-cols-2 p-1 bg-slate-100 rounded-2xl mb-3 text-xs font-extrabold gap-1">
-              <button type="button" onclick="setStageScopeMode('single')" id="scopeModeSingleBtn" class="py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-unpam-900 shadow-sm border border-slate-200/80">
-                <i class="fa-solid fa-bullseye text-unpam-600"></i>
+              <button type="button" onclick="setStageScopeMode('single')" id="scopeModeSingleBtn" class="py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800">
+                <i class="fa-solid fa-bullseye text-slate-400"></i>
                 <span>Per Bab Saja</span>
               </button>
-              <button type="button" onclick="setStageScopeMode('cumulative')" id="scopeModeCumBtn" class="py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800">
-                <i class="fa-solid fa-layer-group text-slate-400"></i>
+              <button type="button" onclick="setStageScopeMode('cumulative')" id="scopeModeCumBtn" class="py-2 px-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-white text-unpam-900 shadow-sm border border-slate-200/80">
+                <i class="fa-solid fa-layer-group text-unpam-600"></i>
                 <span>Kumulatif / Lengkap</span>
               </button>
             </div>
@@ -383,7 +383,7 @@
           </div>
 
           <div class="mt-4 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-slate-500">
-            <div>Batas Aktif: <b id="activeStageLabel" class="text-unpam-700">Hanya BAB II Saja</b></div>
+            <div>Batas Aktif: <b id="activeStageLabel" class="text-unpam-700">Lengkap (BAB I–IV & 8 Lampiran Wajib)</b></div>
             <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded font-bold self-start sm:self-auto flex items-center gap-1">
               <i class="fa-solid fa-check-double text-[10px]"></i> Bisa Cek Bab Terpisah
             </span>
@@ -903,12 +903,12 @@
     // =========================================================================
     // STATE DATA & LOCAL STORAGE
     // =========================================================================
-    const STORAGE_KEY = "UNPAM_KP_VALIDATOR_V3_PREMIUM";
+    const STORAGE_KEY = "UNPAM_KP_VALIDATOR_V4_MASTER";
     
     let appState = {
       activeTab: "audit",
-      stageScopeMode: "single", // "single" (Per Bab Saja) or "cumulative" (Kumulatif/Lengkap)
-      currentStage: "bab2_only",
+      stageScopeMode: "cumulative", // "cumulative" (Kumulatif/Lengkap) or "single" (Per Bab Saja)
+      currentStage: "all",
       checklistFilter: "all",
       unifiedFilter: "issues", // "issues", "checklist_pass", "all", "resolved"
       checkedIssues: {}
@@ -920,8 +920,8 @@
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed) {
-          appState.currentStage = parsed.currentStage || "bab2_only";
-          appState.stageScopeMode = parsed.stageScopeMode || (["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage) ? "single" : "cumulative");
+          appState.stageScopeMode = parsed.stageScopeMode || "cumulative";
+          appState.currentStage = parsed.currentStage || (appState.stageScopeMode === "single" ? "bab1_only" : "all");
           appState.checkedIssues = parsed.checkedIssues || {};
         }
       }
@@ -1356,20 +1356,15 @@
         if (!["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage)) {
           if (appState.currentStage === "bab2") appState.currentStage = "bab2_only";
           else if (appState.currentStage === "bab3") appState.currentStage = "bab3_only";
-          else if (appState.currentStage === "bab1") appState.currentStage = "bab1_only";
-          else appState.currentStage = "bab2_only";
+          else appState.currentStage = "bab1_only"; // Default bagian per bab saja adalah BAB I
         }
       } else {
-        if (["bab1_only", "bab2_only", "bab3_only", "bab4_only"].includes(appState.currentStage)) {
-          if (appState.currentStage === "bab2_only") appState.currentStage = "bab2";
-          else if (appState.currentStage === "bab3_only") appState.currentStage = "bab3";
-          else if (appState.currentStage === "bab1_only") appState.currentStage = "bab1";
-          else appState.currentStage = "all";
-        }
+        // Default bagian kumulatif adalah Lengkap (BAB I–IV & 8 Lampiran Wajib)
+        appState.currentStage = "all";
       }
       saveState();
       renderAll();
-      showToast(`Mode audit: ${mode === 'single' ? 'Fokus Per Bab Saja' : 'Kumulatif / Lengkap'}`, "info");
+      showToast(`Mode audit: ${mode === 'single' ? 'Fokus Per Bab Saja (BAB I)' : 'Kumulatif (Lengkap BAB I–IV)'}`, "info");
     }
 
     function getStageName(stage) {
@@ -3038,6 +3033,8 @@
 
     function loadDefaultDosenSample() {
       docAnalysis = JSON.parse(JSON.stringify(DEFAULT_DOSEN_DATASET));
+      appState.stageScopeMode = "cumulative";
+      appState.currentStage = "all";
       appState.checkedIssues = {};
       saveState();
       renderAll();
