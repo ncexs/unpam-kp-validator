@@ -455,74 +455,78 @@
         </div>
       </div>
 
-      <!-- SECTION: CHECKLIST SYARAT WAJIB SESUAI PEDOMAN 2026 -->
-      <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-200/90 space-y-5">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 pb-4 border-b border-slate-100">
+      <!-- SECTION: LEMBAR AUDIT & REKOMENDASI REVISI TERPADU (UNIFIED 3 JADI 1) -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-200/90 space-y-5" id="unifiedAuditSection">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-4 border-b border-slate-100">
           <div>
-            <div class="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-black px-2.5 py-0.5 rounded-md uppercase tracking-wider mb-1">
-              <i class="fa-solid fa-certificate"></i> Standar Pedoman KP UNPAM 2026
-            </div>
-            <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight" id="syaratBabTitle">
-              Syarat Wajib Format & Struktur (Sesuai Batas Progres)
-            </h3>
-            <p class="text-xs text-slate-500 mt-0.5">
-              Parameter otomatis disesuaikan secara dinamis dengan batas BAB yang sedang Anda pilih di atas.
-            </p>
-          </div>
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-xs font-semibold text-slate-500 mr-1">Filter Kriteria:</span>
-            <button onclick="filterChecklist('all')" id="btnFilterCheck-all" class="check-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-unpam-700 text-white">Semua</button>
-            <button onclick="filterChecklist('fail')" id="btnFilterCheck-fail" class="check-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">Perlu Perbaikan</button>
-            <button onclick="filterChecklist('pass')" id="btnFilterCheck-pass" class="check-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">Sesuai</button>
-          </div>
-        </div>
-
-        <!-- GRID KARTU SYARAT WAJIB -->
-        <div id="mandatoryChecklistGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-      </div>
-
-      <!-- SECTION: DAFTAR REVISI & KOREKSI SPESIFIK -->
-      <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-200/90 space-y-5">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b border-slate-100">
-          <div>
-            <div class="flex items-center gap-2.5">
-              <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
-                📌 Catatan Koreksi & Rekomendasi Revisi
-              </h3>
-              <span id="badgeCountKoreksi" class="bg-rose-600 text-white text-xs font-black px-2.5 py-0.5 rounded-full shadow-sm">
-                0
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <span class="inline-flex items-center gap-1.5 bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-black px-2.5 py-0.5 rounded-md uppercase tracking-wider">
+                <i class="fa-solid fa-clipboard-check"></i> Lembar Audit Terpadu
+              </span>
+              <span class="inline-flex items-center gap-1 text-[11px] font-bold text-slate-600 bg-slate-100 px-2.5 py-0.5 rounded-md" id="activeStagePill">
+                Batas: BAB I–IV & 8 Lampiran Wajib
               </span>
             </div>
+            <h3 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight" id="syaratBabTitle">
+              Syarat Wajib Laporan Lengkap (BAB I–IV & 8 Lampiran Wajib) & Catatan Koreksi
+            </h3>
             <p class="text-xs text-slate-500 mt-1">
-              Setiap catatan dilengkapi <b>lokasi spesifik (halaman & paragraf)</b> dan langkah perbaikan ringkas yang to the point.
+              Daftar syarat kelayakan pedoman 2026 dan catatan koreksi dosen dirangkum dalam satu lembar terpadu agar praktis ditinjau dan diperbaiki.
             </p>
           </div>
 
-          <div class="flex flex-wrap items-center gap-2.5">
-            <div id="progressCorrectedBadge" class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-2 rounded-xl border border-slate-200">
+          <!-- ACTIONS & SUMMARY BADGE -->
+          <div class="flex flex-wrap items-center gap-2.5 self-start lg:self-center">
+            <div id="progressCorrectedBadge" class="text-xs font-bold bg-slate-100 text-slate-700 px-3 py-2 rounded-xl border border-slate-200 shadow-2xs">
               0 / 0 Selesai Diperbaiki
             </div>
-            <button onclick="resetAllCheckedIssues()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition" title="Reset centang">
+            <button onclick="copyRevisiToWA()" class="text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl shadow-xs transition flex items-center gap-1.5" title="Salin ringkasan ke grup WhatsApp">
+              <i class="fa-brands fa-whatsapp text-sm"></i> Salin ke WA
+            </button>
+            <button onclick="resetAllCheckedIssues()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 transition" title="Reset centang perbaikan">
               <i class="fa-solid fa-arrows-rotate mr-1"></i> Reset Checklist
             </button>
           </div>
         </div>
 
-        <!-- SEARCH & FILTER UNTUK DAFTAR REVISI -->
-        <div class="flex flex-col sm:flex-row gap-3">
-          <div class="relative flex-1">
-            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
-            <input type="text" id="searchIssueInput" oninput="renderIssuesList()" placeholder="Cari masalah, nomor halaman, paragraf, atau kata kunci..." class="w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-unpam-500 focus:border-transparent bg-slate-50/50" />
+        <!-- SEARCH & UNIFIED FILTER TABS -->
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-1.5 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80">
+            <button onclick="setUnifiedFilter('issues')" id="btnFilterUnified-issues" class="unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 bg-rose-600 text-white shadow-xs">
+              <i class="fa-solid fa-circle-exclamation"></i>
+              <span>Perlu Perbaikan</span>
+              <span id="badgeCountKoreksi" class="bg-white/20 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+            </button>
+            <button onclick="setUnifiedFilter('checklist_pass')" id="btnFilterUnified-checklist_pass" class="unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i>
+              <span>Syarat Sesuai</span>
+              <span id="badgeCountPass" class="bg-slate-200 text-slate-700 text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+            </button>
+            <button onclick="setUnifiedFilter('all')" id="btnFilterUnified-all" class="unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60">
+              <i class="fa-solid fa-layer-group text-unpam-600"></i>
+              <span>Semua Poin (Terpadu)</span>
+              <span id="badgeCountAll" class="bg-slate-200 text-slate-700 text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
+            </button>
+            <button onclick="setUnifiedFilter('resolved')" id="btnFilterUnified-resolved" class="unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60">
+              <i class="fa-solid fa-check-double text-blue-600"></i>
+              <span>Sudah Diperbaiki</span>
+            </button>
           </div>
-          <select id="filterIssueStatusSelect" onchange="renderIssuesList()" class="text-xs rounded-xl border border-slate-200 px-3 py-2 bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-unpam-500 font-medium">
-            <option value="all">Semua Status (Belum & Sudah)</option>
-            <option value="unresolved">Hanya Belum Selesai</option>
-            <option value="resolved">Hanya Sudah Diperbaiki</option>
-          </select>
+
+          <div class="relative min-w-[240px] md:w-72">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+            <input type="text" id="searchUnifiedInput" oninput="renderUnifiedAuditList()" placeholder="Cari masalah, nomor halaman, istilah..." class="w-full pl-9 pr-3.5 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-unpam-500 focus:border-transparent bg-slate-50/70 focus:bg-white transition" />
+          </div>
         </div>
 
-        <!-- LIST CONTAINER -->
-        <div id="issuesListContainer" class="space-y-4"></div>
+        <!-- UNIFIED AUDIT LIST CONTAINER -->
+        <div id="unifiedAuditListContainer" class="space-y-4 pt-1"></div>
+
+        <!-- Hidden Fallback Containers for backward compatibility -->
+        <div id="mandatoryChecklistGrid" class="hidden"></div>
+        <div id="issuesListContainer" class="hidden"></div>
+        <input type="hidden" id="searchIssueInput" />
+        <select id="filterIssueStatusSelect" class="hidden"><option value="all">all</option></select>
       </div>
 
     </div>
@@ -539,7 +543,7 @@
               Audit Istilah Asing Wajib Dicetak Miring (Italic)
             </h3>
             <p class="text-xs text-slate-500 mt-1">
-              Seluruh istilah bahasa asing atau bahasa teknis TI wajib dicetak miring (italic). Gunakan tombol <b>Salin Cepat</b> dan lakukan pencarian di Word via <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Ctrl + F</kbd> atau <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Ctrl + H</kbd>.
+              Seluruh istilah bahasa asing atau bahasa teknis TI (misal: <i>progressive web application, service worker, online, real-time, database, website, black box testing</i>, dll) wajib dicetak miring (italic). Gunakan tombol <b>Salin Cepat</b> dan lakukan pencarian di Word via <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Ctrl + F</kbd> atau <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Ctrl + H</kbd>.
             </p>
           </div>
           <div class="flex items-center gap-2">
@@ -648,6 +652,59 @@
                 <span><b>Batas Revisi Setelah Lulus:</b> Maksimal <b>1 minggu</b> sejak ujian selesai! Jika terlambat, nilai dapat dibatalkan.</span>
               </li>
             </ul>
+          </div>
+        </div>
+
+        <!-- CATATAN KHUSUS BIMBINGAN DOSEN SECTION -->
+        <div class="border-2 border-amber-300 rounded-2xl p-5 bg-gradient-to-br from-amber-50/60 to-orange-50/40 space-y-3">
+          <div class="flex items-center justify-between">
+            <h4 class="font-black text-sm text-amber-950 flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-amber-600 text-base"></i>
+              <span>Poin Kunci Revisi Dosen Pembimbing KP (Wajib Diperhatikan!)</span>
+            </h4>
+            <span class="text-[10px] font-black uppercase tracking-wider bg-amber-200 text-amber-900 px-2 py-0.5 rounded-md">Feedback Terkini</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+            <div class="bg-white/90 p-3.5 rounded-xl border border-amber-200 space-y-1.5 shadow-xs">
+              <span class="font-extrabold text-unpam-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-list-ol text-unpam-600"></i>
+                <span>1. Penomoran Sub-Sub Bab (Gunakan a, b, c)</span>
+              </span>
+              <p class="text-slate-600 leading-relaxed">
+                Anak sub-bab (level 3) <b>wajib memakai huruf kecil: a., b., c.</b> dan <b>DILARANG memakai angka</b> seperti 1.1.1, 1.2.1, atau 2.1.1.
+              </p>
+            </div>
+
+            <div class="bg-white/90 p-3.5 rounded-xl border border-amber-200 space-y-1.5 shadow-xs">
+              <span class="font-extrabold text-unpam-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-arrows-split-up-and-left text-unpam-600"></i>
+                <span>2. Benang Merah Masalah (Dipadatkan 3 Poin)</span>
+              </span>
+              <p class="text-slate-600 leading-relaxed">
+                <b>Identifikasi Masalah</b> dipadatkan menjadi tepat <b>3 poin</b>. <b>Rumusan Masalah (3 poin)</b>, <b>Tujuan Penelitian (3 poin)</b>, dan <b>Pembahasan BAB III</b> harus selaras 1-ke-1.
+              </p>
+            </div>
+
+            <div class="bg-white/90 p-3.5 rounded-xl border border-amber-200 space-y-1.5 shadow-xs">
+              <span class="font-extrabold text-unpam-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-book-bookmark text-unpam-600"></i>
+                <span>3. Teori & Buku (Hapus Laudon + Ebook PDF)</span>
+              </span>
+              <p class="text-slate-600 leading-relaxed">
+                <b>Hapus referensi buku Laudon</b> (karena rawan edisi usang/copas). Referensi buku wajib terbitan <b>10 tahun terakhir (2016–2026)</b> dan pastikan <b>ada file ebook PDF-nya</b> untuk bukti sidang.
+              </p>
+            </div>
+
+            <div class="bg-white/90 p-3.5 rounded-xl border border-amber-200 space-y-1.5 shadow-xs">
+              <span class="font-extrabold text-unpam-900 flex items-center gap-1.5">
+                <i class="fa-solid fa-diagram-project text-unpam-600"></i>
+                <span>4. Metode Penelitian & Kerangka Berpikir</span>
+              </span>
+              <p class="text-slate-600 leading-relaxed">
+                BAB II wajib memuat <b>Metode Penelitian</b> (teknik pengumpulan data & metode pengembangan). Sedangkan <b>Kerangka Berpikir bersifat OPSIONAL</b> (boleh pakai, boleh tidak).
+              </p>
+            </div>
           </div>
         </div>
 
@@ -903,6 +960,7 @@
       stageScopeMode: "single", // "single" (Per Bab Saja) or "cumulative" (Kumulatif/Lengkap)
       currentStage: "bab2_only",
       checklistFilter: "all",
+      unifiedFilter: "issues", // "issues", "checklist_pass", "all", "resolved"
       checkedIssues: {}
     };
 
@@ -946,18 +1004,21 @@
       bookRequired: 5,
       lampiranCount: 7,
       foreignWords: [
+        { word: "progressive web application", page: "Hal. 1, 2, 14, 25", count: 7, context: "Sistem buku tamu dirancang berbasis Progressive Web Application (PWA) agar responsif di berbagai perangkat" },
+        { word: "service worker", page: "Hal. 15, 26", count: 4, context: "Didukung oleh Service Worker untuk caching data dan akses secara offline" },
         { word: "online", page: "Hal. 1, 2, 3, 4, 5, 6", count: 24, context: "Sistem buku tamu online hadir sebagai salah satu solusi" },
         { word: "real-time", page: "Hal. 2, 3, 13, 17", count: 4, context: "mempermudah proses monitoring kehadiran tamu secara real-time" },
         { word: "human error", page: "Hal. 3, 16", count: 2, context: "potensi terjadinya kesalahan pencatatan (human error) cukup besar" },
-        { word: "security", page: "Hal. 8, 9, 10", count: 6, context: "perusahaan yang bergerak dibidang jasa pengamanan (security)" },
         { word: "website", page: "Hal. 14, 46", count: 3, context: "sistem absensi berbasis website yang telah dikembangkan" },
         { word: "login / logout", page: "Hal. 21, 22, 24, 25", count: 8, context: "Admin kemudian dapat melakukan Login dan Logout" },
         { word: "dashboard", page: "Hal. 23, 35, 41", count: 7, context: "Menampilkan Dashboard daftar singkat aktivitas" },
         { word: "database", page: "Hal. 27, 28, 33", count: 12, context: "tersimpan secara terpusat dalam database" },
-        { word: "blackbox / csv", page: "Hal. 15, 46, 49", count: 5, context: "Metode pengujian yang digunakan adalah Black Box Testing" },
+        { word: "black box testing", page: "Hal. 15, 46, 49", count: 6, context: "Metode pengujian yang digunakan adalah Black Box Testing" },
         { word: "user / client", page: "Hal. 13, 15, 26", count: 11, context: "komunikasi data antara server dan client" },
         { word: "sequence diagram", page: "Hal. 23–31", count: 9, context: "Sequence Diagram Login, Logout, Kelola User" },
-        { word: "entity relationship", page: "Hal. 33", count: 2, context: "Entity Relationship Diagram (ERD) menggambarkan struktur data" }
+        { word: "entity relationship diagram", page: "Hal. 33", count: 2, context: "Entity Relationship Diagram (ERD) menggambarkan struktur data" },
+        { word: "wireframe / mockup", page: "Hal. 35–42", count: 8, context: "Desain wireframe dan mockup antarmuka pengguna" },
+        { word: "cross-platform", page: "Hal. 2, 14", count: 3, context: "Aplikasi dapat diakses secara cross-platform di berbagai perangkat" }
       ],
       chapterChecklist: {
         bab1: [
@@ -1008,6 +1069,22 @@
             desc: "1.1 Latar Belakang, 1.2 Identifikasi Masalah, 1.3 Rumusan Masalah, 1.4 Batasan Masalah, 1.5 Tujuan & Manfaat, 1.6 Metode KP, 1.7 Tempat KP, 1.8 Jadwal KP, 1.9 Sistematika Penulisan.",
             status: "pass",
             badge: "9 Sub-Bab Lengkap"
+          },
+          {
+            id: "chk-6b",
+            title: "6b. Penomoran Sub-Sub Bab Wajib Huruf (a, b, c Jangan Nomor)",
+            pedomanRef: "Catatan Bimbingan Dosen & Pedoman BAB VII",
+            desc: "Penomoran anak sub-bab (level 3) wajib memakai huruf kecil a, b, c bukan angka seperti 1.1.1 atau 1.2.1.",
+            status: "pass",
+            badge: "Format Huruf a, b, c"
+          },
+          {
+            id: "chk-6c",
+            title: "6c. Keselarasan 3 Poin Masalah (Identifikasi = Rumusan = Tujuan = Bab 3)",
+            pedomanRef: "Catatan Bimbingan Dosen",
+            desc: "Identifikasi masalah dipadatkan menjadi tepat 3 poin. Rumusan masalah, tujuan penelitian, dan pembahasan BAB III harus selaras 1-ke-1.",
+            status: "pass",
+            badge: "Padat 3 Poin Selaras"
           }
         ],
         bab2: [
@@ -1029,11 +1106,11 @@
           },
           {
             id: "chk-9",
-            title: "9. Sub-Bab 2.3 Teori, 2.4 Metode, 2.5 Kerangka Berfikir",
-            pedomanRef: "BAB VII Hal. 12",
-            desc: "Sistematika BAB II wajib memuat 2.3 Landasan Teori, 2.4 Metode, dan 2.5 Kerangka Berfikir. Di laporan contoh sub-bab 2.5 terlewat.",
-            status: "fail",
-            badge: "Sub-Bab 2.5 Belum Ada"
+            title: "9. Sistematika Teori, Metode Penelitian & Kerangka Berpikir",
+            pedomanRef: "BAB VII Hal. 12 & Arahan Dosen",
+            desc: "BAB II memuat 2.3/2.4 Landasan Teori dan Metode Penelitian (teknik pengumpulan data & metode perancangan). Kerangka berpikir bersifat OPSIONAL (nilai tambah jika disertakan).",
+            status: "pass",
+            badge: "Kerangka Berpikir Opsional"
           },
           {
             id: "chk-10",
@@ -1045,11 +1122,11 @@
           },
           {
             id: "chk-11",
-            title: "11. Minimal 5 Buku Referensi (Maks 10 Tahun: 2016–2026)",
-            pedomanRef: "Standar Dosen & Reviewer",
-            desc: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit 2016–2026 yang dicantumkan di Landasan Teori dan Daftar Pustaka.",
+            title: "11. Minimal 5 Buku Referensi (10 Tahun Terakhir 2016–2026 + Ada Ebook PDF)",
+            pedomanRef: "Arahan Dosen & Reviewer",
+            desc: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit 2016–2026 yang memiliki file ebook PDF. Hapus referensi buku usang seperti Laudon edisi lama.",
             status: "fail",
-            badge: "Baru 0 / 5 Buku"
+            badge: "Min 10 Thn (Ada Ebook PDF)"
           }
         ],
         bab3: [
@@ -1132,14 +1209,16 @@
           id: "iss-2",
           stage: "bab1",
           babLabel: "BAB I",
-          page: "Hal. 2 s/d 4",
-          locationDetail: "Hal. 2 (Paragraf 1), Hal. 3 (Paragraf 1), Hal. 4 (Paragraf 2)",
+          page: "Hal. 1 s/d 4",
+          locationDetail: "Hal. 1 (Par. 1), Hal. 2 (Par. 1), Hal. 3 (Par. 1), Hal. 4 (Par. 2)",
           category: "Istilah Asing",
-          title: "Daftar kata asing di Bab I yang wajib dimiringkan (italic)",
-          explanation: "Kata-kata teknis bahasa Inggris berikut terdeteksi masih dicetak tegak biasa pada naskah Bab I Anda: 'online' (Hal. 2, 4), 'real-time' (Hal. 2, 3), 'human error' (Hal. 3), dan 'website' (Hal. 4). Seluruh kata ini wajib dicetak miring.",
+          title: "Daftar istilah asing & teknis (PWA, Service Worker, dll) wajib dimiringkan (italic)",
+          explanation: "Kata-kata teknis bahasa Inggris berikut terdeteksi masih dicetak tegak biasa pada naskah Anda: 'progressive web application', 'service worker', 'online', 'real-time', 'human error', dan 'website'. Seluruh istilah asing wajib dicetak miring (italic) sesuai Pedoman Bab VII Hal. 9.",
           fix: "Klik tombol kata di bawah untuk otomatis menyalin ke clipboard, lalu di Microsoft Word tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I).",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
           foreignItems: [
+            { word: "progressive web application", page: "Hal. 1, 2", count: 4 },
+            { word: "service worker", page: "Hal. 2", count: 2 },
             { word: "online", page: "Hal. 2, 4", count: 8 },
             { word: "real-time", page: "Hal. 2, 3", count: 4 },
             { word: "human error", page: "Hal. 3", count: 2 },
@@ -1199,12 +1278,12 @@
           stage: "bab2",
           babLabel: "BAB II",
           page: "Hal. 12 – 16",
-          locationDetail: "BAB II (Setelah Sub-Bab 2.1 & Akhir BAB II)",
+          locationDetail: "BAB II (Setelah Sub-Bab 2.1 & Metode)",
           category: "Struktur Bab",
-          title: "Sub-bab 2.2 Tinjauan Pustaka & 2.5 Kerangka Berfikir belum dicantumkan di BAB II",
-          explanation: "Struktur resmi Bab II Pedoman 2026 Hal. 11-12 mewajibkan: 2.1 Profil Tempat KP, 2.2 Tinjauan Pustaka, 2.3 Landasan Teori, 2.4 Metode, 2.5 Kerangka Berfikir.",
-          fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka (tabel penelitian terdahulu) dan 2.5 Kerangka Berfikir (diagram alur pemecahan masalah) sebelum lanjut ke Bab III.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11–12"
+          title: "Sub-bab 2.2 Tinjauan Pustaka belum dicantumkan di BAB II (Kerangka Berpikir Opsional)",
+          explanation: "Struktur resmi Bab II Pedoman 2026 mewajibkan: 2.1 Profil Perusahaan, 2.2 Tinjauan Pustaka, 2.3 Landasan Teori, dan Metode Penelitian. Sesuai arahan revisi dosen, Kerangka Berpikir sifatnya opsional (boleh dipakai, boleh tidak).",
+          fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka berupa tabel komparasi penelitian terdahulu yang relevan sebelum masuk ke Landasan Teori.",
+          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11–12 & Arahan Dosen"
         },
         {
           id: "iss-8",
@@ -1225,10 +1304,10 @@
           page: "Hal. 52",
           locationDetail: "Hal. 52 (Daftar Pustaka Buku)",
           category: "Jumlah Literatur",
-          title: "Buku Teks Referensi masih kurang (Baru 0 buku mutakhir, syarat minimal 5 Buku 2016–2026)",
-          explanation: "Buku yang dikutip di contoh hanya buku terbitan tahun 1998 (lebih dari 10 tahun). Syarat buku teks adalah maksimal 10 tahun terakhir (2016–2026).",
-          fix: "Tambahkan minimal 5 buku teks terbaru (analisis sistem, basis data, rekayasa perangkat lunak, pemrograman web) terbitan 2016 ke atas.",
-          pedomanRef: "Standar Referensi Buku Teks Prodi SI UNPAM"
+          title: "Buku Teks Referensi masih kurang (Wajib 10 Tahun Terakhir 2016–2026 & Ada Ebook PDF)",
+          explanation: "Buku yang dikutip di contoh hanya buku usang tahun 1998 / Laudon edisi lawas. Arahan Dosen Pembimbing: Hapus referensi Laudon, cari minimal 5 buku teks terbaru terbitan maksimal 10 tahun terakhir (2016–2026) yang memiliki ebook PDF.",
+          fix: "Hapus referensi Laudon di Bab II dan Daftar Pustaka. Ganti dengan minimal 5 buku referensi sistem/basis data terbitan 2016-2026 yang memiliki file ebook PDF.",
+          pedomanRef: "Arahan Revisi Dosen & Standar Referensi Prodi SI"
         },
         {
           id: "iss-10",
@@ -1474,104 +1553,45 @@
     }
 
     // =========================================================================
-    // CHECKLIST SYARAT WAJIB RENDERING
+    // LEMBAR AUDIT & REKOMENDASI REVISI TERPADU (UNIFIED 3 JADI 1)
     // =========================================================================
-    function filterChecklist(status) {
-      appState.checklistFilter = status;
-      const filters = ["all", "fail", "pass"];
+    function setUnifiedFilter(filterKey) {
+      appState.unifiedFilter = filterKey;
+      const filters = ["issues", "checklist_pass", "all", "resolved"];
       filters.forEach(f => {
-        const btn = document.getElementById("btnFilterCheck-" + f);
+        const btn = document.getElementById("btnFilterUnified-" + f);
         if (btn) {
-          if (f === status) {
-            btn.className = "check-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-unpam-700 text-white";
+          if (f === filterKey) {
+            btn.className = "unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 " + 
+              (f === "issues" ? "bg-rose-600 text-white shadow-xs" : 
+               f === "checklist_pass" ? "bg-emerald-600 text-white shadow-xs" : 
+               f === "resolved" ? "bg-blue-600 text-white shadow-xs" : "bg-unpam-700 text-white shadow-xs");
           } else {
-            btn.className = "check-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200";
+            btn.className = "unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60";
           }
         }
       });
-      renderMandatoryChecklist();
+      renderUnifiedAuditList();
+    }
+
+    function filterChecklist(status) {
+      if (status === "pass") setUnifiedFilter("checklist_pass");
+      else if (status === "fail") setUnifiedFilter("issues");
+      else setUnifiedFilter("all");
     }
 
     function renderMandatoryChecklist() {
-      const activeStages = getActiveStagesList(appState.currentStage);
-      const stageTitles = {
-        bab1_only: "Syarat Wajib Khusus BAB I Pendahuluan (Pedoman 2026)",
-        bab1: "Syarat Wajib BAB I Pendahuluan (Pedoman 2026)",
-        bab2_only: "Syarat Wajib Khusus BAB II (Profil PT, Teori, 20 Jurnal & 5 Buku)",
-        bab3_only: "Syarat Wajib Khusus BAB III (UML, Mockup UI/UX & BlackBox Testing)",
-        bab4_only: "Syarat Wajib Khusus BAB IV & Format Daftar Pustaka",
-        bab2: "Syarat Wajib Kumulatif (Cover s/d BAB II Profil & Teori)",
-        bab3: "Syarat Wajib Kumulatif (Cover s/d BAB III Perancangan)",
-        all: "Syarat Wajib Laporan Lengkap (BAB I–IV & 8 Lampiran Wajib)"
-      };
-      document.getElementById("syaratBabTitle").textContent = stageTitles[appState.currentStage] || "Syarat Wajib Format & Struktur Pedoman 2026";
-
-      let items = [];
-      activeStages.forEach(st => {
-        if (docAnalysis.chapterChecklist[st]) {
-          items = items.concat(docAnalysis.chapterChecklist[st]);
-        }
-      });
-
-      if (appState.checklistFilter !== "all") {
-        items = items.filter(it => {
-          if (appState.checklistFilter === "fail") return it.status === "fail" || it.status === "warn";
-          if (appState.checklistFilter === "pass") return it.status === "pass";
-          return true;
-        });
-      }
-
-      const grid = document.getElementById("mandatoryChecklistGrid");
-      if (items.length === 0) {
-        grid.innerHTML = `<div class="col-span-full p-8 text-center bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-500">Tidak ada kriteria yang sesuai filter saat ini.</div>`;
-        return;
-      }
-
-      grid.innerHTML = items.map(item => {
-        let cardBg = "bg-white border-slate-200/90 hover:border-slate-300";
-        let statusBadge = "bg-emerald-50 text-emerald-800 border-emerald-200";
-        let icon = '<i class="fa-solid fa-circle-check text-emerald-600"></i>';
-        
-        if (item.status === "fail") {
-          cardBg = "bg-rose-50/40 border-rose-200 hover:border-rose-300";
-          statusBadge = "bg-rose-100 text-rose-800 border-rose-200";
-          icon = '<i class="fa-solid fa-circle-xmark text-rose-600"></i>';
-        } else if (item.status === "warn") {
-          cardBg = "bg-amber-50/40 border-amber-200 hover:border-amber-300";
-          statusBadge = "bg-amber-100 text-amber-900 border-amber-200";
-          icon = '<i class="fa-solid fa-triangle-exclamation text-amber-600"></i>';
-        }
-
-        return `
-          <div class="rounded-2xl border ${cardBg} p-4 flex flex-col justify-between transition-all duration-200 shadow-sm">
-            <div>
-              <div class="flex items-start justify-between gap-2">
-                <div class="flex items-start gap-2">
-                  <span class="text-base mt-0.5">${icon}</span>
-                  <div>
-                    <h4 class="text-xs font-black text-slate-900 leading-snug">${item.title}</h4>
-                    <span class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">${item.pedomanRef}</span>
-                  </div>
-                </div>
-              </div>
-              <p class="text-xs text-slate-600 mt-2.5 leading-relaxed">${item.desc}</p>
-            </div>
-            <div class="mt-3 pt-2.5 border-t border-slate-100/80 flex items-center justify-between text-[11px]">
-              <span class="font-bold px-2.5 py-0.5 rounded-full border ${statusBadge}">${item.badge}</span>
-              <span class="text-[10px] text-slate-400">Pedoman 2026</span>
-            </div>
-          </div>
-        `;
-      }).join("");
+      renderUnifiedAuditList();
     }
 
-    // =========================================================================
-    // DAFTAR REVISI & CHECKLIST KOREKSI RENDERING (WITH EXACT PARAGRAPH & SNIPPET DIFF)
-    // =========================================================================
+    function renderIssuesList() {
+      renderUnifiedAuditList();
+    }
+
     function toggleIssueCheck(issueId) {
       appState.checkedIssues[issueId] = !appState.checkedIssues[issueId];
       saveState();
-      renderIssuesList();
+      renderUnifiedAuditList();
       updateScoreMetrics();
 
       if (appState.checkedIssues[issueId]) {
@@ -1584,76 +1604,99 @@
       if (confirm("Reset semua centang pada daftar perbaikan?")) {
         appState.checkedIssues = {};
         saveState();
-        renderIssuesList();
+        renderUnifiedAuditList();
         updateScoreMetrics();
         showToast("Semua centang perbaikan telah direset.", "info");
       }
     }
 
-    function renderIssuesList() {
+    function renderUnifiedAuditList() {
       const activeStages = getActiveStagesList(appState.currentStage);
-      const query = (document.getElementById("searchIssueInput").value || "").toLowerCase().trim();
-      const statusFilter = document.getElementById("filterIssueStatusSelect").value;
+      const stageTitles = {
+        bab1_only: "Syarat Wajib Khusus BAB I Pendahuluan (Pedoman 2026)",
+        bab1: "Syarat Wajib BAB I Pendahuluan (Pedoman 2026)",
+        bab2_only: "Syarat Wajib Khusus BAB II (Profil PT, Teori, 20 Jurnal & 5 Buku)",
+        bab3_only: "Syarat Wajib Khusus BAB III (UML, Mockup UI/UX & BlackBox Testing)",
+        bab4_only: "Syarat Wajib Khusus BAB IV & Format Daftar Pustaka",
+        bab2: "Syarat Wajib Kumulatif (Cover s/d BAB II Profil & Teori)",
+        bab3: "Syarat Wajib Kumulatif (Cover s/d BAB III Perancangan)",
+        all: "Syarat Wajib Laporan Lengkap (BAB I–IV & 8 Lampiran Wajib) & Catatan Koreksi"
+      };
 
-      let filtered = docAnalysis.issues.filter(it => activeStages.includes(it.stage));
+      const titleEl = document.getElementById("syaratBabTitle");
+      if (titleEl) {
+        titleEl.textContent = stageTitles[appState.currentStage] || "Hasil Audit & Rekomendasi Revisi Laporan";
+      }
 
-      if (query) {
-        filtered = filtered.filter(it => 
+      const stagePillEl = document.getElementById("activeStagePill");
+      if (stagePillEl) {
+        stagePillEl.textContent = `Batas: ${getStageName(appState.currentStage)}`;
+      }
+
+      // 1. Gather all active issues for current stage
+      const allActiveIssues = docAnalysis.issues.filter(it => activeStages.includes(it.stage));
+      let doneCount = 0;
+      allActiveIssues.forEach(it => {
+        if (appState.checkedIssues[it.id]) doneCount++;
+      });
+      const remainingCount = allActiveIssues.length - doneCount;
+
+      // 2. Gather active checklist items
+      let activeChecklist = [];
+      activeStages.forEach(st => {
+        if (docAnalysis.chapterChecklist[st]) {
+          activeChecklist = activeChecklist.concat(docAnalysis.chapterChecklist[st]);
+        }
+      });
+      const passChecklist = activeChecklist.filter(it => it.status === "pass");
+
+      // 3. Update summary badges
+      const badgeKoreksi = document.getElementById("badgeCountKoreksi");
+      if (badgeKoreksi) badgeKoreksi.textContent = remainingCount;
+      const badgePass = document.getElementById("badgeCountPass");
+      if (badgePass) badgePass.textContent = passChecklist.length;
+      const badgeAll = document.getElementById("badgeCountAll");
+      if (badgeAll) badgeAll.textContent = allActiveIssues.length + passChecklist.length;
+      const progressBadge = document.getElementById("progressCorrectedBadge");
+      if (progressBadge) progressBadge.textContent = `${doneCount} / ${allActiveIssues.length} Selesai Diperbaiki`;
+
+      const searchInput = document.getElementById("searchUnifiedInput");
+      const query = (searchInput ? searchInput.value : "").toLowerCase().trim();
+
+      const container = document.getElementById("unifiedAuditListContainer");
+      if (!container) return;
+
+      const currentFilter = appState.unifiedFilter || "issues";
+
+      function filterIssueByQuery(it) {
+        if (!query) return true;
+        return (
           it.title.toLowerCase().includes(query) ||
           it.fix.toLowerCase().includes(query) ||
           it.page.toLowerCase().includes(query) ||
           it.babLabel.toLowerCase().includes(query) ||
-          (it.locationDetail && it.locationDetail.toLowerCase().includes(query))
+          (it.locationDetail && it.locationDetail.toLowerCase().includes(query)) ||
+          (it.foreignItems && it.foreignItems.some(f => f.word.toLowerCase().includes(query)))
         );
       }
 
-      if (statusFilter === "unresolved") {
-        filtered = filtered.filter(it => !appState.checkedIssues[it.id]);
-      } else if (statusFilter === "resolved") {
-        filtered = filtered.filter(it => !!appState.checkedIssues[it.id]);
+      function filterChecklistByQuery(item) {
+        if (!query) return true;
+        return (
+          item.title.toLowerCase().includes(query) ||
+          item.desc.toLowerCase().includes(query) ||
+          item.pedomanRef.toLowerCase().includes(query) ||
+          item.badge.toLowerCase().includes(query)
+        );
       }
 
-      const activeIssuesInStage = docAnalysis.issues.filter(it => activeStages.includes(it.stage));
-      let doneCount = 0;
-      activeIssuesInStage.forEach(it => {
-        if (appState.checkedIssues[it.id]) doneCount++;
-      });
-      const remainingCount = activeIssuesInStage.length - doneCount;
-
-      document.getElementById("badgeCountKoreksi").textContent = remainingCount;
-      document.getElementById("progressCorrectedBadge").textContent = `${doneCount} / ${activeIssuesInStage.length} Selesai Diperbaiki`;
-
-      const container = document.getElementById("issuesListContainer");
-
-      if (filtered.length === 0) {
-        if (remainingCount === 0 && activeIssuesInStage.length > 0) {
-          container.innerHTML = `
-            <div class="p-8 text-center bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl">
-              <div class="text-4xl mb-2">🎉</div>
-              <h4 class="text-sm font-extrabold text-emerald-900">Luar Biasa! Semua Poin Revisi Selesai</h4>
-              <p class="text-xs text-emerald-700 mt-1 max-w-md mx-auto">
-                Kelompok Anda telah menyelesaikan seluruh poin perbaikan pada batas ${getStageName(appState.currentStage)}. Laporan siap diajukan ke Dosen Pembimbing!
-              </p>
-            </div>
-          `;
-        } else {
-          container.innerHTML = `
-            <div class="p-6 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
-              Tidak ada data koreksi yang cocok dengan filter / pencarian.
-            </div>
-          `;
-        }
-        return;
-      }
-
-      container.innerHTML = filtered.map(it => {
+      function renderSingleIssueCard(it) {
         const isDone = !!appState.checkedIssues[it.id];
         const foreignItems = it.foreignItems || (it.category === "Istilah Asing" ? docAnalysis.foreignWords : null);
 
         return `
           <div class="group relative rounded-2xl border-2 transition-all duration-200 p-4 sm:p-5 ${isDone ? 'bg-slate-50/80 border-slate-200 opacity-65' : 'bg-white border-slate-200 hover:border-unpam-300 shadow-sm hover:shadow-md'}">
             <div class="flex items-start gap-3.5">
-              <!-- Custom Checkbox -->
               <div class="pt-0.5">
                 <input 
                   type="checkbox" 
@@ -1664,18 +1707,17 @@
                 />
               </div>
 
-              <!-- Content -->
               <div class="flex-1">
                 <div class="flex flex-wrap items-center gap-2 mb-2">
                   <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-unpam-100 text-unpam-800">${it.babLabel}</span>
                   
-                  <!-- Lokasi Halaman & Paragraf -->
-                  <span class="text-xs font-bold text-amber-900 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-md flex items-center gap-1.5 shadow-xs">
+                  <span class="text-xs font-bold text-amber-900 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-md flex items-center gap-1.5 shadow-2xs">
                     <i class="fa-solid fa-location-dot text-amber-600"></i>
                     <span>${it.locationDetail || it.page}</span>
                   </span>
 
                   <span class="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded">${it.category}</span>
+                  <span class="text-[10px] font-mono text-slate-400 ml-auto hidden sm:inline">${it.pedomanRef || ''}</span>
                   ${isDone ? '<span class="text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded flex items-center gap-1"><i class="fa-solid fa-check"></i> Sudah Diperbaiki</span>' : ''}
                 </div>
 
@@ -1692,7 +1734,7 @@
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-amber-950">
                       <span class="flex items-center gap-1.5">
                         <i class="fa-solid fa-spell-check text-amber-600"></i>
-                        <span>Daftar Kata Asing Pasti yang Harus Dicari di Word (${foreignItems.length} Kata):</span>
+                        <span>Daftar Istilah Asing yang Harus Dicari di Word (${foreignItems.length} Istilah):</span>
                       </span>
                       <button onclick="switchTab('italic')" class="text-[11px] font-extrabold text-unpam-700 hover:text-unpam-900 underline flex items-center gap-1">
                         <span>Buka Tab Kamus</span> &rarr;
@@ -1704,7 +1746,7 @@
                         <button 
                           type="button"
                           onclick="copySingleWord('${f.word}')" 
-                          title="Klik untuk salin kata '${f.word}' lalu cari di Word" 
+                          title="Klik untuk salin '${f.word}' lalu cari di Word" 
                           class="inline-flex items-center gap-1.5 bg-white hover:bg-amber-100/70 border border-amber-300 hover:border-amber-400 text-slate-800 text-xs px-2.5 py-1.5 rounded-lg font-medium shadow-2xs transition group/btn cursor-pointer"
                         >
                           <span class="font-bold font-mono italic text-unpam-800">${f.word}</span>
@@ -1716,12 +1758,11 @@
                     </div>
 
                     <p class="text-[11px] text-amber-900/90 leading-tight">
-                      💡 <b>Tinggal klik salah satu kata di atas</b> untuk menyalin otomatis ke clipboard, lalu buka Word & tekan <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + F</kbd> (Cari) atau <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + H</kbd> (Replace) untuk langsung memiringkannya.
+                      💡 <b>Tinggal klik salah satu istilah di atas</b> untuk menyalin otomatis ke clipboard, lalu buka Word & tekan <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + F</kbd> (Cari) atau <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + H</kbd> (Replace) untuk langsung memiringkannya.
                     </p>
                   </div>
                 ` : ''}
 
-                <!-- Solution Action Box -->
                 <div class="mt-3 bg-slate-50 border border-slate-200/80 rounded-xl p-3 text-xs flex items-start gap-2.5">
                   <span class="text-amber-500 font-bold text-sm mt-0.5"><i class="fa-solid fa-wrench"></i></span>
                   <div class="flex-1 text-slate-700 leading-relaxed">
@@ -1735,7 +1776,131 @@
             </div>
           </div>
         `;
-      }).join("");
+      }
+
+      function renderSinglePassChecklist(item) {
+        return `
+          <div class="rounded-2xl border border-emerald-200/90 bg-emerald-50/40 p-4 transition-all duration-200 hover:border-emerald-300 shadow-2xs">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-start gap-2.5">
+                <span class="text-base text-emerald-600 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
+                <div>
+                  <div class="flex items-center gap-2 flex-wrap mb-1">
+                    <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${item.pedomanRef || 'Pedoman 2026'}</span>
+                    <span class="text-[11px] font-bold text-emerald-700 bg-white border border-emerald-200 px-2 py-0.5 rounded-md">${item.badge}</span>
+                  </div>
+                  <h4 class="text-xs font-black text-slate-900 leading-snug">${item.title}</h4>
+                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">${item.desc}</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full shrink-0">Sesuai</span>
+            </div>
+          </div>
+        `;
+      }
+
+      if (currentFilter === "issues") {
+        const issuesToShow = allActiveIssues.filter(it => !appState.checkedIssues[it.id]).filter(filterIssueByQuery);
+        
+        if (issuesToShow.length === 0) {
+          if (remainingCount === 0 && allActiveIssues.length > 0) {
+            container.innerHTML = `
+              <div class="p-8 text-center bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-200 rounded-2xl">
+                <div class="text-4xl mb-2">🎉</div>
+                <h4 class="text-sm font-extrabold text-emerald-900">Luar Biasa! Semua Poin Revisi Selesai</h4>
+                <p class="text-xs text-emerald-700 mt-1 max-w-md mx-auto">
+                  Seluruh poin perbaikan pada batas ${getStageName(appState.currentStage)} telah ditandai selesai. Laporan siap diajukan ke Dosen Pembimbing!
+                </p>
+                <button onclick="setUnifiedFilter('all')" class="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-emerald-700">Lihat Semua Ketentuan Lengkap</button>
+              </div>
+            `;
+          } else {
+            container.innerHTML = `
+              <div class="p-8 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
+                Tidak ada poin perbaikan yang sesuai dengan kata kunci pencarian.
+              </div>
+            `;
+          }
+          return;
+        }
+
+        container.innerHTML = issuesToShow.map(renderSingleIssueCard).join("");
+
+      } else if (currentFilter === "checklist_pass") {
+        const passToShow = passChecklist.filter(filterChecklistByQuery);
+        if (passToShow.length === 0) {
+          container.innerHTML = `
+            <div class="p-8 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
+              Tidak ada syarat sesuai yang cocok dengan kata kunci pencarian.
+            </div>
+          `;
+          return;
+        }
+        container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">${passToShow.map(renderSinglePassChecklist).join("")}</div>`;
+
+      } else if (currentFilter === "resolved") {
+        const resolvedIssues = allActiveIssues.filter(it => !!appState.checkedIssues[it.id]).filter(filterIssueByQuery);
+        if (resolvedIssues.length === 0) {
+          container.innerHTML = `
+            <div class="p-8 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
+              Belum ada poin perbaikan yang ditandai selesai (centang salah satu kartu untuk menandainya).
+            </div>
+          `;
+          return;
+        }
+        container.innerHTML = resolvedIssues.map(renderSingleIssueCard).join("");
+
+      } else {
+        // "all" mode: unified master view showing actionable issues first, then passing criteria
+        const issuesToShow = allActiveIssues.filter(filterIssueByQuery);
+        const passToShow = passChecklist.filter(filterChecklistByQuery);
+
+        let html = "";
+
+        if (issuesToShow.length > 0) {
+          html += `
+            <div class="space-y-3">
+              <div class="flex items-center justify-between pb-2 border-b border-rose-100">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
+                  <h4 class="text-xs font-black uppercase tracking-wider text-rose-900">Catatan Koreksi & Revisi Wajib (${issuesToShow.length} Poin)</h4>
+                </div>
+                <span class="text-[11px] text-slate-400">Centang kotak jika telah diperbaiki</span>
+              </div>
+              <div class="space-y-3.5">
+                ${issuesToShow.map(renderSingleIssueCard).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        if (passToShow.length > 0) {
+          html += `
+            <div class="space-y-3 pt-4">
+              <div class="flex items-center justify-between pb-2 border-b border-emerald-100">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+                  <h4 class="text-xs font-black uppercase tracking-wider text-emerald-900">Syarat Pedoman yang Sudah Sesuai (${passToShow.length} Poin)</h4>
+                </div>
+                <span class="text-[11px] text-emerald-600 font-semibold">✓ Standar Pedoman 2026</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                ${passToShow.map(renderSinglePassChecklist).join("")}
+              </div>
+            </div>
+          `;
+        }
+
+        if (issuesToShow.length === 0 && passToShow.length === 0) {
+          html = `
+            <div class="p-8 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
+              Tidak ada data yang cocok dengan kata kunci pencarian.
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+      }
     }
 
     function copySingleFix(issueId) {
@@ -2153,31 +2318,95 @@
 
       const lines = text.split(/\n|\. /);
       let journalCount = 0;
-      let bookCount = 0;
+      const uniqueBookKeys = new Set();
 
       lines.forEach(line => {
         const l = line.toLowerCase();
         const has5Yr = years5.some(y => l.includes(y));
         const has10Yr = years10.some(y => l.includes(y));
 
-        if (has5Yr && (l.includes("jurnal") || l.includes("journal") || l.includes("vol") || l.includes("issn") || l.includes("et al") || l.includes("dkk"))) {
+        // Deteksi Jurnal Ilmiah (5 Tahun Terakhir: 2021-2026)
+        if (has5Yr && (l.includes("jurnal") || l.includes("journal") || l.includes("vol") || l.includes("issn") || l.includes("prosiding") || l.includes("proceeding") || l.includes("et al") || l.includes("dkk"))) {
           journalCount++;
-        } else if (has10Yr && (l.includes("penerbit") || l.includes("cetakan") || l.includes("edisi") || l.includes("press") || l.includes("jakarta") || l.includes("bandung") || l.includes("yogyakarta"))) {
-          bookCount++;
+        } 
+        
+        // Deteksi Buku Cara 1: Format bibliografi Daftar Pustaka (10 Tahun Terakhir: 2016-2026)
+        if (has10Yr && (l.includes("penerbit") || l.includes("cetakan") || l.includes("edisi") || l.includes("press") || l.includes("jakarta") || l.includes("bandung") || l.includes("yogyakarta") || l.includes("isbn") || l.includes("erlangga") || l.includes("andi offset") || l.includes("gava media"))) {
+          const matchedYr = years10.find(y => l.includes(y));
+          uniqueBookKeys.add(`${matchedYr}-${l.substring(0, 35).trim()}`);
         }
       });
 
-      // Deteksi istilah asing dinamis
+      // Deteksi Buku Cara 2: In-Text Citation di Landasan Teori / Bab II (dengan nomor halaman hlm./hal. & tahun 2016-2026)
+      // Contoh: (Sistem Informasi Manajemen, 2026, hlm. 1) atau (2022, hlm. 71-72)
+      const inTextPageRegex = /\(([^()]*?(?:201[6-9]|202[0-6])[^()]*?(?:hlm|hal|halaman|bagian)[^()]*?)\)/gi;
+      let pageMatch;
+      while ((pageMatch = inTextPageRegex.exec(text)) !== null) {
+        const raw = pageMatch[1].trim();
+        const rawLower = raw.toLowerCase();
+        if (!rawLower.includes("jurnal") && !rawLower.includes("journal") && !rawLower.includes("vol")) {
+          const yr = years10.find(y => rawLower.includes(y)) || "";
+          uniqueBookKeys.add(`${yr}-${rawLower.replace(/[^a-z0-9]/g, "").substring(0, 30)}`);
+        }
+      }
+
+      // Deteksi Buku Cara 3: Frasa "buku ... (tahun)"
+      // Contoh: Menurut buku Data dan Manajemen Pengetahuan (2024, hlm. 28-29)
+      const bookPhraseRegex = /buku\s+([A-Za-z0-9\s]{3,45})\s*\((?:201[6-9]|202[0-6])/gi;
+      let phraseMatch;
+      while ((phraseMatch = bookPhraseRegex.exec(text)) !== null) {
+        uniqueBookKeys.add(phraseMatch[1].trim().toLowerCase().replace(/[^a-z0-9]/g, "").substring(0, 25));
+      }
+
+      // Deteksi Buku Cara 4: Buku rujukan standar / lembaga / author populer (PMI, Hume, Pressman, dll)
+      const authorBookRegex = /\(((?:Project Management Institute|PMI|Hume|Pressman|Sommerville|Jogiyanto|Rosa|Shalahuddin|Kendall|Whitten|Satzinger)[^()]*?(?:201[6-9]|202[0-6])[^()]*?)\)/gi;
+      let authorMatch;
+      while ((authorMatch = authorBookRegex.exec(text)) !== null) {
+        const raw = authorMatch[1].toLowerCase().replace(/[^a-z0-9]/g, "").substring(0, 25);
+        uniqueBookKeys.add(raw);
+      }
+
+      let bookCount = uniqueBookKeys.size;
+
+      // Deteksi istilah asing teknis TI komprehensif (Pedoman Bab VII Hal. 9 Poin g.1)
       const foreignDictionary = [
-        "online", "real-time", "human error", "security", "website", "login", "logout", 
-        "dashboard", "database", "blackbox", "user", "client", "input", "output", 
-        "wireframe", "tools", "flowchart", "software", "hardware", "interface", 
-        "framework", "agile", "waterfall", "use case", "activity diagram", "backend", "frontend"
+        // Frasa majemuk (multi-word phrases) diuji terlebih dahulu
+        "progressive web application", "progressive web app", "single page application", "multi page application",
+        "service worker", "service workers", "web app manifest", "app manifest", "application shell", "app shell",
+        "push notification", "push notifications", "cache storage", "local storage", "session storage",
+        "offline first", "offline mode", "responsive web design", "responsive design",
+        "cross-platform", "multi-platform", "client-side rendering", "server-side rendering",
+        "black box testing", "blackbox testing", "white box testing", "whitebox testing",
+        "user acceptance testing", "equivalence partitioning", "boundary value analysis",
+        "use case diagram", "activity diagram", "sequence diagram", "class diagram", "deployment diagram",
+        "state machine diagram", "entity relationship diagram", "entity relationship",
+        "rapid application development", "software development life cycle",
+        "human error", "real-time", "real time", "cloud computing", "cutting list", "shop drawing", "paperless office",
+        "restful api", "rest api", "web service", "user interface", "user experience",
+        "user persona", "usability testing", "information architecture", "wireframe", "wireframing",
+        "mockup", "prototype", "prototyping", "test case", "test scenario", "test suite",
+        "relational database", "database management system",
+        
+        // Istilah kata tunggal & singkatan teknis
+        "pwa", "spa", "mpa", "api", "erd", "uml", "rad", "sdlc", "uat", "csv", "json", "xml",
+        "online", "offline", "website", "web", "login", "logout", "signin", "signout", "signup", "register",
+        "dashboard", "database", "rdbms", "dbms", "blackbox", "whitebox", "user", "client", "server",
+        "admin", "administrator", "input", "output", "tools", "flowchart", "software", "hardware",
+        "interface", "framework", "library", "agile", "waterfall", "scrum", "sprint", "kanban",
+        "backend", "frontend", "fullstack", "middleware", "payload", "endpoint", "query",
+        "primary key", "foreign key", "cardinality", "actor", "include", "extend", "swimlane",
+        "lifeline", "token", "authentication", "authorization", "monitoring", "caching", "cache",
+        "bug", "error", "defect", "debugging", "testing", "security", "hosting", "domain", "deploy", "deployment"
       ];
+
+      // Urutkan frasa terpanjang terlebih dahulu agar frasa majemuk tidak terpecah
+      foreignDictionary.sort((a, b) => b.length - a.length);
+
       let detectedForeign = [];
 
       foreignDictionary.forEach(w => {
-        const regex = new RegExp(`\\b${w}\\b`, "gi");
+        const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b${escaped}\\b`, "gi");
         const matches = text.match(regex);
         if (matches && matches.length > 0) {
           // Cari nomor halaman spesifik jika format PDF
@@ -2274,6 +2503,39 @@
             pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11"
           });
         }
+
+        // Cek penomoran sub-sub bab angka (misal: 1.1.1 atau 1.2.1)
+        const hasNumberedSubSub = /\b1\.[1-9]\.[1-9]\b/g.test(text);
+        if (hasNumberedSubSub) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab1",
+            babLabel: "BAB I",
+            page: "BAB I Pendahuluan",
+            locationDetail: "Sub-sub bab bertingkat (misal: 1.1.1 / 1.2.1)",
+            category: "Format Penomoran",
+            title: "Ditemukan penomoran sub-sub bab memakai angka (1.1.1 / 1.2.1)",
+            explanation: "Arahan Revisi Dosen: Penomoran anak sub-bab (level 3) wajib memakai huruf kecil (a, b, c, dst.), jangan memakai format angka seperti 1.1.1 atau 1.2.1.",
+            fix: "Ubah penomoran 1.1.1, 1.1.2 menjadi huruf kecil a., b., c. pada naskah Word Anda.",
+            pedomanRef: "Catatan Bimbingan Dosen & Pedoman BAB VII Hal. 9"
+          });
+        }
+
+        // Pengingat 3 poin identifikasi masalah selaras
+        if (has12 && has13) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab1",
+            babLabel: "BAB I",
+            page: "Sub-bab 1.2 & 1.3",
+            locationDetail: "Sub-bab 1.2 Identifikasi Masalah & 1.3 Rumusan Masalah",
+            category: "Keselarasan Masalah",
+            title: "Pastikan Identifikasi Masalah dipadatkan menjadi tepat 3 poin selaras",
+            explanation: "Arahan Dosen Pembimbing: Identifikasi Masalah wajib dipadatkan menjadi 3 poin. Rumusan Masalah (3 poin), Tujuan Penelitian (3 poin), serta Pembahasan BAB III harus mengacu dan menjawab ketiga poin masalah tersebut secara berurutan (1-ke-1).",
+            fix: "Padatkan Sub-bab 1.2 menjadi 3 poin masalah utama, turunkan menjadi 3 rumusan masalah di 1.3, dan jawab dengan 3 tujuan di 1.5.",
+            pedomanRef: "Prinsip Benang Merah KP - Arahan Dosen"
+          });
+        }
       }
 
       // 2. ISU BAB II (jika scope bab2_only, bab2, bab3, atau all)
@@ -2293,18 +2555,36 @@
           });
         }
 
-        if (!has25 && !isScannedOrLittleText) {
+        // Cek Metode Penelitian di Bab II
+        const hasMetodeBab2 = lower.includes("metode penelitian") || lower.includes("teknik pengumpulan data") || lower.includes("metode pengumpulan");
+        if (!hasMetodeBab2 && !isScannedOrLittleText) {
           dynamicIssues.push({
             id: `dyn-${issIndex++}`,
             stage: "bab2",
             babLabel: "BAB II",
-            page: "BAB II (Akhir Bab)",
-            locationDetail: "BAB II (Sub-bab terakhir sebelum BAB III)",
+            page: "BAB II (Metode)",
+            locationDetail: "BAB II (Sub-bab Metode Penelitian)",
             category: "Struktur Wajib",
-            title: "Sub-Bab 2.5 Kerangka Berfikir belum terdeteksi di BAB II",
-            explanation: "Pedoman KP 2026 Hal. 12 mewajibkan alur diagram kerangka berfikir sebelum masuk ke perancangan BAB III.",
-            fix: "Tambahkan sub-bab 2.5 Kerangka Berfikir lengkap dengan bagan diagram alur pemecahan masalah.",
-            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+            title: "Sub-Bab Metode Penelitian belum terdeteksi di BAB II",
+            explanation: "Sesuai arahan revisi dosen, BAB II wajib memuat sub-bab Metode Penelitian (teknik pengumpulan data: observasi, wawancara, dan metode pengembangan sistem).",
+            fix: "Tambahkan sub-bab Metode Penelitian di BAB II yang menjelaskan teknik pengumpulan data dan alur pengembangan sistem.",
+            pedomanRef: "Catatan Bimbingan Dosen & Pedoman BAB VII"
+          });
+        }
+
+        // Cek jika ada kutipan buku Laudon di teks
+        if (lower.includes("laudon")) {
+          dynamicIssues.push({
+            id: `dyn-${issIndex++}`,
+            stage: "bab2",
+            babLabel: "BAB II & Dafpus",
+            page: "Landasan Teori",
+            locationDetail: "BAB II (Kutipan Buku Laudon)",
+            category: "Sitasi & Literatur",
+            title: "Ditemukan kutipan buku Laudon di Landasan Teori (Arahan Dosen: Hapus)",
+            explanation: "Dosen Pembimbing menginstruksikan untuk menghapus referensi buku 'Laudon' dari Landasan Teori dan menggantinya dengan buku teks/referensi lain terbitan maksimal 10 tahun terakhir (2016–2026) yang memiliki ebook PDF.",
+            fix: "Hapus kutipan Laudon di BAB II dan di Daftar Pustaka. Ganti dengan buku teks sistem informasi / rekayasa perangkat lunak terbitan 2016-2026 yang memiliki ebook PDF.",
+            pedomanRef: "Catatan Revisi Dosen Pembimbing KP"
           });
         }
 
@@ -2331,10 +2611,10 @@
             page: "Daftar Pustaka",
             locationDetail: "Daftar Pustaka (Referensi Buku Teks)",
             category: "Jumlah Literatur",
-            title: `Jumlah Buku Teks (2016–2026) baru terdeteksi ${bookCount} (Syarat minimal 5 Buku)`,
-            explanation: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit maksimal 10 tahun terakhir (2016–2026).",
-            fix: "Tambahkan 5 buku referensi perancangan sistem/pemrograman/basis data terbitan 2016 ke atas di Daftar Pustaka.",
-            pedomanRef: "Standar Referensi Buku Teks Prodi SI"
+            title: `Jumlah Buku Teks (2016–2026) baru terdeteksi ${bookCount} (Syarat minimal 5 Buku + Ada Ebook PDF)`,
+            explanation: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit maksimal 10 tahun terakhir (2016–2026) yang memiliki file ebook PDF. Hindari buku usang.",
+            fix: "Tambahkan minimal 5 buku referensi perancangan sistem/pemrograman/basis data terbitan 2016 ke atas yang memiliki file ebook PDF di Daftar Pustaka.",
+            pedomanRef: "Standar Referensi Buku Teks Prodi SI & Arahan Dosen"
           });
         }
       }
@@ -2462,8 +2742,8 @@
       }
 
       if (docAnalysis.chapterChecklist.bab2 && docAnalysis.chapterChecklist.bab2[2]) {
-        docAnalysis.chapterChecklist.bab2[2].status = has25 ? "pass" : "fail";
-        docAnalysis.chapterChecklist.bab2[2].badge = has25 ? "2.5 Kerangka Berfikir Ada" : "Belum Ada Sub-Bab 2.5";
+        docAnalysis.chapterChecklist.bab2[2].status = "pass";
+        docAnalysis.chapterChecklist.bab2[2].badge = has25 ? "Kerangka Berfikir Disertakan (Nilai Plus)" : "Kerangka Berpikir Opsional";
       }
 
       if (docAnalysis.chapterChecklist.bab2 && docAnalysis.chapterChecklist.bab2[3]) {
@@ -2699,8 +2979,7 @@
       }
 
       renderStageButtons();
-      renderMandatoryChecklist();
-      renderIssuesList();
+      renderUnifiedAuditList();
       renderForeignWords();
       calculateGradeSimulation();
       updateScoreMetrics();
