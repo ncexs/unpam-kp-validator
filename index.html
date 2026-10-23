@@ -2270,10 +2270,11 @@
       const pos3 = getChapterPos(3, posSub3);
       const pos4 = getChapterPos(4, posSub4);
 
-      const hasBab1 = pos1 >= 0 || lower.includes("latar belakang") || lower.includes("1.1 latar belakang");
-      const hasBab2 = pos2 >= 0 || lower.includes("profil perusahaan") || lower.includes("profil instansi") || lower.includes("landasan teori");
-      const hasBab3 = pos3 >= 0;
-      const hasBab4 = pos4 >= 0;
+      // Ketatkan deteksi bab: gunakan regex batas baris/halaman agar teks teori biasa tidak memicu bab semu
+      const hasBab1 = pos1 >= 0 || /(?:^|\n|\[Halaman\s+\d+\])\s*(?:BAB\s*(?:I|1)\b|1\.1\s+Latar\s+Belakang)/i.test(cleanText);
+      const hasBab2 = pos2 >= 0 || /(?:^|\n|\[Halaman\s+\d+\])\s*(?:BAB\s*(?:II|2)\b|2\.1\s+Profil)/i.test(cleanText);
+      const hasBab3 = pos3 >= 0 || /(?:^|\n|\[Halaman\s+\d+\])\s*(?:BAB\s*(?:III|3)\b|3\.1\s+[A-Za-z])/i.test(cleanText);
+      const hasBab4 = pos4 >= 0 || /(?:^|\n|\[Halaman\s+\d+\])\s*(?:BAB\s*(?:IV|4)\b|4\.1\s+Kesimpulan)/i.test(cleanText);
       const hasLampiran = /(?:lampiran\s+(?:1|2|3|4|5|6|7|8|[a-h])|\bsiup\b|\bnib\b)/i.test(cleanText);
 
       // Ekstraksi konten per bab spesifik
@@ -2285,7 +2286,7 @@
       if (hasBab1 && pos1 >= 0) {
         const end = pos2 >= 0 ? pos2 : (pos3 >= 0 ? pos3 : (pos4 >= 0 ? pos4 : (posDafpus >= 0 ? posDafpus : cleanText.length)));
         bab1Text = cleanText.slice(pos1, end);
-      } else if (hasBab1) {
+      } else if (hasBab1 && !hasBab2 && !hasBab3) {
         bab1Text = cleanText;
       }
 
@@ -2328,7 +2329,7 @@
         } else if (hasBab4 && !hasBab1 && !hasBab2 && !hasBab3) {
           targetScope = "bab4_only";
         } else {
-          targetScope = hasBab2 ? "bab2" : "bab1";
+          targetScope = hasBab2 ? "bab2_only" : (hasBab1 ? "bab1_only" : "bab2_only");
         }
       }
 
@@ -2397,46 +2398,115 @@
       let bookCount = uniqueBookKeys.size;
 
       // Deteksi istilah asing teknis TI komprehensif (Pedoman Bab VII Hal. 9 Poin g.1)
+      // Catatan: Singkatan kapital baku (PWA, RAD, UML, ERD, UAT, API, SDLC, JSON) TIDAK dimiringkan menurut EYD V & Pedoman KP.
       const foreignDictionary = [
-        // Frasa majemuk (multi-word phrases) diuji terlebih dahulu
-        "progressive web application", "progressive web app", "single page application", "multi page application",
-        "service worker", "service workers", "web app manifest", "app manifest", "application shell", "app shell",
-        "push notification", "push notifications", "cache storage", "local storage", "session storage",
-        "offline first", "offline mode", "responsive web design", "responsive design",
-        "cross-platform", "multi-platform", "client-side rendering", "server-side rendering",
-        "black box testing", "blackbox testing", "white box testing", "whitebox testing",
-        "user acceptance testing", "equivalence partitioning", "boundary value analysis",
-        "use case diagram", "activity diagram", "sequence diagram", "class diagram", "deployment diagram",
-        "state machine diagram", "entity relationship diagram", "entity relationship",
-        "rapid application development", "software development life cycle",
-        "human error", "real-time", "real time", "cloud computing", "cutting list", "shop drawing", "paperless office",
-        "restful api", "rest api", "web service", "user interface", "user experience",
-        "user persona", "usability testing", "information architecture", "wireframe", "wireframing",
-        "mockup", "prototype", "prototyping", "test case", "test scenario", "test suite",
-        "relational database", "database management system",
-        
-        // Istilah kata tunggal & singkatan teknis
-        "pwa", "spa", "mpa", "api", "erd", "uml", "rad", "sdlc", "uat", "csv", "json", "xml",
-        "online", "offline", "website", "web", "login", "logout", "signin", "signout", "signup", "register",
-        "dashboard", "database", "rdbms", "dbms", "blackbox", "whitebox", "user", "client", "server",
-        "admin", "administrator", "input", "output", "tools", "flowchart", "software", "hardware",
-        "interface", "framework", "library", "agile", "waterfall", "scrum", "sprint", "kanban",
-        "backend", "frontend", "fullstack", "middleware", "payload", "endpoint", "query",
-        "primary key", "foreign key", "cardinality", "actor", "include", "extend", "swimlane",
-        "lifeline", "token", "authentication", "authorization", "monitoring", "caching", "cache",
-        "bug", "error", "defect", "debugging", "testing", "security", "hosting", "domain", "deploy", "deployment"
+        // Frasa majemuk teknis (multi-word technical phrases)
+        "rapid application development",
+        "software development life cycle",
+        "progressive web application",
+        "single page application",
+        "multi page application",
+        "service worker",
+        "web app manifest",
+        "application shell",
+        "push notification",
+        "cache storage",
+        "local storage",
+        "session storage",
+        "offline mode",
+        "offline first",
+        "responsive web design",
+        "responsive design",
+        "cross-platform",
+        "client-side rendering",
+        "server-side rendering",
+        "black box testing",
+        "white box testing",
+        "user acceptance testing",
+        "equivalence partitioning",
+        "boundary value analysis",
+        "use case diagram",
+        "activity diagram",
+        "sequence diagram",
+        "class diagram",
+        "deployment diagram",
+        "state machine diagram",
+        "entity relationship diagram",
+        "cloud computing",
+        "cutting list",
+        "shop drawing",
+        "paperless office",
+        "restful api",
+        "web service",
+        "user interface",
+        "user experience",
+        "user persona",
+        "usability testing",
+        "information architecture",
+        "primary key",
+        "foreign key",
+        "test case",
+        "test scenario",
+        "real-time",
+        "relational database",
+        "database management system",
+
+        // Kata tunggal teknis bahasa Inggris murni (tanpa singkatan kapital, tanpa kata umum sehari-hari)
+        "online",
+        "offline",
+        "website",
+        "dashboard",
+        "database",
+        "prototype",
+        "mockup",
+        "wireframe",
+        "flowchart",
+        "software",
+        "hardware",
+        "interface",
+        "framework",
+        "library",
+        "waterfall",
+        "agile",
+        "scrum",
+        "sprint",
+        "kanban",
+        "backend",
+        "frontend",
+        "fullstack",
+        "middleware",
+        "endpoint",
+        "cardinality",
+        "swimlane",
+        "lifeline",
+        "token",
+        "monitoring",
+        "caching",
+        "debugging",
+        "hosting",
+        "deploy",
+        "deployment"
       ];
 
-      // Urutkan frasa terpanjang terlebih dahulu agar frasa majemuk tidak terpecah
+      // Urutkan frasa terpanjang terlebih dahulu agar frasa majemuk terdeteksi lebih dulu
       foreignDictionary.sort((a, b) => b.length - a.length);
 
       let detectedForeign = [];
+      let matchedCompoundWords = new Set();
 
       foreignDictionary.forEach(w => {
         const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const regex = new RegExp(`\\b${escaped}\\b`, "gi");
         const matches = text.match(regex);
         if (matches && matches.length > 0) {
+          // Cegah duplikasi jika kata tunggal/pendek telah tercakup dalam frasa majemuk yang lebih panjang
+          const isSubsumed = Array.from(matchedCompoundWords).some(comp => comp.includes(w) && comp !== w);
+          if (isSubsumed) return;
+
+          if (w.includes(" ")) {
+            matchedCompoundWords.add(w);
+          }
+
           // Cari nomor halaman spesifik jika format PDF
           let foundPages = [];
           const pageSections = text.split(/\[Halaman\s+(\d+)\]/i);
@@ -2444,17 +2514,16 @@
             for (let i = 1; i < pageSections.length; i += 2) {
               const pNum = pageSections[i];
               const pContent = pageSections[i+1] || "";
-              if (new RegExp(`\\b${w}\\b`, "i").test(pContent)) {
+              if (new RegExp(`\\b${escaped}\\b`, "i").test(pContent)) {
                 foundPages.push(`Hal. ${pNum}`);
+                if (foundPages.length >= 4) break;
               }
             }
           }
 
           let pageStr = "";
           if (foundPages.length > 0) {
-            pageStr = foundPages.length <= 4 
-              ? foundPages.join(", ") 
-              : `${foundPages.slice(0, 3).join(", ")} (+${foundPages.length - 3} hal lain)`;
+            pageStr = foundPages.join(", ") + (matches.length > foundPages.length ? ` (+${matches.length - foundPages.length} hal lain)` : "");
           } else {
             pageStr = `Muncul ${matches.length}x di naskah`;
           }
@@ -2463,7 +2532,7 @@
           let contextSnippet = "";
           const sentences = text.split(/[.\n\r]+/);
           for (const s of sentences) {
-            if (new RegExp(`\\b${w}\\b`, "i").test(s)) {
+            if (new RegExp(`\\b${escaped}\\b`, "i").test(s)) {
               const cleanS = s.trim().replace(/\[Halaman\s+\d+\]/gi, "").replace(/\s+/g, " ");
               if (cleanS.length >= 15 && cleanS.length <= 160) {
                 contextSnippet = `"${cleanS}"`;
@@ -2756,7 +2825,6 @@
 
       // 5. ISU UMUM / ISTILAH ASING (stage: 'any')
       if (detectedForeign.length > 0) {
-        const wordSummary = detectedForeign.map(d => `"${d.word}" (${d.count}x)`).join(", ");
         const firstPages = detectedForeign.filter(d => d.page && !d.page.startsWith("Muncul")).map(d => `${d.word}: ${d.page}`).slice(0, 3).join("; ");
 
         dynamicIssues.push({
@@ -2766,9 +2834,9 @@
           page: "Teks Dokumen",
           locationDetail: firstPages || "Tersebar di naskah (Klik tombol kata di bawah)",
           category: "Istilah Asing",
-          title: `Ditemukan ${detectedForeign.length} kata asing yang WAJIB dimiringkan (italic)`,
-          explanation: `Kata-kata teknis bahasa Inggris berikut pasti ditemukan dalam teks naskah Anda dan terdeteksi belum dicetak miring: ${wordSummary}. Seluruh istilah asing wajib dicetak miring (italic) sesuai Pedoman Bab VII Hal. 9.`,
-          fix: "Klik tombol kata di bawah untuk menyalin kata ke clipboard, lalu buka Word dan tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I).",
+          title: `${detectedForeign.length} Istilah Asing Teknis Terdeteksi Belum Dicetak Miring (Italic)`,
+          explanation: `Pedoman KP 2026 Bab VII Hal. 9 Poin g.1 mewajibkan seluruh istilah teknis asing (bahasa Inggris) dicetak miring (italic). Termasuk istilah metodologi, diagram UML, dan pengujian sistem yang Anda kutip pada BAB II Landasan Teori (misal: rapid application development, use case diagram, black box testing). Singkatan huruf kapital baku (PWA, RAD, UML, ERD, UAT, API) tidak perlu dimiringkan.`,
+          fix: "Klik tombol kata di bawah untuk menyalin istilah otomatis ke clipboard, lalu buka Word dan tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I).",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
           foreignItems: detectedForeign
         });
