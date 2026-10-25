@@ -1675,11 +1675,11 @@
                 </p>
 
                 ${(foreignItems && foreignItems.length > 0) ? `
-                  <div class="mt-3 p-3.5 bg-amber-50/90 border border-amber-200/90 rounded-xl space-y-2.5">
+                  <div class="mt-3.5 p-4 bg-amber-50/80 border border-amber-200/90 rounded-2xl space-y-3">
                     <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-bold text-amber-950">
                       <span class="flex items-center gap-1.5">
-                        <i class="fa-solid fa-spell-check text-amber-600"></i>
-                        <span>Daftar Istilah Asing yang Harus Dicari di Word (${foreignItems.length} Istilah):</span>
+                        <i class="fa-solid fa-spell-check text-rose-600"></i>
+                        <span>Daftar Istilah yang Masih Terdeteksi Tegak di Word (${foreignItems.length} Istilah):</span>
                       </span>
                       <button onclick="switchTab('italic')" class="text-[11px] font-extrabold text-unpam-700 hover:text-unpam-900 underline flex items-center gap-1">
                         <span>Buka Tab Kamus</span> &rarr;
@@ -1691,11 +1691,11 @@
                         <button 
                           type="button"
                           onclick="copySingleWord('${f.word}')" 
-                          title="Klik untuk salin '${f.word}' lalu cari di Word" 
-                          class="inline-flex items-center gap-1.5 bg-white hover:bg-amber-100/70 border border-amber-300 hover:border-amber-400 text-slate-800 text-xs px-2.5 py-1.5 rounded-lg font-medium shadow-2xs transition group/btn cursor-pointer"
+                          title="Klik untuk salin '${f.word}' lalu cari di Word (${f.page || ''})" 
+                          class="inline-flex items-center gap-1.5 bg-white hover:bg-amber-100/70 border ${f.isPartiallyItalic ? 'border-amber-400 bg-amber-50/30' : 'border-rose-300 hover:border-rose-400'} text-slate-800 text-xs px-2.5 py-1.5 rounded-lg font-medium shadow-2xs transition group/btn cursor-pointer"
                         >
                           <span class="font-bold font-mono italic text-unpam-800">${f.word}</span>
-                          <span class="text-[10px] bg-amber-100 group-hover/btn:bg-amber-200 text-amber-900 font-black px-1.5 py-0.5 rounded-full">${f.count}x</span>
+                          <span class="text-[10px] ${f.isPartiallyItalic ? 'bg-amber-100 text-amber-900' : 'bg-rose-100 text-rose-900'} font-black px-1.5 py-0.5 rounded-full">${f.nonItalicCount || f.count}x tegak</span>
                           ${f.page ? `<span class="text-[10px] text-slate-500 font-normal">(${f.page})</span>` : ''}
                           <i class="fa-regular fa-copy text-[11px] text-slate-400 group-hover/btn:text-amber-700"></i>
                         </button>
@@ -1703,8 +1703,32 @@
                     </div>
 
                     <p class="text-[11px] text-amber-900/90 leading-tight">
-                      💡 <b>Tinggal klik salah satu istilah di atas</b> untuk menyalin otomatis ke clipboard, lalu buka Word & tekan <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + F</kbd> (Cari) atau <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + H</kbd> (Replace) untuk langsung memiringkannya.
+                      💡 <b>Tinggal klik salah satu istilah di atas</b> untuk menyalin otomatis ke clipboard, lalu buka Word & tekan <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + F</kbd> (Cari) atau <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + H</kbd> (Replace) untuk langsung memiringkannya pada halaman yang masih tegak.
                     </p>
+
+                    ${(it.alreadyItalicItems && it.alreadyItalicItems.length > 0) ? `
+                      <div class="mt-3 pt-3 border-t border-emerald-200/90 bg-emerald-50/70 rounded-xl p-3 space-y-2">
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                          <span class="flex items-center gap-1.5 font-bold text-xs text-emerald-950">
+                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                            <span>Sudah 100% Dicetak Miring di Naskah (${it.alreadyItalicItems.length} Istilah - Sesuai Pedoman):</span>
+                          </span>
+                          <span class="text-[10px] font-bold bg-emerald-200/80 text-emerald-900 px-2 py-0.5 rounded-full">Sesuai ✓</span>
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                          ${it.alreadyItalicItems.map(af => `
+                            <span class="inline-flex items-center gap-1.5 bg-white border border-emerald-300 text-emerald-900 text-xs px-2.5 py-1 rounded-lg font-medium shadow-2xs">
+                              <span class="font-bold font-mono italic text-emerald-800">${af.word}</span>
+                              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-black px-1.5 py-0.5 rounded-full">${af.italicCount}x ✓</span>
+                              ${af.italicPages && af.italicPages.length > 0 ? `<span class="text-[10px] text-slate-500 font-normal">(${af.italicPages.slice(0, 3).join(', ')})</span>` : ''}
+                            </span>
+                          `).join('')}
+                        </div>
+                        <p class="text-[11px] text-emerald-900/90 leading-tight">
+                          👏 <b>Bagus!</b> Istilah di atas terdeteksi sudah dalam format cetak miring (italic) di seluruh halaman kemunculannya.
+                        </p>
+                      </div>
+                    ` : ''}
                   </div>
                 ` : ''}
 
@@ -2098,20 +2122,53 @@
           const pdf = await loadingTask.promise;
           totalPages = pdf.numPages;
 
+          let fullTaggedText = "";
+          let fullPlainText = "";
+
           for (let i = 1; i <= totalPages; i++) {
             if (updateProgress) updateProgress(i, totalPages);
             try {
               const page = await pdf.getPage(i);
+              try {
+                await page.getOperatorList();
+              } catch (opErr) {}
               const textContent = await page.getTextContent();
-              const pageText = textContent.items.map(item => item.str).join(" ");
-              fullText += `\n[Halaman ${i}] ` + pageText;
+              let pagePlain = "";
+              let pageTagged = "";
+
+              for (const item of textContent.items) {
+                if (!item.str) continue;
+                let isItalic = false;
+                if (page.commonObjs && page.commonObjs.has(item.fontName)) {
+                  const fontObj = page.commonObjs.get(item.fontName);
+                  if (fontObj && fontObj.name) {
+                    isItalic = /italic|oblique|kursiv/i.test(fontObj.name);
+                  }
+                }
+                if (!isItalic && textContent.styles && textContent.styles[item.fontName]) {
+                  const s = textContent.styles[item.fontName];
+                  if (s.fontFamily && /italic|oblique|kursiv/i.test(s.fontFamily)) {
+                    isItalic = true;
+                  }
+                }
+
+                pagePlain += item.str + " ";
+                if (isItalic && item.str.trim().length > 0) {
+                  pageTagged += ` <i>${item.str}</i> `;
+                } else {
+                  pageTagged += item.str + " ";
+                }
+              }
+
+              fullPlainText += `\n[Halaman ${i}] ` + pagePlain;
+              fullTaggedText += `\n[Halaman ${i}] ` + pageTagged;
             } catch (pageErr) {
               console.warn(`Halaman ${i} tidak dapat diekstrak penuh:`, pageErr);
             }
           }
 
-          if (fullText.trim().length > 60) {
-            return { text: fullText, totalPages: Math.max(1, totalPages) };
+          if (fullPlainText.trim().length > 60) {
+            return { text: fullPlainText, taggedText: fullTaggedText, totalPages: Math.max(1, totalPages) };
           }
         } catch (pdfJsErr) {
           console.warn("PDF.js extractor issue, beralih ke Fallback Binary Parser:", pdfJsErr);
@@ -2146,7 +2203,7 @@
         console.error("Binary fallback extractor error:", binErr);
       }
 
-      return { text: fullText, totalPages: Math.max(1, totalPages) };
+      return { text: fullText, taggedText: fullText, totalPages: Math.max(1, totalPages) };
     }
 
     // =========================================================================
@@ -2171,6 +2228,7 @@
 
       try {
         let extractedText = "";
+        let taggedText = "";
         let totalPages = 1;
 
         const fileNameLower = file.name.toLowerCase();
@@ -2185,17 +2243,21 @@
           });
 
           extractedText = result.text;
+          taggedText = result.taggedText || result.text;
           totalPages = result.totalPages;
         } else if (fileNameLower.endsWith(".docx")) {
           const arrayBuffer = await file.arrayBuffer();
-          progressDetail.textContent = "Mengekstrak teks dokumen Word (.docx)...";
+          progressDetail.textContent = "Mengekstrak teks & format Word (.docx)...";
           progressBar.style.width = "50%";
           progressPercent.textContent = "50%";
-          const res = await mammoth.extractRawText({ arrayBuffer });
-          extractedText = res.value || "";
+          const htmlRes = await mammoth.convertToHtml({ arrayBuffer });
+          const rawRes = await mammoth.extractRawText({ arrayBuffer });
+          extractedText = rawRes.value || "";
+          taggedText = (htmlRes.value || "").replace(/<em>/gi, '<i>').replace(/<\/em>/gi, '</i>');
           totalPages = Math.max(1, Math.round(extractedText.split(/\s+/).length / 280));
         } else if (fileNameLower.endsWith(".txt") || fileNameLower.endsWith(".doc")) {
           extractedText = await file.text();
+          taggedText = extractedText;
           totalPages = Math.max(1, Math.round(extractedText.split(/\s+/).length / 280));
         } else {
           alert("Format file belum didukung. Silakan gunakan format .PDF, .DOCX, atau .TXT");
@@ -2208,7 +2270,7 @@
         progressDetail.textContent = "Mendeteksi nomor halaman & paragraf spesifik...";
 
         setTimeout(() => {
-          parseAndAuditDocument(file.name, extractedText, totalPages);
+          parseAndAuditDocument(file.name, extractedText, totalPages, null, taggedText);
           progressContainer.classList.add("hidden");
           progressBar.style.width = "0%";
           showToast(`File "${file.name}" berhasil diaudit oleh ncexs!`, "success");
@@ -2224,9 +2286,10 @@
     // =========================================================================
     // DYNAMIC AUDIT LOGIC (FOR UPLOADED FILES WITH SPECIFIC LOCATION DETECTION)
     // =========================================================================
-    function parseAndAuditDocument(fileName, text, totalPages, forcedScope = null) {
+    function parseAndAuditDocument(fileName, text, totalPages, forcedScope = null, taggedText = null) {
       const cleanText = text.replace(/\r\n/g, '\n');
       const lower = cleanText.toLowerCase();
+      const auditTaggedText = (taggedText || text).replace(/\r\n/g, '\n');
       const isScannedOrLittleText = text.trim().length < 150;
 
       // 1. Deteksi bab secara ketat (menghindari baris Daftar Isi bertitik .... dan kutipan teori di bab lain)
@@ -2488,44 +2551,92 @@
 
       let detectedForeign = [];
       let matchedCompoundWords = new Set();
+      const pagesTagged = auditTaggedText.split(/\[Halaman\s+(\d+)\]/i);
 
       foreignDictionary.forEach(w => {
-        const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`\\b${escaped}\\b`, "gi");
-        const matches = text.match(regex);
-        if (matches && matches.length > 0) {
-          // Cegah duplikasi jika kata tunggal/pendek telah tercakup dalam frasa majemuk yang lebih panjang
-          const isSubsumed = Array.from(matchedCompoundWords).some(comp => comp.includes(w) && comp !== w);
-          if (isSubsumed) return;
+        const isSubsumed = Array.from(matchedCompoundWords).some(comp => comp.includes(w) && comp !== w);
+        if (isSubsumed) return;
 
+        const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const wordRegex = new RegExp(`\\b${escaped}\\b`, "gi");
+
+        let totalMatches = 0;
+        let italicCount = 0;
+        let nonItalicCount = 0;
+        let italicPages = [];
+        let nonItalicPages = [];
+
+        if (pagesTagged.length > 1) {
+          // Format dokumen berhalaman (PDF)
+          for (let i = 1; i < pagesTagged.length; i += 2) {
+            const pNum = pagesTagged[i];
+            const pContent = pagesTagged[i + 1] || "";
+
+            let match;
+            while ((match = wordRegex.exec(pContent)) !== null) {
+              totalMatches++;
+              const matchIdx = match.index;
+              const before = pContent.substring(0, matchIdx);
+              const lastOpen = before.lastIndexOf("<i>");
+              const lastClose = before.lastIndexOf("</i>");
+              const isInsideItalic = lastOpen > lastClose;
+
+              if (isInsideItalic) {
+                italicCount++;
+                italicPages.push(`Hal. ${pNum}`);
+              } else {
+                nonItalicCount++;
+                nonItalicPages.push(`Hal. ${pNum}`);
+              }
+            }
+          }
+        } else {
+          // Format DOCX atau teks tanpa header [Halaman X]
+          let match;
+          while ((match = wordRegex.exec(auditTaggedText)) !== null) {
+            totalMatches++;
+            const matchIdx = match.index;
+            const before = auditTaggedText.substring(0, matchIdx);
+            const lastOpen = before.lastIndexOf("<i>");
+            const lastClose = before.lastIndexOf("</i>");
+            const isInsideItalic = lastOpen > lastClose;
+
+            if (isInsideItalic) {
+              italicCount++;
+            } else {
+              nonItalicCount++;
+            }
+          }
+        }
+
+        if (totalMatches > 0) {
           if (w.includes(" ")) {
             matchedCompoundWords.add(w);
           }
 
-          // Cari nomor halaman spesifik jika format PDF
-          let foundPages = [];
-          const pageSections = text.split(/\[Halaman\s+(\d+)\]/i);
-          if (pageSections.length > 1) {
-            for (let i = 1; i < pageSections.length; i += 2) {
-              const pNum = pageSections[i];
-              const pContent = pageSections[i+1] || "";
-              if (new RegExp(`\\b${escaped}\\b`, "i").test(pContent)) {
-                foundPages.push(`Hal. ${pNum}`);
-                if (foundPages.length >= 4) break;
-              }
-            }
-          }
+          const uniqItalicPages = [...new Set(italicPages)];
+          const uniqNonItalicPages = [...new Set(nonItalicPages)];
 
-          let pageStr = "";
-          if (foundPages.length > 0) {
-            pageStr = foundPages.join(", ") + (matches.length > foundPages.length ? ` (+${matches.length - foundPages.length} hal lain)` : "");
+          let locationStr = "";
+          if (nonItalicCount > 0) {
+            if (uniqNonItalicPages.length > 0) {
+              locationStr = `Masih tegak di ${uniqNonItalicPages.slice(0, 3).join(', ')}`;
+              if (uniqNonItalicPages.length > 3) locationStr += ` (+${uniqNonItalicPages.length - 3} hal lain)`;
+              if (italicCount > 0) locationStr += ` • (Sudah miring di ${uniqItalicPages.slice(0, 2).join(', ')})`;
+            } else {
+              locationStr = italicCount > 0 
+                ? `${nonItalicCount}x masih tegak (sebagian sudah miring)` 
+                : `Muncul ${totalMatches}x dalam naskah`;
+            }
           } else {
-            pageStr = `Muncul ${matches.length}x di naskah`;
+            locationStr = uniqItalicPages.length > 0 
+              ? `Sudah 100% miring di ${uniqItalicPages.slice(0, 3).join(', ')}`
+              : `Sudah 100% dicetak miring (${italicCount}x)`;
           }
 
           // Ambil kutipan kalimat asli untuk preview konteks
           let contextSnippet = "";
-          const sentences = text.split(/[.\n\r]+/);
+          const sentences = cleanText.split(/[.\n\r]+/);
           for (const s of sentences) {
             if (new RegExp(`\\b${escaped}\\b`, "i").test(s)) {
               const cleanS = s.trim().replace(/\[Halaman\s+\d+\]/gi, "").replace(/\s+/g, " ");
@@ -2536,17 +2647,28 @@
             }
           }
           if (!contextSnippet) {
-            contextSnippet = `Ditemukan kata "${w}" sebanyak ${matches.length}x dalam teks laporan`;
+            contextSnippet = `Ditemukan kata "${w}" sebanyak ${totalMatches}x dalam teks laporan`;
           }
 
           detectedForeign.push({
             word: w,
-            page: pageStr,
-            count: matches.length,
+            page: locationStr,
+            count: nonItalicCount > 0 ? nonItalicCount : italicCount,
+            totalCount: totalMatches,
+            italicCount,
+            nonItalicCount,
+            isFullyItalic: nonItalicCount === 0 && italicCount > 0,
+            isPartiallyItalic: italicCount > 0 && nonItalicCount > 0,
+            isNotItalic: italicCount === 0,
+            italicPages: uniqItalicPages,
+            nonItalicPages: uniqNonItalicPages,
             context: contextSnippet
           });
         }
       });
+
+      const unfixedForeign = detectedForeign.filter(d => !d.isFullyItalic);
+      const fixedForeign = detectedForeign.filter(d => d.isFullyItalic);
 
       // Estimasi halaman Bab I–IV
       const bab1To4Pages = Math.min(totalPages, Math.max(1, totalPages > 12 ? totalPages - 12 : totalPages));
@@ -2819,8 +2941,8 @@
       }
 
       // 5. ISU UMUM / ISTILAH ASING (stage: 'any')
-      if (detectedForeign.length > 0) {
-        const firstPages = detectedForeign.filter(d => d.page && !d.page.startsWith("Muncul")).map(d => `${d.word}: ${d.page}`).slice(0, 3).join("; ");
+      if (unfixedForeign.length > 0) {
+        const firstPages = unfixedForeign.filter(d => d.page && !d.page.startsWith("Muncul")).map(d => `${d.word}: ${d.page}`).slice(0, 3).join("; ");
 
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
@@ -2829,11 +2951,12 @@
           page: "Teks Dokumen",
           locationDetail: firstPages || "Tersebar di naskah (Klik tombol kata di bawah)",
           category: "Istilah Asing",
-          title: `${detectedForeign.length} Istilah Asing Teknis Terdeteksi Belum Dicetak Miring (Italic)`,
-          explanation: `Pedoman KP 2026 Bab VII Hal. 9 Poin g.1 mewajibkan seluruh istilah teknis asing (bahasa Inggris) dicetak miring (italic). Termasuk istilah metodologi, diagram UML, dan pengujian sistem yang Anda kutip pada BAB II Landasan Teori (misal: rapid application development, use case diagram, black box testing). Singkatan huruf kapital baku (PWA, RAD, UML, ERD, UAT, API) tidak perlu dimiringkan.`,
-          fix: "Klik tombol kata di bawah untuk menyalin istilah otomatis ke clipboard, lalu buka Word dan tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I).",
+          title: `${unfixedForeign.length} Istilah Asing Belum Dicetak Miring (${fixedForeign.length} Istilah Sudah Sesuai)`,
+          explanation: `Pedoman KP 2026 Bab VII Hal. 9 Poin g.1 mewajibkan seluruh istilah teknis asing (bahasa Inggris) dicetak miring (italic). Dari total ${detectedForeign.length} istilah asing yang ditemukan di naskah Anda, ${fixedForeign.length} istilah sudah berhasil Anda cetak miring dengan benar (lihat kotak hijau di bawah). Namun masih ada ${unfixedForeign.length} istilah yang masih berformat huruf tegak pada halaman-halaman tertentu.`,
+          fix: "Klik tombol kata berwarna merah/oranye di bawah untuk menyalin istilah otomatis ke clipboard, lalu buka Word dan tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I) untuk memiringkannya pada halaman yang masih tegak.",
           pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
-          foreignItems: detectedForeign
+          foreignItems: unfixedForeign,
+          alreadyItalicItems: fixedForeign
         });
       }
 
@@ -2899,6 +3022,16 @@
       docAnalysis.issues = dynamicIssues;
 
       // Update Checklist BAB I
+      if (docAnalysis.chapterChecklist.bab1 && docAnalysis.chapterChecklist.bab1[3]) {
+        if (unfixedForeign.length === 0 && fixedForeign.length > 0) {
+          docAnalysis.chapterChecklist.bab1[3].status = "pass";
+          docAnalysis.chapterChecklist.bab1[3].badge = `${fixedForeign.length} Istilah Sudah Miring (Sesuai)`;
+        } else if (unfixedForeign.length > 0) {
+          docAnalysis.chapterChecklist.bab1[3].status = "fail";
+          docAnalysis.chapterChecklist.bab1[3].badge = `${unfixedForeign.length} Istilah Masih Perlu Dimiringkan`;
+        }
+      }
+
       if (docAnalysis.chapterChecklist.bab1 && docAnalysis.chapterChecklist.bab1[5]) {
         docAnalysis.chapterChecklist.bab1[5].status = hasBab1Complete ? "pass" : "fail";
         docAnalysis.chapterChecklist.bab1[5].badge = hasBab1Complete ? "9 Sub-Bab Lengkap" : "Ada Sub-Bab Belum Ditemukan";
