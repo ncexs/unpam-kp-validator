@@ -4,7 +4,7 @@
 [![Author: ncexs](https://img.shields.io/badge/Developer-ncexs-f59e0b?style=for-the-badge&logo=github)](https://github.com/ncexs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)](LICENSE)
 [![Prodi](https://img.shields.io/badge/Prodi-Sistem_Informasi_S1-blue?style=for-the-badge)](https://unpam.ac.id)
-[![Pedoman](https://img.shields.io/badge/Pedoman_KP-Edisi_2026-amber?style=for-the-badge)](#)
+[![Pedoman](https://img.shields.io/badge/Pedoman-KP_UNPAM-amber?style=for-the-badge)](#)
 
 > **Aplikasi Web Interaktif (Single Page Application)** yang dikembangkan oleh **ncexs** untuk membantu mahasiswa **Universitas Pamulang (UNPAM) Program Studi Sistem Informasi S1** mengaudit, memeriksa format penulisan, kelengkapan sub-bab, sitasi literatur, istilah asing, dan lampiran laporan Kerja Praktek (KP) secara otomatis sebelum diajukan ke Dosen Pembimbing & Penguji.
 
@@ -25,8 +25,8 @@ Seringkali laporan Kerja Praktek mahasiswa ditolak atau mendapatkan banyak revis
 
 ## ✨ Fitur Unggulan
 
-- 🎯 **Tunjuk Nomor Halaman & Paragraf Spesifik**:
-  Setiap catatan koreksi kini langsung menunjukkan **halaman dan paragraf ke berapa** yang keliru, lengkap dengan perbandingan **Teks Asli yang Salah vs Rekomendasi Teks Sesuai Pedoman**.
+- 🎯 **Hanya Menampilkan Temuan yang Perlu Diperbaiki**:
+  Hasil audit hanya memuat poin yang **masih salah atau kurang**, lengkap dengan **lokasi temuan** (bab/sub-bab, atau nomor halaman bila terdeteksi) dan **cara memperbaikinya** sesuai Pedoman KP. Poin yang sudah benar tidak ditampilkan.
 - 📂 **Multi-Format Document Parser (.PDF & .DOCX)**:
   Membaca dan memindai teks dokumen secara langsung di browser (*100% Client-Side*, aman dan menjaga privasi data kelompok).
 - 🎯 **Multi-Stage Audit (Pilih Batas BAB)**:
@@ -35,8 +35,8 @@ Seringkali laporan Kerja Praktek mahasiswa ditolak atau mendapatkan banyak revis
   2. *Sampai BAB II* (Profil PT, Tinjauan Pustaka, Teori, 20 Jurnal & 5 Buku)
   3. *Sampai BAB III* (UML Diagram, UI/UX Wireframe & BlackBox Testing)
   4. *Lengkap (BAB I–IV Full + Lampiran)* (Min. 50 Halaman, Kesimpulan, Daftar Pustaka & 8 Lampiran Wajib)
-- 🔍 **Kamus Istilah Asing & Italic Detector**:
-  Mendeteksi kata-kata teknis bahasa Inggris dan menyediakan fitur *copy* cepat untuk pencarian massal di Word via `Ctrl + H`.
+- 🔍 **Deteksi Istilah Asing yang Belum Miring**:
+  Mendeteksi kata-kata teknis bahasa Inggris yang masih tegak dan menyediakan tombol *salin* cepat per kata untuk pencarian massal di Word via `Ctrl + H`.
 - 📲 **Export Ringkasan ke WhatsApp Kelompok**:
   Satu klik untuk menyalin seluruh daftar temuan revisi ke clipboard dengan format rapi siap kirim ke grup WhatsApp.
 - 🖨️ **Cetak Lembar Audit Mandiri**:

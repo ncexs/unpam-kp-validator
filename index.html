@@ -4,8 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UNPAM KP Validator by ncexs — Sistem Audit & Pengecekan Otomatis Laporan Kerja Praktek</title>
-  <meta name="description" content="Aplikasi Web Interaktif Audit & Validasi Laporan Kerja Praktek (KP) Mahasiswa Program Studi Sistem Informasi Universitas Pamulang Sesuai Pedoman Update 2026. Dibuat oleh ncexs." />
+  <meta name="description" content="Aplikasi Web Interaktif Audit & Validasi Laporan Kerja Praktek (KP) Mahasiswa Program Studi Sistem Informasi Universitas Pamulang Sesuai Pedoman. Dibuat oleh ncexs." />
   <meta name="author" content="ncexs" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta name="theme-color" content="#1e40af" />
 
   <!-- Google Fonts: Inter, Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,7 +21,8 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
+  <script type="module">
+    import { isItalicFont, getLetter } from './src/utils.js';
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -47,8 +52,9 @@
           }
         }
       }
-    }
+    };
   </script>
+
 
   <!-- PDF.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -113,28 +119,6 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col font-sans selection:bg-unpam-600 selection:text-white">
 
-  <!-- ================= TOP NOTIFICATION BAR ================= -->
-  <div class="bg-gradient-to-r from-unpam-950 via-unpam-900 to-indigo-950 text-unpam-100 py-2 px-4 border-b border-unpam-800/40 text-xs no-print">
-    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-      <div class="flex items-center gap-2">
-        <span class="inline-flex items-center justify-center bg-campus-gold/20 text-campus-gold border border-campus-gold/30 px-2 py-0.5 rounded text-[10px] font-bold tracking-wide uppercase">
-          Edisi 2026
-        </span>
-        <span class="truncate">Portal Standar Validasi Laporan Kerja Praktek • S1 Sistem Informasi UNPAM</span>
-        <span class="hidden md:inline-flex items-center gap-1 bg-amber-400/20 text-campus-gold border border-campus-gold/40 px-2 py-0.5 rounded text-[10px] font-extrabold">
-          <i class="fa-solid fa-code text-[9px]"></i> by ncexs
-        </span>
-      </div>
-      <div class="flex items-center gap-4 text-[11px]">
-        <span class="flex items-center gap-1.5"><i class="fa-solid fa-clock text-unpam-300"></i> Semester Genap 2025/2026</span>
-        <span class="hidden md:inline">•</span>
-        <a href="#pedomanRingkas" onclick="switchTab('panduan')" class="hover:text-white underline decoration-unpam-400 underline-offset-2 flex items-center gap-1">
-          <i class="fa-solid fa-book-bookmark text-campus-gold"></i> Buku Pedoman 2026
-        </a>
-      </div>
-    </div>
-  </div>
-
   <!-- ================= MAIN HEADER / NAVBAR ================= -->
   <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/80 shadow-sm no-print">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -158,13 +142,6 @@
             </h1>
           </div>
         </div>
-
-        <!-- Mobile Action Trigger -->
-        <div class="flex items-center gap-2 lg:hidden">
-          <button onclick="copyRevisiToWA()" class="p-2.5 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition" title="Salin ke WhatsApp">
-            <i class="fa-brands fa-whatsapp text-lg"></i>
-          </button>
-        </div>
       </div>
 
       <!-- NAVIGATION TABS -->
@@ -173,14 +150,9 @@
           <i class="fa-solid fa-clipboard-check"></i>
           <span>Audit & Validasi</span>
         </button>
-        <button onclick="switchTab('italic')" id="nav-italic" class="tab-btn px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700">
-          <i class="fa-solid fa-italic text-indigo-600"></i>
-          <span>Kamus Italic</span>
-          <span id="navItalicBadge" class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-bold">12</span>
-        </button>
         <button onclick="switchTab('panduan')" id="nav-panduan" class="tab-btn px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700">
           <i class="fa-solid fa-book-open text-blue-600"></i>
-          <span>Pedoman 2026</span>
+          <span>Pedoman</span>
         </button>
         <button onclick="switchTab('simulasi')" id="nav-simulasi" class="tab-btn px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700">
           <i class="fa-solid fa-calculator text-emerald-600"></i>
@@ -189,10 +161,6 @@
 
         <!-- CTA Action Buttons -->
         <div class="hidden sm:flex items-center gap-2 ml-2 pl-2 border-l border-slate-200">
-          <button onclick="copyRevisiToWA()" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white transition-all shadow-sm flex items-center gap-1.5 whitespace-nowrap">
-            <i class="fa-brands fa-whatsapp text-sm"></i>
-            <span>Salin ke WA</span>
-          </button>
           <button onclick="window.print()" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition border border-slate-300" title="Cetak Ringkasan Audit">
             <i class="fa-solid fa-print"></i>
           </button>
@@ -214,10 +182,10 @@
           <span>Prodi Sistem Informasi (S1) • FIK UNPAM • Built with ❤️ by <b>ncexs</b></span>
         </div>
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white leading-tight">
-          Audit Laporan KP Tanpa Cemas Ditolak Dosen Pembimbing
+          Audit Laporan KP
         </h2>
         <p class="text-unpam-100 text-sm sm:text-base mt-2 leading-relaxed">
-          Sistem otomatis menunjukkan <b>nomor halaman dan paragraf spesifik</b> dari setiap kesalahan, lengkap dengan perbandingan <b>teks asli yang salah vs rekomendasi kalimat perbaikan</b> sesuai Pedoman KP 2026.
+          Sistem otomatis memeriksa laporan Anda dan <b>hanya menampilkan poin yang perlu diperbaiki</b>, lengkap dengan <b>lokasi temuan</b> (bab/sub-bab, atau nomor halaman bila terdeteksi) serta <b>cara memperbaikinya</b> sesuai Pedoman KP.
         </p>
 
         <!-- Quick Tags -->
@@ -229,7 +197,7 @@
             <i class="fa-solid fa-file-word text-blue-400 mr-1.5"></i> Support DOCX / Word
           </span>
           <span class="bg-unpam-950/60 border border-unpam-700/60 px-3 py-1 rounded-lg text-unpam-200">
-            <i class="fa-solid fa-crosshairs text-campus-gold mr-1.5"></i> Tunjuk Nomor Halaman & Paragraf
+            <i class="fa-solid fa-crosshairs text-campus-gold mr-1.5"></i> Tunjuk Lokasi Temuan
           </span>
           <span class="bg-unpam-950/60 border border-unpam-700/60 px-3 py-1 rounded-lg text-unpam-200">
             <i class="fa-solid fa-shield-halved text-emerald-400 mr-1.5"></i> 100% Client-Side Privacy
@@ -268,10 +236,10 @@
     <div id="tab-audit-content" class="tab-pane space-y-8">
 
       <!-- STEP 1 & 2: DUA KARTU (UPLOAD FILE & PILIH PROGRES BAB) -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start no-print">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch no-print">
 
         <!-- KARTU 1: UPLOAD ZONE (7 COLS) -->
-        <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-200/90 relative">
+        <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-200/90 relative flex flex-col">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <div>
               <div class="flex items-center gap-2">
@@ -296,7 +264,7 @@
           </div>
 
           <!-- DROP ZONE -->
-          <div id="dropZoneArea" class="upload-zone-active cursor-pointer group flex flex-col items-center justify-center border-2 border-dashed border-unpam-500 bg-gradient-to-b from-unpam-50/60 to-slate-50/80 hover:from-unpam-100/70 hover:to-unpam-50/90 transition-all duration-300 rounded-2xl p-7 text-center">
+          <div id="dropZoneArea" class="upload-zone-active flex-1 cursor-pointer group flex flex-col items-center justify-center border-2 border-dashed border-unpam-500 bg-gradient-to-b from-unpam-50/60 to-slate-50/80 hover:from-unpam-100/70 hover:to-unpam-50/90 transition-all duration-300 rounded-2xl p-7 text-center">
             <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-unpam-700 to-blue-500 text-white flex items-center justify-center text-3xl shadow-lg shadow-unpam-700/20 mb-3 group-hover:scale-105 transition-transform duration-300 pointer-events-none">
               <i class="fa-solid fa-cloud-arrow-up"></i>
             </div>
@@ -421,7 +389,7 @@
               Syarat Wajib Laporan Lengkap (BAB I–IV & 8 Lampiran Wajib) & Catatan Koreksi
             </h3>
             <p class="text-xs text-slate-500 mt-1">
-              Daftar syarat kelayakan pedoman 2026 dan catatan koreksi dosen dirangkum dalam satu lembar terpadu agar praktis ditinjau dan diperbaiki.
+              Daftar syarat kelayakan pedoman dan catatan koreksi dosen dirangkum dalam satu lembar terpadu agar praktis ditinjau dan diperbaiki.
             </p>
           </div>
 
@@ -447,20 +415,6 @@
               <span>Perlu Perbaikan</span>
               <span id="badgeCountKoreksi" class="bg-white/20 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
             </button>
-            <button onclick="setUnifiedFilter('checklist_pass')" id="btnFilterUnified-checklist_pass" class="unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60">
-              <i class="fa-solid fa-circle-check text-emerald-600"></i>
-              <span>Syarat Sesuai</span>
-              <span id="badgeCountPass" class="bg-slate-200 text-slate-700 text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
-            </button>
-            <button onclick="setUnifiedFilter('all')" id="btnFilterUnified-all" class="unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60">
-              <i class="fa-solid fa-layer-group text-unpam-600"></i>
-              <span>Semua Poin (Terpadu)</span>
-              <span id="badgeCountAll" class="bg-slate-200 text-slate-700 text-[10px] font-black px-1.5 py-0.2 rounded-full">0</span>
-            </button>
-            <button onclick="setUnifiedFilter('resolved')" id="btnFilterUnified-resolved" class="unified-filter-btn px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-white/60">
-              <i class="fa-solid fa-check-double text-blue-600"></i>
-              <span>Sudah Diperbaiki</span>
-            </button>
           </div>
 
           <div class="relative min-w-[240px] md:w-72">
@@ -481,51 +435,12 @@
 
     </div>
 
-    <!-- TAB 2: KAMUS ISTILAH ASING (ITALIC CHECKER) -->
-    <div id="tab-italic-content" class="tab-pane hidden space-y-6">
-      <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-200/90 space-y-6">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-4 border-b border-slate-100">
-          <div>
-            <div class="inline-flex items-center gap-1.5 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-black px-2.5 py-0.5 rounded-md uppercase mb-1">
-              <i class="fa-solid fa-spell-check"></i> Pedoman KP 2026 Bab VII Hal. 9 Poin g.1
-            </div>
-            <h3 class="text-xl font-extrabold text-slate-900">
-              Audit Istilah Asing Wajib Dicetak Miring (Italic)
-            </h3>
-            <p class="text-xs text-slate-500 mt-1">
-              Seluruh istilah bahasa asing atau bahasa teknis TI (misal: <i>progressive web application, service worker, online, real-time, database, website, black box testing</i>, dll) wajib dicetak miring (italic). Gunakan tombol <b>Salin Cepat</b> dan lakukan pencarian di Word via <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Ctrl + F</kbd> atau <kbd class="bg-slate-100 border border-slate-300 px-1.5 py-0.5 rounded font-mono text-[10px]">Ctrl + H</kbd>.
-            </p>
-          </div>
-          <div class="flex items-center gap-2">
-            <button onclick="copyAllItalicWords()" class="bg-unpam-600 hover:bg-unpam-700 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition shadow-sm flex items-center gap-2">
-              <i class="fa-regular fa-copy"></i>
-              <span>Salin Semua Kata</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Grid of foreign words with direct copy -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" id="foreignWordsFullGrid"></div>
-
-        <!-- Guidance Box -->
-        <div class="bg-blue-50/70 border border-blue-200 rounded-2xl p-5 text-xs text-blue-900 space-y-2">
-          <div class="font-bold flex items-center gap-2 text-sm text-unpam-900">
-            <i class="fa-solid fa-lightbulb text-campus-gold"></i>
-            <span>Tips Cepat dari Asisten Dosen:</span>
-          </div>
-          <p>
-            Di Microsoft Word, tekan <kbd class="bg-white border px-1.5 py-0.5 rounded font-mono">Ctrl + H</kbd> (Replace), pada kolom <b>Find what</b> masukkan kata asing (misal: <code>online</code>), lalu pada kolom <b>Replace with</b> masukkan kata yang sama, lalu tekan <kbd class="bg-white border px-1.5 py-0.5 rounded font-mono">Ctrl + I</kbd> pada kolom Replace with hingga muncul keterangan <i>Format: Italic</i> di bawahnya. Klik <b>Replace All</b> untuk memiringkan semua kata sekaligus secara otomatis!
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB 3: PEDOMAN RESMI 2026 CHEATSHEET -->
+    <!-- TAB 3: PEDOMAN RESMI CHEATSHEET -->
     <div id="tab-panduan-content" class="tab-pane hidden space-y-6">
       <div class="bg-white rounded-3xl p-6 sm:p-7 shadow-sm border border-slate-200/90 space-y-6">
         <div>
           <div class="inline-flex items-center gap-1.5 bg-blue-50 text-blue-800 border border-blue-200 text-xs font-black px-2.5 py-0.5 rounded-md uppercase mb-1">
-            <i class="fa-solid fa-book"></i> Rangkuman Pedoman KP 2026
+            <i class="fa-solid fa-book"></i> Rangkuman Pedoman KP
           </div>
           <h3 class="text-xl font-extrabold text-slate-900">
             Ketentuan Lengkap Format Laporan & Syarat Ujian KP
@@ -856,7 +771,7 @@
     <div class="text-center border-b-2 border-black pb-4">
       <h2 class="text-lg font-black uppercase">UNIVERSITAS PAMULANG</h2>
       <h3 class="text-base font-bold">PROGRAM STUDI SISTEM INFORMASI (S1) - FAKULTAS ILMU KOMPUTER</h3>
-      <p class="text-xs mt-1">LEMBAR HASIL AUDIT MANDIRI LAPORAN KERJA PRAKTEK (PEDOMAN 2026)</p>
+      <p class="text-xs mt-1">LEMBAR HASIL AUDIT MANDIRI LAPORAN KERJA PRAKTEK (PEDOMAN)</p>
       <p class="text-[10px] mt-0.5 text-slate-600">Sistem Validasi dikembangkan oleh: <b>ncexs</b></p>
     </div>
     <div class="grid grid-cols-2 text-xs gap-2 py-2">
@@ -940,7 +855,7 @@
     }
 
     // =========================================================================
-    // MASTER DATA ANALISIS PEDOMAN 2026 & DATASET CONTOH DOSEN (WITH EXACT PARAGRAPHS & SNIPPETS)
+    // MASTER DATA ANALISIS PEDOMAN & DATASET CONTOH DOSEN (WITH EXACT PARAGRAPHS & SNIPPETS)
     // =========================================================================
     const DEFAULT_DOSEN_DATASET = {
       fileName: "Final K.P Kelompok 6.pdf (Contoh Dosen)",
@@ -1165,7 +1080,7 @@
           title: "Daftar istilah asing & teknis (PWA, Service Worker, dll) wajib dimiringkan (italic)",
           explanation: "Kata-kata teknis bahasa Inggris berikut terdeteksi masih dicetak tegak biasa pada naskah Anda: 'progressive web application', 'service worker', 'online', 'real-time', 'human error', dan 'website'. Seluruh istilah asing wajib dicetak miring (italic) sesuai Pedoman Bab VII Hal. 9.",
           fix: "Klik tombol kata di bawah untuk otomatis menyalin ke clipboard, lalu di Microsoft Word tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I).",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
+          pedomanRef: "Pedoman KP BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
           foreignItems: [
             { word: "progressive web application", page: "Hal. 1, 2", count: 4 },
             { word: "service worker", page: "Hal. 2", count: 2 },
@@ -1209,7 +1124,7 @@
           title: "Tertulis nama PT lain: 'Berikut gambar struktur perusahaan Bitnet' & typo 'Peusahaan'",
           explanation: "Sisa copy-paste dari laporan teman/grup lain. Judul laporan PT. Gama Setia Waspada tetapi di narasi tertulis perusahaan 'Bitnet' dan caption gambar tertulis 'Peusahaan'.",
           fix: "Ganti kata 'Bitnet' menjadi 'PT. Gama Setia Waspada' dan perbaiki tulisan 'Struktur Peusahaan' menjadi 'Struktur Perusahaan'.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11 Poin 2.1"
+          pedomanRef: "Pedoman KP BAB VII Hal. 11 Poin 2.1"
         },
         {
           id: "iss-6",
@@ -1231,9 +1146,9 @@
           locationDetail: "BAB II (Setelah Sub-Bab 2.1 & Metode)",
           category: "Struktur Bab",
           title: "Sub-bab 2.2 Tinjauan Pustaka belum dicantumkan di BAB II (Kerangka Berpikir Opsional)",
-          explanation: "Struktur resmi Bab II Pedoman 2026 mewajibkan: 2.1 Profil Perusahaan, 2.2 Tinjauan Pustaka, 2.3 Landasan Teori, dan Metode Penelitian. Sesuai arahan revisi dosen, Kerangka Berpikir sifatnya opsional (boleh dipakai, boleh tidak).",
+          explanation: "Struktur resmi Bab II Pedoman mewajibkan: 2.1 Profil Perusahaan, 2.2 Tinjauan Pustaka, 2.3 Landasan Teori, dan Metode Penelitian. Sesuai arahan revisi dosen, Kerangka Berpikir sifatnya opsional (boleh dipakai, boleh tidak).",
           fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka berupa tabel komparasi penelitian terdahulu yang relevan sebelum masuk ke Landasan Teori.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11–12 & Arahan Dosen"
+          pedomanRef: "Pedoman KP BAB VII Hal. 11–12 & Arahan Dosen"
         },
         {
           id: "iss-8",
@@ -1269,7 +1184,7 @@
           title: "Penomoran huruf sub-bab 3.5 lompat (c, d, g, h, i, j) & caption gambar typo",
           explanation: "Di sub-bab 3.5 implementasi sistem nomor hurufnya melompat dari d langsung ke g. Caption Gambar 3.17 s/d 3.26 juga memuat beberapa typo pengetikan.",
           fix: "Urutkan abjad sub-bab 3.5 secara rapi (a, b, c, d, e, f, ...) dan perbaiki penamaan seluruh caption gambar perancangan antarmuka.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 10 Poin 7"
+          pedomanRef: "Pedoman KP BAB VII Hal. 10 Poin 7"
         },
         {
           id: "iss-11",
@@ -1293,7 +1208,7 @@
           title: "Sub-bab Bab IV menggunakan huruf (A & B) dan Daftar Pustaka belum urut abjad",
           explanation: "Bab IV memakai format 'A. Kesimpulan' dan 'B. Saran'. Daftar Pustaka pada halaman 52 juga belum diurutkan dari huruf A sampai Z.",
           fix: "Ubah menjadi 4.1 Kesimpulan dan 4.2 Saran agar konsisten dengan Bab I-III, lalu urutkan daftar pustaka berdasarkan abjad nama belakang penulis tanpa nomor.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12 Poin a, b, c"
+          pedomanRef: "Pedoman KP BAB VII Hal. 12 Poin a, b, c"
         },
         {
           id: "iss-13",
@@ -1305,7 +1220,7 @@
           title: "Lampiran wajib SIUP / NIB / SK Operasional Perusahaan (Poin c) belum terlampir",
           explanation: "Berdasarkan Pedoman Bab VII Hal. 13 Poin c, SIUP/NIB/SK Operasional instansi wajib dilampirkan. Di file contoh hanya ada surat permohonan dan surat balasan.",
           fix: "Mintakan scan dokumen legalitas (NIB/SIUP/Surat Keterangan Operasional) ke bagian administrasi/HRD tempat KP lalu lampirkan sebagai Lampiran 3.",
-          pedomanRef: "Pedoman KP 2026 BAB II Hal. 3 & BAB VII Hal. 13 Poin c"
+          pedomanRef: "Pedoman KP BAB II Hal. 3 & BAB VII Hal. 13 Poin c"
         }
       ]
     };
@@ -1318,7 +1233,7 @@
     // =========================================================================
     function switchTab(tabName) {
       appState.activeTab = tabName;
-      const tabs = ["audit", "italic", "panduan", "simulasi"];
+      const tabs = ["audit", "panduan", "simulasi"];
       tabs.forEach(t => {
         const btn = document.getElementById("nav-" + t);
         const content = document.getElementById("tab-" + t + "-content");
@@ -1558,8 +1473,8 @@
     function renderUnifiedAuditList() {
       const activeStages = getActiveStagesList(appState.currentStage);
       const stageTitles = {
-        bab1_only: "Syarat Wajib Khusus BAB I Pendahuluan (Pedoman 2026)",
-        bab1: "Syarat Wajib BAB I Pendahuluan (Pedoman 2026)",
+        bab1_only: "Syarat Wajib Khusus BAB I Pendahuluan (Pedoman)",
+        bab1: "Syarat Wajib BAB I Pendahuluan (Pedoman)",
         bab2_only: "Syarat Wajib Khusus BAB II (Profil PT, Teori, 20 Jurnal & 5 Buku)",
         bab3_only: "Syarat Wajib Khusus BAB III (UML, Mockup UI/UX & BlackBox Testing)",
         bab4_only: "Syarat Wajib Khusus BAB IV & Format Daftar Pustaka",
@@ -1681,9 +1596,6 @@
                         <i class="fa-solid fa-spell-check text-rose-600"></i>
                         <span>Daftar Istilah yang Masih Terdeteksi Tegak di Word (${foreignItems.length} Istilah):</span>
                       </span>
-                      <button onclick="switchTab('italic')" class="text-[11px] font-extrabold text-unpam-700 hover:text-unpam-900 underline flex items-center gap-1">
-                        <span>Buka Tab Kamus</span> &rarr;
-                      </button>
                     </div>
 
                     <div class="flex flex-wrap gap-1.5">
@@ -1706,29 +1618,6 @@
                       💡 <b>Tinggal klik salah satu istilah di atas</b> untuk menyalin otomatis ke clipboard, lalu buka Word & tekan <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + F</kbd> (Cari) atau <kbd class="bg-white border border-amber-300 px-1 py-0.2 rounded font-mono text-[10px]">Ctrl + H</kbd> (Replace) untuk langsung memiringkannya pada halaman yang masih tegak.
                     </p>
 
-                    ${(it.alreadyItalicItems && it.alreadyItalicItems.length > 0) ? `
-                      <div class="mt-3 pt-3 border-t border-emerald-200/90 bg-emerald-50/70 rounded-xl p-3 space-y-2">
-                        <div class="flex items-center justify-between gap-2 flex-wrap">
-                          <span class="flex items-center gap-1.5 font-bold text-xs text-emerald-950">
-                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
-                            <span>Sudah 100% Dicetak Miring di Naskah (${it.alreadyItalicItems.length} Istilah - Sesuai Pedoman):</span>
-                          </span>
-                          <span class="text-[10px] font-bold bg-emerald-200/80 text-emerald-900 px-2 py-0.5 rounded-full">Sesuai ✓</span>
-                        </div>
-                        <div class="flex flex-wrap gap-1.5">
-                          ${it.alreadyItalicItems.map(af => `
-                            <span class="inline-flex items-center gap-1.5 bg-white border border-emerald-300 text-emerald-900 text-xs px-2.5 py-1 rounded-lg font-medium shadow-2xs">
-                              <span class="font-bold font-mono italic text-emerald-800">${af.word}</span>
-                              <span class="text-[10px] bg-emerald-100 text-emerald-800 font-black px-1.5 py-0.5 rounded-full">${af.italicCount}x ✓</span>
-                              ${af.italicPages && af.italicPages.length > 0 ? `<span class="text-[10px] text-slate-500 font-normal">(${af.italicPages.slice(0, 3).join(', ')})</span>` : ''}
-                            </span>
-                          `).join('')}
-                        </div>
-                        <p class="text-[11px] text-emerald-900/90 leading-tight">
-                          👏 <b>Bagus!</b> Istilah di atas terdeteksi sudah dalam format cetak miring (italic) di seluruh halaman kemunculannya.
-                        </p>
-                      </div>
-                    ` : ''}
                   </div>
                 ` : ''}
 
@@ -1747,27 +1636,6 @@
         `;
       }
 
-      function renderSinglePassChecklist(item) {
-        return `
-          <div class="rounded-2xl border border-emerald-200/90 bg-emerald-50/40 p-4 transition-all duration-200 hover:border-emerald-300 shadow-2xs">
-            <div class="flex items-start justify-between gap-3">
-              <div class="flex items-start gap-2.5">
-                <span class="text-base text-emerald-600 mt-0.5"><i class="fa-solid fa-circle-check"></i></span>
-                <div>
-                  <div class="flex items-center gap-2 flex-wrap mb-1">
-                    <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">${item.pedomanRef || 'Pedoman 2026'}</span>
-                    <span class="text-[11px] font-bold text-emerald-700 bg-white border border-emerald-200 px-2 py-0.5 rounded-md">${item.badge}</span>
-                  </div>
-                  <h4 class="text-xs font-black text-slate-900 leading-snug">${item.title}</h4>
-                  <p class="text-xs text-slate-600 mt-1 leading-relaxed">${item.desc}</p>
-                </div>
-              </div>
-              <span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full shrink-0">Sesuai</span>
-            </div>
-          </div>
-        `;
-      }
-
       if (currentFilter === "issues") {
         const issuesToShow = allActiveIssues.filter(it => !appState.checkedIssues[it.id]).filter(filterIssueByQuery);
         
@@ -1780,7 +1648,6 @@
                 <p class="text-xs text-emerald-700 mt-1 max-w-md mx-auto">
                   Seluruh poin perbaikan pada batas ${getStageName(appState.currentStage)} telah ditandai selesai. Laporan siap diajukan ke Dosen Pembimbing!
                 </p>
-                <button onclick="setUnifiedFilter('all')" class="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm hover:bg-emerald-700">Lihat Semua Ketentuan Lengkap</button>
               </div>
             `;
           } else {
@@ -1795,86 +1662,6 @@
 
         container.innerHTML = issuesToShow.map(renderSingleIssueCard).join("");
 
-      } else if (currentFilter === "checklist_pass") {
-        const passToShow = passChecklist.filter(filterChecklistByQuery);
-        if (passToShow.length === 0) {
-          container.innerHTML = `
-            <div class="p-8 text-center bg-slate-50 rounded-2xl border border-slate-200">
-              <div class="text-3xl mb-2">📋</div>
-              <h4 class="text-xs font-bold text-slate-800">Tidak ada syarat sesuai pada ${getStageName(appState.currentStage)}</h4>
-              <p class="text-[11px] text-slate-500 mt-1 max-w-md mx-auto">
-                ${!docAnalysis.hasBab3 && (appState.currentStage === 'bab3_only' || appState.currentStage === 'bab3')
-                  ? 'Dokumen yang diunggah belum memuat BAB III (Perancangan & Pembahasan). Klik tombol filter <b>Perlu Perbaikan</b> di atas untuk melihat rincian hal yang wajib dibuat.'
-                  : 'Seluruh syarat pada batas ini belum terpenuhi atau memerlukan perbaikan.'}
-              </p>
-            </div>
-          `;
-          return;
-        }
-        container.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">${passToShow.map(renderSinglePassChecklist).join("")}</div>`;
-
-      } else if (currentFilter === "resolved") {
-        const resolvedIssues = allActiveIssues.filter(it => !!appState.checkedIssues[it.id]).filter(filterIssueByQuery);
-        if (resolvedIssues.length === 0) {
-          container.innerHTML = `
-            <div class="p-8 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
-              Belum ada poin perbaikan yang ditandai selesai (centang salah satu kartu untuk menandainya).
-            </div>
-          `;
-          return;
-        }
-        container.innerHTML = resolvedIssues.map(renderSingleIssueCard).join("");
-
-      } else {
-        // "all" mode: unified master view showing actionable issues first, then passing criteria
-        const issuesToShow = allActiveIssues.filter(filterIssueByQuery);
-        const passToShow = passChecklist.filter(filterChecklistByQuery);
-
-        let html = "";
-
-        if (issuesToShow.length > 0) {
-          html += `
-            <div class="space-y-3">
-              <div class="flex items-center justify-between pb-2 border-b border-rose-100">
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
-                  <h4 class="text-xs font-black uppercase tracking-wider text-rose-900">Catatan Koreksi & Revisi Wajib (${issuesToShow.length} Poin)</h4>
-                </div>
-                <span class="text-[11px] text-slate-400">Centang kotak jika telah diperbaiki</span>
-              </div>
-              <div class="space-y-3.5">
-                ${issuesToShow.map(renderSingleIssueCard).join("")}
-              </div>
-            </div>
-          `;
-        }
-
-        if (passToShow.length > 0) {
-          html += `
-            <div class="space-y-3 pt-4">
-              <div class="flex items-center justify-between pb-2 border-b border-emerald-100">
-                <div class="flex items-center gap-2">
-                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-                  <h4 class="text-xs font-black uppercase tracking-wider text-emerald-900">Syarat Pedoman yang Sudah Sesuai (${passToShow.length} Poin)</h4>
-                </div>
-                <span class="text-[11px] text-emerald-600 font-semibold">✓ Standar Pedoman 2026</span>
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-                ${passToShow.map(renderSinglePassChecklist).join("")}
-              </div>
-            </div>
-          `;
-        }
-
-        if (issuesToShow.length === 0 && passToShow.length === 0) {
-          html = `
-            <div class="p-8 text-center text-xs text-slate-500 bg-slate-50 rounded-2xl border border-slate-200">
-              Tidak ada data yang cocok dengan kata kunci pencarian.
-            </div>
-          `;
-        }
-
-        container.innerHTML = html;
       }
     }
 
@@ -1962,48 +1749,9 @@
       }
     }
 
-    // =========================================================================
-    // KAMUS ITALIC RENDERING
-    // =========================================================================
-    function renderForeignWords() {
-      const grid = document.getElementById("foreignWordsFullGrid");
-      if (!grid) return;
-
-      document.getElementById("navItalicBadge").textContent = docAnalysis.foreignWords.length;
-
-      grid.innerHTML = docAnalysis.foreignWords.map((item, idx) => {
-        return `
-          <div class="p-3.5 rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-white hover:border-unpam-300 transition-all flex flex-col justify-between group shadow-sm">
-            <div>
-              <div class="flex items-center justify-between">
-                <span class="font-mono font-bold text-sm text-unpam-900 group-hover:text-unpam-700"><i>${item.word}</i></span>
-                <span class="text-[10px] font-bold bg-amber-100 text-amber-900 px-2 py-0.5 rounded-full">${item.count}x Muncul</span>
-              </div>
-              <div class="text-[11px] text-slate-400 mt-0.5">Lokasi: <b>${item.page}</b></div>
-              <p class="text-[11px] text-slate-600 mt-2 italic bg-white p-2 rounded-lg border border-slate-100">
-                "${item.context}"
-              </p>
-            </div>
-            <div class="mt-3 pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
-              <span class="text-[10px] text-slate-400 font-mono">Word Find: ${item.word}</span>
-              <button onclick="copySingleWord('${item.word}')" class="text-unpam-700 hover:text-unpam-900 font-bold text-xs flex items-center gap-1">
-                <i class="fa-regular fa-copy"></i> Salin Kata
-              </button>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
-
     function copySingleWord(word) {
       navigator.clipboard.writeText(word);
       showToast(`Kata "${word}" disalin ke clipboard! Tekan Ctrl+F di Word.`, "success");
-    }
-
-    function copyAllItalicWords() {
-      const words = docAnalysis.foreignWords.map(w => w.word).join("\n");
-      navigator.clipboard.writeText(words);
-      showToast("Seluruh daftar istilah asing berhasil disalin!", "success");
     }
 
     // =========================================================================
@@ -2013,7 +1761,7 @@
       const activeStages = getActiveStagesList(appState.currentStage);
       const activeIssues = docAnalysis.issues.filter(it => (it.stage === "any" || activeStages.includes(it.stage)) && !appState.checkedIssues[it.id]);
 
-      let msg = `*📢 HASIL AUDIT LAPORAN KERJA PRAKTEK UNPAM (Pedoman 2026)*\n`;
+      let msg = `*📢 HASIL AUDIT LAPORAN KERJA PRAKTEK UNPAM (Pedoman)*\n`;
       msg += `👨‍💻 *Validator by:* ncexs\n`;
       msg += `📄 *Dokumen:* ${docAnalysis.fileName}\n`;
       msg += `🎯 *Batas Pemeriksaan:* ${getStageName(appState.currentStage)}\n`;
@@ -2130,7 +1878,10 @@
             try {
               const page = await pdf.getPage(i);
               try {
-                await page.getOperatorList();
+                await Promise.race([
+                  page.getOperatorList(),
+                  new Promise(res => setTimeout(res, 250))
+                ]);
               } catch (opErr) {}
               const textContent = await page.getTextContent();
               let pagePlain = "";
@@ -2250,10 +2001,21 @@
           progressDetail.textContent = "Mengekstrak teks & format Word (.docx)...";
           progressBar.style.width = "50%";
           progressPercent.textContent = "50%";
-          const htmlRes = await mammoth.convertToHtml({ arrayBuffer });
+          let htmlRes = { value: "" };
+          try {
+            htmlRes = await mammoth.convertToHtml({ arrayBuffer }, {
+              convertImage: mammoth.images.inline(() => Promise.resolve({ src: "" }))
+            });
+          } catch (mErr) {
+            htmlRes = await mammoth.convertToHtml({ arrayBuffer });
+          }
           const rawRes = await mammoth.extractRawText({ arrayBuffer });
           extractedText = rawRes.value || "";
-          taggedText = (htmlRes.value || "").replace(/<em>/gi, '<i>').replace(/<\/em>/gi, '</i>');
+          taggedText = (htmlRes.value || "")
+            .replace(/<img[^>]*>/gi, '')
+            .replace(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/gi, '')
+            .replace(/<em>/gi, '<i>')
+            .replace(/<\/em>/gi, '</i>');
           totalPages = Math.max(1, Math.round(extractedText.split(/\s+/).length / 280));
         } else if (fileNameLower.endsWith(".txt") || fileNameLower.endsWith(".doc")) {
           extractedText = await file.text();
@@ -2270,11 +2032,23 @@
         progressDetail.textContent = "Mendeteksi nomor halaman & paragraf spesifik...";
 
         setTimeout(() => {
-          parseAndAuditDocument(file.name, extractedText, totalPages, null, taggedText);
-          progressContainer.classList.add("hidden");
-          progressBar.style.width = "0%";
-          showToast(`File "${file.name}" berhasil diaudit oleh ncexs!`, "success");
-        }, 350);
+          try {
+            parseAndAuditDocument(file.name, extractedText, totalPages, null, taggedText);
+            progressBar.style.width = "100%";
+            progressPercent.textContent = "100%";
+            progressDetail.textContent = "Selesai!";
+            setTimeout(() => {
+              progressContainer.classList.add("hidden");
+              progressBar.style.width = "0%";
+              showToast(`File "${file.name}" berhasil diaudit oleh ncexs!`, "success");
+            }, 250);
+          } catch (auditErr) {
+            console.error("Gagal saat memvalidasi naskah:", auditErr);
+            progressContainer.classList.add("hidden");
+            progressBar.style.width = "0%";
+            alert("Terjadi kendala saat menganalisis dokumen: " + (auditErr.message || auditErr));
+          }
+        }, 150);
 
       } catch (err) {
         console.error("Upload error:", err);
@@ -2284,12 +2058,141 @@
     }
 
     // =========================================================================
+    // DETEKSI KANDIDAT ISTILAH ASING DI LUAR KAMUS (HEURISTIK POLA BAHASA INGGRIS)
+    // Memeriksa isi naskah sebelum Daftar Pustaka, mengabaikan kata berhuruf kapital
+    // (nama/singkatan) dan kata yang sudah dicetak miring. Hasilnya hanya "kandidat".
+    // =========================================================================
+    // Potong naskah sebelum Daftar Pustaka (judul referensi berbahasa Inggris bukan istilah asing di teks).
+    // Memakai heading "DAFTAR PUSTAKA" terakhir yang berada di paruh akhir dokumen (menghindari Daftar Isi).
+    function trimBibliography(taggedText) {
+      if (!taggedText) return "";
+      const dafRegex = /(?:^|\n|\[Halaman\s+\d+\])\s*DAFTAR\s+PUSTAKA\b/gi;
+      let dm;
+      let lastDaf = -1;
+      while ((dm = dafRegex.exec(taggedText)) !== null) lastDaf = dm.index;
+      return lastDaf > taggedText.length * 0.4 ? taggedText.slice(0, lastDaf) : taggedText;
+    }
+
+    function detectCandidateForeign(taggedText, knownTerms) {
+      const known = new Set();
+      const phrases = [];
+      knownTerms.forEach(term => {
+        const lower = term.toLowerCase();
+        if (/[\s\-]/.test(lower)) phrases.push(lower);
+        else known.add(lower);
+      });
+
+      let body = trimBibliography(taggedText);
+      body = body.replace(/https?:\/\/\S+|www\.\S+|\S+@\S+/gi, " ");
+      // Tutup (masking) frasa kamus agar kata di dalam frasa tidak terhitung ganda,
+      // sementara kemunculan mandiri kata yang sama tetap diperiksa.
+      if (phrases.length > 0) {
+        const escPhrases = phrases.map(ph => ph.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+        const phraseRegex = new RegExp(`\\b(?:${escPhrases.join('|')})(?:s)?\\b`, "gi");
+        body = body.replace(phraseRegex, m => " ".repeat(m.length));
+      }
+
+      const commonEnglish = new Set([
+        "with", "from", "that", "this", "have", "been", "your", "will", "when", "what", "which",
+        "their", "there", "where", "about", "other", "system", "systems", "information", "management",
+        "application", "applications", "analysis", "development", "design", "process", "service",
+        "services", "control", "manager", "error", "feature", "features", "module", "modules",
+        "version", "input", "output", "request", "response", "report", "page", "site", "link",
+        "file", "files", "search", "setting", "settings", "support", "access", "account", "profile",
+        "history", "content", "message", "messages", "order", "orders", "product", "products",
+        "state", "props", "hook", "store", "layer", "level", "score", "table", "column", "row",
+        "field", "value", "index", "query", "event", "queue", "stack", "scope", "token", "cache",
+        "client", "server", "cloud", "device", "mobile", "smart", "screen", "layout", "theme",
+        "widget", "plugin", "custom", "default", "active", "status", "result", "detail", "source",
+        "target", "filter", "action", "update", "delete", "create", "insert", "select", "import",
+        "export", "upload", "download", "online", "offline", "pipeline", "benchmark", "runtime",
+        "bundle", "compiler", "middleware", "package", "library", "framework", "syntax", "script",
+        "session", "cookie", "storage", "database", "backend", "frontend", "fullstack", "network",
+        "gateway", "router", "socket", "packet", "security", "cipher", "crypto", "payload", "endpoint",
+        "schema", "entity", "attribute", "relation", "diagram", "testing", "tester", "developer",
+        "designer", "admin", "user", "username", "password", "dashboard", "navbar", "sidebar"
+      ]);
+      const enSuffix = /(?:tion|tions|sion|sions|ment|ments|ness|ship|ships|able|ibles?|ality|ities|ity|ous|ful|less|ically|ally|ization|izing|ised|ized|ware|wares|ough|ught|ight|ights|works?|lines?|boards?|bases?|sites?|pages?|codes?|marks?|flows?|times?|([bcdfghjklmnpqrstvwxz])\1ing)$/;
+      const hasEnglishPattern = (w) => {
+        if (commonEnglish.has(w)) return true;
+        if (enSuffix.test(w)) return true;
+        if (/(?:ck|tch|ph|wh|ght)/.test(w)) return true;
+        if (/oo(?!r)/.test(w) && !/zoo|koo/.test(w)) return true;
+        if (/sh/.test(w) && !/shalat|shalawat|shaf|shubuh|shahih|dishub/.test(w)) return true;
+        if (/th/.test(w) && !/thah|thaw|thib|thab|thol|thul|ethis|ethik/.test(w)) return true;
+        if (w.length >= 5 && /[bcdfghjklmnpqrstvwxz]y$/.test(w)) return true;
+        return false;
+      };
+
+      const tokenRegex = /<\/?i>|\[Halaman\s+(\d+)\]|[A-Za-z]{4,}/g;
+      let italic = false;
+      let page = null;
+      let sentStart = true;
+      let lastEnd = 0;
+      const found = new Map();
+      let tm;
+      while ((tm = tokenRegex.exec(body)) !== null) {
+        const gap = body.slice(lastEnd, tm.index);
+        lastEnd = tm.index + tm[0].length;
+        if (/[.!?\n]/.test(gap)) sentStart = true;
+        const raw = tm[0];
+        if (raw === "<i>") { italic = true; continue; }
+        if (raw === "</i>") { italic = false; continue; }
+        if (tm[1]) { page = tm[1]; sentStart = true; continue; }
+        const wasSentStart = sentStart;
+        sentStart = false;
+        if (italic) continue;
+        // Kata kapital di tengah kalimat = nama/merek/singkatan -> abaikan.
+        // Kata berawalan kapital di awal kalimat (Title-case) tetap diperiksa.
+        const isTitleCase = /^[A-Z][a-z]+$/.test(raw);
+        if (raw !== raw.toLowerCase() && !(wasSentStart && isTitleCase)) continue;
+        const tok = raw.toLowerCase();
+        if (known.has(tok) || known.has(tok.replace(/s$/, ""))) continue;
+        if (!hasEnglishPattern(tok)) continue;
+        if (!found.has(tok)) found.set(tok, { count: 0, pages: new Set() });
+        const rec = found.get(tok);
+        rec.count++;
+        if (page) rec.pages.add(`Hal. ${page}`);
+      }
+
+      return Array.from(found.entries())
+        .sort((a, b) => b[1].count - a[1].count)
+        .slice(0, 40)
+        .map(([word, rec]) => {
+          const pages = Array.from(rec.pages);
+          let loc = `Muncul ${rec.count}x dalam naskah`;
+          if (pages.length > 0) {
+            loc = `Masih tegak di ${pages.slice(0, 3).join(', ')}`;
+            if (pages.length > 3) loc += ` (+${pages.length - 3} hal lain)`;
+          }
+          return {
+            word,
+            page: loc,
+            count: rec.count,
+            totalCount: rec.count,
+            italicCount: 0,
+            nonItalicCount: rec.count,
+            isFullyItalic: false,
+            isPartiallyItalic: false,
+            isNotItalic: true,
+            italicPages: [],
+            nonItalicPages: pages,
+            context: "",
+            isCandidate: true
+          };
+        });
+    }
+
+    // =========================================================================
     // DYNAMIC AUDIT LOGIC (FOR UPLOADED FILES WITH SPECIFIC LOCATION DETECTION)
     // =========================================================================
     function parseAndAuditDocument(fileName, text, totalPages, forcedScope = null, taggedText = null) {
       const cleanText = text.replace(/\r\n/g, '\n');
       const lower = cleanText.toLowerCase();
-      const auditTaggedText = (taggedText || text).replace(/\r\n/g, '\n');
+      const auditTaggedText = (taggedText || text || "")
+        .replace(/<img[^>]*>/gi, '')
+        .replace(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/gi, '')
+        .replace(/\r\n/g, '\n');
       const isScannedOrLittleText = text.trim().length < 150;
 
       // 1. Deteksi bab secara ketat (menghindari baris Daftar Isi bertitik .... dan kutipan teori di bab lain)
@@ -2543,22 +2446,364 @@
         "debugging",
         "hosting",
         "deploy",
-        "deployment"
+        "deployment",
+
+        // --- Perluasan kamus: frasa majemuk ---
+        "progressive web app",
+        "entity relationship",
+        "app manifest",
+        "app shell",
+        "human error",
+        "real time",
+        "realtime",
+        "user flow",
+        "user story",
+        "data flow diagram",
+        "use case",
+        "login page",
+        "landing page",
+        "home page",
+        "homepage",
+        "pop up",
+        "pop-up",
+        "drop down",
+        "drop-down",
+        "drag and drop",
+        "sign in",
+        "sign up",
+        "log in",
+        "log out",
+        "standalone",
+        "stand alone",
+        "open source",
+        "big data",
+        "machine learning",
+        "artificial intelligence",
+        "deep learning",
+        "data mining",
+        "data warehouse",
+        "cloud storage",
+        "web hosting",
+        "web server",
+        "web browser",
+        "web design",
+        "mobile app",
+        "mobile application",
+        "android studio",
+        "visual studio code",
+        "source code",
+        "version control",
+        "bug fixing",
+        "error handling",
+        "session timeout",
+        "user friendly",
+        "user-friendly",
+        "design thinking",
+        "design pattern",
+        "point of sale",
+        "decision support system",
+        "management information system",
+        "enterprise resource planning",
+        "supply chain",
+        "key performance indicator",
+        "business process",
+        "product backlog",
+        "sprint backlog",
+        "unit testing",
+        "integration testing",
+        "functional testing",
+        "regression testing",
+        "stress testing",
+        "performance testing",
+        "alpha testing",
+        "beta testing",
+        "smoke testing",
+        "e-commerce",
+        "e-learning",
+        "e-wallet",
+        "e-ticket",
+        "e-mail",
+
+        // --- Tambahan frasa teknis & bisnis sistem informasi ---
+        "web application",
+        "desktop application",
+        "hybrid application",
+        "native application",
+        "client server",
+        "client-server",
+        "model view controller",
+        "single sign on",
+        "role based access control",
+        "multi factor authentication",
+        "two factor authentication",
+        "rest api",
+        "web api",
+        "query string",
+        "status code",
+        "request body",
+        "response body",
+        "text field",
+        "text area",
+        "radio button",
+        "check box",
+        "date picker",
+        "time picker",
+        "combo box",
+        "search bar",
+        "navigation bar",
+        "bottom navigation",
+        "floating action button",
+        "action sheet",
+        "bottom sheet",
+        "snack bar",
+        "toast notification",
+        "card view",
+        "list view",
+        "grid view",
+        "table view",
+        "context diagram",
+        "block diagram",
+        "package diagram",
+        "component diagram",
+        "composite key",
+        "candidate key",
+        "inner join",
+        "left join",
+        "right join",
+        "outer join",
+        "stored procedure",
+        "database trigger",
+        "data dictionary",
+        "test plan",
+        "test step",
+        "expected result",
+        "actual result",
+        "bug report",
+        "test suite",
+        "supply chain management",
+        "customer relationship management",
+        "human resource management",
+        "inventory management",
+        "asset management",
+        "document management system",
+        "billing system",
+        "fingerprint scanner",
+        "face recognition",
+        "barcode scanner",
+        "qr code",
+        "cash on delivery",
+        "shopping cart",
+        "purchase order",
+        "delivery order",
+        "decision tree",
+        "random forest",
+        "support vector machine",
+        "naive bayes",
+        "k-nearest neighbor",
+        "k-means clustering",
+        "confusion matrix",
+        "data cleaning",
+        "feature extraction",
+        "extreme programming",
+        "waterfall model",
+        "scrum framework",
+        "sprint planning",
+        "daily standup",
+        "burndown chart",
+        "gantt chart",
+        "e-money",
+
+        // --- Perluasan kamus: kata tunggal ---
+        "login",
+        "logout",
+        "user",
+        "username",
+        "password",
+        "admin",
+        "administrator",
+        "browser",
+        "email",
+        "upload",
+        "download",
+        "update",
+        "install",
+        "setup",
+        "server",
+        "client",
+        "firewall",
+        "backup",
+        "restore",
+        "cache",
+        "cookie",
+        "session",
+        "button",
+        "icon",
+        "layout",
+        "template",
+        "plugin",
+        "widget",
+        "scroll",
+        "click",
+        "slider",
+        "banner",
+        "header",
+        "footer",
+        "sidebar",
+        "navbar",
+        "popup",
+        "dropdown",
+        "checkbox",
+        "textbox",
+        "sorting",
+        "pagination",
+        "feedback",
+        "notification",
+        "chat",
+        "chatbot",
+        "bug",
+        "debug",
+        "testing",
+        "tester",
+        "developer",
+        "programmer",
+        "designer",
+        "stakeholder",
+        "customer",
+        "supplier",
+        "marketing",
+        "branding",
+        "outsourcing",
+        "freelance",
+        "tools",
+        "tool",
+        "gateway",
+        "payment",
+        "invoice",
+        "barcode",
+        "gadget",
+        "smartphone",
+        "mobile",
+        "desktop",
+        "script",
+        "query",
+        "syntax",
+        "compiler",
+        "router",
+        "bandwidth",
+        "hotspot",
+        "wifi",
+        "streaming",
+        "workflow",
+        "workload",
+        "deadline",
+        "meeting",
+        "briefing",
+        "brainstorming",
+        "budget",
+        "benchmark",
+        "milestone",
+        "roadmap",
+        "cloud",
+        "web",
+        "tracking",
+        "loading",
+        "coding",
+        "training",
+        "reporting",
+        "security",
+
+        // --- Tambahan kata teknis, UI/UX & sistem informasi ---
+        "actor",
+        "lifeline",
+        "swimlane",
+        "cardinality",
+        "multiplicity",
+        "crud",
+        "field",
+        "record",
+        "tuple",
+        "schema",
+        "indexing",
+        "trigger",
+        "controller",
+        "migration",
+        "seeder",
+        "router",
+        "routing",
+        "view",
+        "model",
+        "payload",
+        "webhook",
+        "modal",
+        "toast",
+        "tooltip",
+        "breadcrumb",
+        "placeholder",
+        "skeleton",
+        "spinner",
+        "loader",
+        "badge",
+        "chip",
+        "card",
+        "avatar",
+        "toggle",
+        "switch",
+        "accordion",
+        "carousel",
+        "slider",
+        "dataset",
+        "accuracy",
+        "precision",
+        "recall",
+        "clustering",
+        "classification",
+        "regression",
+        "payroll",
+        "inventory",
+        "procurement",
+        "accounting",
+        "cashier",
+        "billing",
+        "voucher",
+        "checkout",
+        "cart",
+        "catalog",
+        "malware",
+        "ransomware",
+        "phishing",
+        "vulnerability",
+        "exploit",
+        "runtime",
+        "syntax",
+        "compiler",
+        "scripting"
       ];
 
-      // Urutkan frasa terpanjang terlebih dahulu agar frasa majemuk terdeteksi lebih dulu
-      foreignDictionary.sort((a, b) => b.length - a.length);
+      // Gabungkan tanpa duplikat & urutkan frasa terpanjang terlebih dahulu agar frasa majemuk terdeteksi lebih dulu
+      const foreignTerms = Array.from(new Set(foreignDictionary.map(x => x.toLowerCase())))
+        .sort((a, b) => b.length - a.length);
 
       let detectedForeign = [];
-      let matchedCompoundWords = new Set();
-      const pagesTagged = auditTaggedText.split(/\[Halaman\s+(\d+)\]/i);
+      let workingTagged = trimBibliography(auditTaggedText);
 
-      foreignDictionary.forEach(w => {
-        const isSubsumed = Array.from(matchedCompoundWords).some(comp => comp.includes(w) && comp !== w);
-        if (isSubsumed) return;
+      // Pre-compute pemisahan halaman dokumen berhalaman (PDF) sekali saja
+      const rawPageParts = workingTagged.split(/\[Halaman\s+(\d+)\]/i);
+      const pageBlocks = [];
+      if (rawPageParts.length > 1) {
+        for (let i = 1; i < rawPageParts.length; i += 2) {
+          pageBlocks.push({ pNum: rawPageParts[i], pContent: rawPageParts[i + 1] || "" });
+        }
+      }
 
+      // Pre-compute kalimat naskah sekali saja di awal untuk cuplikan konteks
+      const precomputedSentences = cleanText
+        .split(/[.\n\r]+/)
+        .map(s => s.trim().replace(/\[Halaman\s+\d+\]/gi, "").replace(/\s+/g, " "))
+        .filter(s => s.length >= 15 && s.length <= 160);
+
+      foreignTerms.forEach(w => {
         const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const wordRegex = new RegExp(`\\b${escaped}\\b`, "gi");
+        const wordRegex = new RegExp(`\\b${escaped}(?:s)?\\b`, "gi");
 
         let totalMatches = 0;
         let italicCount = 0;
@@ -2566,11 +2811,11 @@
         let italicPages = [];
         let nonItalicPages = [];
 
-        if (pagesTagged.length > 1) {
+        if (pageBlocks.length > 0) {
           // Format dokumen berhalaman (PDF)
-          for (let i = 1; i < pagesTagged.length; i += 2) {
-            const pNum = pagesTagged[i];
-            const pContent = pagesTagged[i + 1] || "";
+          for (let i = 0; i < pageBlocks.length; i++) {
+            const pNum = pageBlocks[i].pNum;
+            const pContent = pageBlocks[i].pContent;
 
             let match;
             while ((match = wordRegex.exec(pContent)) !== null) {
@@ -2593,10 +2838,10 @@
         } else {
           // Format DOCX atau teks tanpa header [Halaman X]
           let match;
-          while ((match = wordRegex.exec(auditTaggedText)) !== null) {
+          while ((match = wordRegex.exec(workingTagged)) !== null) {
             totalMatches++;
             const matchIdx = match.index;
-            const before = auditTaggedText.substring(0, matchIdx);
+            const before = workingTagged.substring(0, matchIdx);
             const lastOpen = before.lastIndexOf("<i>");
             const lastClose = before.lastIndexOf("</i>");
             const isInsideItalic = lastOpen > lastClose;
@@ -2610,8 +2855,8 @@
         }
 
         if (totalMatches > 0) {
-          if (w.includes(" ")) {
-            matchedCompoundWords.add(w);
+          if (w.includes(" ") || w.includes("-")) {
+            workingTagged = workingTagged.replace(wordRegex, m => "\u0001".repeat(m.length));
           }
 
           const uniqItalicPages = [...new Set(italicPages)];
@@ -2636,14 +2881,11 @@
 
           // Ambil kutipan kalimat asli untuk preview konteks
           let contextSnippet = "";
-          const sentences = cleanText.split(/[.\n\r]+/);
-          for (const s of sentences) {
-            if (new RegExp(`\\b${escaped}\\b`, "i").test(s)) {
-              const cleanS = s.trim().replace(/\[Halaman\s+\d+\]/gi, "").replace(/\s+/g, " ");
-              if (cleanS.length >= 15 && cleanS.length <= 160) {
-                contextSnippet = `"${cleanS}"`;
-                break;
-              }
+          const termRegex = new RegExp(`\\b${escaped}\\b`, "i");
+          for (const s of precomputedSentences) {
+            if (termRegex.test(s)) {
+              contextSnippet = `"${s}"`;
+              break;
             }
           }
           if (!contextSnippet) {
@@ -2669,6 +2911,7 @@
 
       const unfixedForeign = detectedForeign.filter(d => !d.isFullyItalic);
       const fixedForeign = detectedForeign.filter(d => d.isFullyItalic);
+      const candidateForeign = detectCandidateForeign(auditTaggedText, foreignTerms);
 
       // Estimasi halaman Bab I–IV
       const bab1To4Pages = Math.min(totalPages, Math.max(1, totalPages > 12 ? totalPages - 12 : totalPages));
@@ -2707,27 +2950,12 @@
             locationDetail: "BAB I Pendahuluan (Antara Sub-bab 1.1 s/d 1.5)",
             category: "Kelengkapan Sub-Bab",
             title: `Ada sub-bab wajib BAB I yang belum lengkap (${missing.join(", ")})`,
-            explanation: "Pedoman KP 2026 Hal. 11 mewajibkan 9 sub-bab terstruktur mulai dari 1.1 s/d 1.9.",
+            explanation: "Pedoman KP Hal. 11 mewajibkan 9 sub-bab terstruktur mulai dari 1.1 s/d 1.9.",
             fix: `Lengkapi sub-bab ${missing.join(", ")} pada draft BAB I dokumen laporan Anda.`,
-            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11"
+            pedomanRef: "Pedoman KP BAB VII Hal. 11"
           });
         }
 
-        const hasNumberedSubSub = /\b1\.[1-9]\.[1-9]\b/g.test(bab1Text || text);
-        if (hasNumberedSubSub) {
-          dynamicIssues.push({
-            id: `dyn-${issIndex++}`,
-            stage: "bab1",
-            babLabel: "BAB I",
-            page: "BAB I Pendahuluan",
-            locationDetail: "Sub-sub bab bertingkat (misal: 1.1.1 / 1.2.1)",
-            category: "Format Penomoran",
-            title: "Ditemukan penomoran sub-sub bab memakai angka (1.1.1 / 1.2.1)",
-            explanation: "Arahan Revisi Dosen: Penomoran anak sub-bab (level 3) wajib memakai huruf kecil (a, b, c, dst.), jangan memakai format angka seperti 1.1.1 atau 1.2.1.",
-            fix: "Ubah penomoran 1.1.1, 1.1.2 menjadi huruf kecil a., b., c. pada naskah Word Anda.",
-            pedomanRef: "Catatan Bimbingan Dosen & Pedoman BAB VII Hal. 9"
-          });
-        }
 
         if (has12 && has13) {
           dynamicIssues.push({
@@ -2753,8 +2981,8 @@
           category: "Kelengkapan Bab",
           title: "BAB I Pendahuluan belum terdeteksi di dokumen",
           explanation: "Naskah dokumen Anda belum memuat BAB I Pendahuluan (1.1 Latar Belakang s/d 1.9 Sistematika Penulisan).",
-          fix: "Sertakan draf BAB I sesuai pedoman UNPAM 2026.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11"
+          fix: "Sertakan draf BAB I sesuai pedoman UNPAM.",
+          pedomanRef: "Pedoman KP BAB VII Hal. 11"
         });
       }
 
@@ -2769,9 +2997,9 @@
             locationDetail: "BAB II (Setelah Sub-Bab 2.1)",
             category: "Struktur Wajib",
             title: "Sub-Bab 2.2 Tinjauan Pustaka belum terdeteksi di BAB II",
-            explanation: "Sesuai Pedoman KP 2026 Hal. 12, setelah profil perusahaan wajib mencantumkan sub-bab 2.2 Tinjauan Pustaka (penelitian terdahulu).",
+            explanation: "Sesuai Pedoman KP Hal. 12, setelah profil perusahaan wajib mencantumkan sub-bab 2.2 Tinjauan Pustaka (penelitian terdahulu).",
             fix: "Tambahkan sub-bab 2.2 Tinjauan Pustaka berupa tabel komparasi penelitian/jurnal terdahulu yang relevan.",
-            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+            pedomanRef: "Pedoman KP BAB VII Hal. 12"
           });
         }
 
@@ -2844,8 +3072,8 @@
           category: "Kelengkapan Bab",
           title: "BAB II Profil Tempat KP & Landasan Teori belum terdeteksi di dokumen",
           explanation: "Naskah dokumen Anda belum memuat BAB II (Profil Instansi, Tinjauan Pustaka, Landasan Teori, Metode Penelitian).",
-          fix: "Sertakan draf BAB II sesuai pedoman UNPAM 2026.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 11-12"
+          fix: "Sertakan draf BAB II sesuai pedoman UNPAM.",
+          pedomanRef: "Pedoman KP BAB VII Hal. 11-12"
         });
       }
 
@@ -2861,7 +3089,7 @@
           title: "BAB III (Perancangan & Pembahasan Sistem) belum dibuat / belum terdeteksi di dokumen",
           explanation: "Anda sedang memilih atau menguji batas BAB III, namun naskah yang diunggah baru memuat sampai BAB " + (hasBab2 ? "II" : "I") + ". BAB III merupakan bab inti KP yang membahas penugasan nyata, analisis masalah, perancangan diagram UML, layar antarmuka sistem (UI/UX), dan pengujian sistem BlackBox.",
           fix: "Tulis dan lengkapi BAB III sesuai format Pedoman KP BAB VII Hal. 12 (minimal memuat Pembahasan Penugasan, Diagram UML, Mockup Layar, dan BlackBox Testing) sebelum mengajukan review BAB III.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+          pedomanRef: "Pedoman KP BAB VII Hal. 12"
         });
 
         dynamicIssues.push({
@@ -2872,9 +3100,9 @@
           locationDetail: "BAB III (Sub-bab Diagram UML)",
           category: "Diagram UML & UI/UX",
           title: "Diagram UML & Mockup Antarmuka (UI/UX) belum ada di BAB III",
-          explanation: "Pedoman KP 2026 Hal. 12 mewajibkan dokumentasi diagram UML lengkap (Use Case, Activity, Sequence, Class Diagram) serta tangkapan layar antarmuka sistem nyata pada BAB III, bukan sekadar teori di BAB II.",
+          explanation: "Pedoman KP Hal. 12 mewajibkan dokumentasi diagram UML lengkap (Use Case, Activity, Sequence, Class Diagram) serta tangkapan layar antarmuka sistem nyata pada BAB III, bukan sekadar teori di BAB II.",
           fix: "Sajikan perancangan use case diagram, activity diagram, sequence diagram, class diagram, dan mockup layar pada BAB III.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12 & Standar SI"
+          pedomanRef: "Pedoman KP BAB VII Hal. 12 & Standar SI"
         });
 
         dynamicIssues.push({
@@ -2902,9 +3130,9 @@
             locationDetail: "BAB III (Sub-bab Diagram UML)",
             category: "Struktur Wajib",
             title: "Diagram UML (Use Case, Activity, Sequence Diagram) belum terdeteksi di BAB III",
-            explanation: "Pedoman KP 2026 mewajibkan dokumentasi diagram UML lengkap untuk rancangan sistem nyata di BAB III.",
+            explanation: "Pedoman KP mewajibkan dokumentasi diagram UML lengkap untuk rancangan sistem nyata di BAB III.",
             fix: "Sertakan diagram Use Case, Activity, Sequence, dan Class Diagram di BAB III.",
-            pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+            pedomanRef: "Pedoman KP BAB VII Hal. 12"
           });
         }
 
@@ -2936,7 +3164,7 @@
           title: "BAB IV (Kesimpulan dan Saran) belum dibuat / belum ada di dokumen",
           explanation: "Naskah laporan belum memuat BAB IV Penutup yang berisi 4.1 Kesimpulan dan 4.2 Saran pengembangan.",
           fix: "Tambahkan BAB IV Penutup dengan penomoran 4.1 Kesimpulan dan 4.2 Saran yang menjawab rumusan masalah.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 12"
+          pedomanRef: "Pedoman KP BAB VII Hal. 12"
         });
       }
 
@@ -2951,16 +3179,185 @@
           page: "Teks Dokumen",
           locationDetail: firstPages || "Tersebar di naskah (Klik tombol kata di bawah)",
           category: "Istilah Asing",
-          title: `${unfixedForeign.length} Istilah Asing Belum Dicetak Miring (${fixedForeign.length} Istilah Sudah Sesuai)`,
-          explanation: `Pedoman KP 2026 Bab VII Hal. 9 Poin g.1 mewajibkan seluruh istilah teknis asing (bahasa Inggris) dicetak miring (italic). Dari total ${detectedForeign.length} istilah asing yang ditemukan di naskah Anda, ${fixedForeign.length} istilah sudah berhasil Anda cetak miring dengan benar (lihat kotak hijau di bawah). Namun masih ada ${unfixedForeign.length} istilah yang masih berformat huruf tegak pada halaman-halaman tertentu.`,
+          title: `${unfixedForeign.length} Istilah Asing Belum Dicetak Miring`,
+          explanation: `Pedoman KP Bab VII Hal. 9 Poin g.1 mewajibkan seluruh istilah teknis asing (bahasa Inggris) dicetak miring (italic). Masih ada ${unfixedForeign.length} istilah yang berformat huruf tegak pada halaman-halaman tertentu.`,
           fix: "Klik tombol kata berwarna merah/oranye di bawah untuk menyalin istilah otomatis ke clipboard, lalu buka Word dan tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I) untuk memiringkannya pada halaman yang masih tegak.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
-          foreignItems: unfixedForeign,
-          alreadyItalicItems: fixedForeign
+          pedomanRef: "Pedoman KP BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
+          foreignItems: unfixedForeign
         });
       }
 
-      // 6. ISU LAPORAN LENGKAP (stage: 'all')
+      if (candidateForeign.length > 0) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "any",
+          babLabel: "Istilah Asing (Cek Manual)",
+          page: "Teks Dokumen",
+          locationDetail: "Kemungkinan istilah asing di luar kamus bawaan (klik kata di bawah untuk menyalin)",
+          category: "Istilah Asing",
+          title: `${candidateForeign.length} Kemungkinan Istilah Asing Lain (Perlu Dicek Manual)`,
+          explanation: "Kata-kata berikut tidak ada di kamus bawaan, tetapi berpola bahasa Inggris dan masih berhuruf tegak. Daftar ini hasil tebakan pola huruf, jadi periksa satu per satu: jika memang istilah asing (bukan nama, merek, atau serapan baku KBBI), cetak miring; jika bukan, abaikan.",
+          fix: "Klik kata untuk menyalinnya, lalu cari di Word dengan Ctrl + F. Jika memang istilah asing, miringkan dengan Ctrl + H (Replace) dan format Italic (Ctrl + I).",
+          pedomanRef: "Pedoman KP BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
+          foreignItems: candidateForeign
+        });
+      }
+
+      // 6. ISU FORMAT PENULISAN BAB & SUB-BAB (stage: 'any')
+      // a. Judul BAB memakai angka biasa bukan Romawi (misal "BAB 1" alih-alih "BAB I")
+      const arabicBabRegex = /(?:^|\n|\[Halaman\s+\d+\])\s*(BAB\s+([1-4]))\b/gi;
+      let abMatch;
+      const arabicBabs = [];
+      while ((abMatch = arabicBabRegex.exec(cleanText)) !== null) {
+        const num = abMatch[2];
+        const rom = num === '1' ? 'I' : (num === '2' ? 'II' : (num === '3' ? 'III' : 'IV'));
+        arabicBabs.push({ found: abMatch[1].toUpperCase(), correct: `BAB ${rom}` });
+      }
+      if (arabicBabs.length > 0) {
+        const listStr = arabicBabs.map(b => `"${b.found}" ➔ "${b.correct}"`).join(', ');
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "any",
+          babLabel: "Format Judul Bab",
+          page: "Judul Bab",
+          locationDetail: arabicBabs.map(b => b.found).join(", "),
+          category: "Format Bab",
+          title: `Penulisan Judul BAB Memakai Angka Biasa (${arabicBabs.map(b => b.found).join(', ')})`,
+          explanation: "Pedoman KP BAB VII Hal. 9 mewajibkan penulisan judul bab utama menggunakan angka Romawi kapital tebal (BAB I, BAB II, BAB III, BAB IV), bukan angka Arab biasa.",
+          fix: `Ganti penulisan ${listStr} pada naskah dokumen Word Anda.`,
+          pedomanRef: "Pedoman KP BAB VII Hal. 9"
+        });
+      }
+
+      // b. Judul sub-bab diakhiri tanda titik (misal "1.1 Latar Belakang.")
+      const subBabDotRegex = /(?:^|\n)\s*([1-4]\.[1-9]\s+[^\n\r.]{3,55})\.\s*(?:\n|$)/g;
+      let dotMatch;
+      const dotTitles = [];
+      while ((dotMatch = subBabDotRegex.exec(cleanText)) !== null) {
+        dotTitles.push(dotMatch[1].trim());
+      }
+      if (dotTitles.length > 0) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "any",
+          babLabel: "Tanda Baca Sub-Bab",
+          page: "Judul Sub-Bab",
+          locationDetail: dotTitles.slice(0, 3).join("; "),
+          category: "Format Sub-Bab",
+          title: `Judul Sub-Bab Diakhiri Tanda Titik (${dotTitles.slice(0, 2).join(', ')})`,
+          explanation: "Sesuai kaidah tata tulis EYD V dan Pedoman KP UNPAM, judul bab dan judul sub-bab TIDAK boleh diakhiri dengan tanda titik (.).",
+          fix: `Hapus tanda titik di akhir judul sub-bab: ${dotTitles.join(', ')}.`,
+          pedomanRef: "EYD V & Pedoman KP BAB VII"
+        });
+      }
+
+      // c. Penomoran sub-sub bab bertingkat 3 level angka (1.1.1, 2.1.1, 3.1.1, dst.)
+      const multiSubRegex = /\b([1-4]\.[1-9]\.[1-9](?:\.[1-9])?)\b/g;
+      let msMatch;
+      const multiSubs = new Set();
+      while ((msMatch = multiSubRegex.exec(cleanText)) !== null) {
+        multiSubs.add(msMatch[1]);
+      }
+      if (multiSubs.size > 0) {
+        const list = Array.from(multiSubs);
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "any",
+          babLabel: "Format Penomoran",
+          page: "Sub-sub Bab",
+          locationDetail: list.slice(0, 5).join(", "),
+          category: "Format Penomoran",
+          title: `Penomoran Sub-Sub Bab Memakai Angka Bertingkat (${list.slice(0, 3).join(', ')})`,
+          explanation: "Arahan Dosen Pembimbing & Pedoman KP: Penomoran anak sub-bab (level 3) dilarang memakai format angka bertingkat seperti 1.1.1 atau 2.1.1. Wajib memakai format huruf kecil (a., b., c., dst.).",
+          fix: `Ubah penomoran ${list.join(', ')} menjadi huruf kecil a., b., c. pada naskah Word Anda.`,
+          pedomanRef: "Catatan Bimbingan Dosen & Pedoman BAB VII Hal. 9"
+        });
+      }
+
+      // 7. ISU TYPO TEKS & EJAAN BAKU BAHASA INDONESIA (stage: 'any')
+      const typoDictionary = [
+        { pattern: /\banalisa\b/gi, wrong: "analisa", correct: "analisis", note: "Baku KBBI & Pedoman: 'analisis'" },
+        { pattern: /\bmerubah\b/gi, wrong: "merubah", correct: "mengubah", note: "Baku KBBI: 'mengubah' (dari kata dasar ubah)" },
+        { pattern: /\bberfikir\b/gi, wrong: "berfikir", correct: "berpikir", note: "Baku KBBI: 'berpikir' (misal: Kerangka Berpikir)" },
+        { pattern: /\bobyek\b/gi, wrong: "obyek", correct: "objek", note: "Baku KBBI: 'objek'" },
+        { pattern: /\bsubyek\b/gi, wrong: "subyek", correct: "subjek", note: "Baku KBBI: 'subjek'" },
+        { pattern: /\bkreatifitas\b/gi, wrong: "kreatifitas", correct: "kreativitas", note: "Baku KBBI: 'kreativitas'" },
+        { pattern: /\befektip\b/gi, wrong: "efektip", correct: "efektif", note: "Baku KBBI: 'efektif'" },
+        { pattern: /\bperusaahaan\b|\bpeusahaan\b|\bperusahan\b/gi, wrong: "perusaahaan/peusahaan", correct: "perusahaan", note: "Typo ejaan kata 'perusahaan'" },
+        { pattern: /\bpengola\b/gi, wrong: "pengola", correct: "pengelola", note: "Typo ejaan kata 'pengelola'" },
+        { pattern: /\bkegitan\b/gi, wrong: "kegitan", correct: "kegiatan", note: "Typo ejaan kata 'kegiatan'" },
+        { pattern: /\bdokumenasi\b/gi, wrong: "dokumenasi", correct: "dokumentasi", note: "Typo ejaan kata 'dokumentasi'" },
+        { pattern: /\bpebelitian\b/gi, wrong: "pebelitian", correct: "penelitian", note: "Typo ejaan kata 'penelitian'" },
+        { pattern: /\bvayasansasmita\b|\bvahasan\b|\bvaysan\b/gi, wrong: "vahasan/vaysan", correct: "Yayasan Sasmita Jaya", note: "Typo Yayasan Sasmita Jaya" }
+      ];
+
+      const foundTypos = [];
+      typoDictionary.forEach(t => {
+        const m = cleanText.match(t.pattern);
+        if (m && m.length > 0) {
+          foundTypos.push(`${t.wrong} ➔ ${t.correct} (${m.length}x)`);
+        }
+      });
+
+      if (foundTypos.length > 0) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "any",
+          babLabel: "Typo & Kata Baku",
+          page: "Teks Dokumen",
+          locationDetail: foundTypos.slice(0, 3).join("; "),
+          category: "Ejaan & Typo",
+          title: `Ditemukan ${foundTypos.length} Pola Kata Typo / Non-Baku dalam Dokumen`,
+          explanation: `Terdeteksi penulisan kata non-baku atau salah ketik (typo): ${foundTypos.join(", ")}. Sesuai kaidah penulisan karya ilmiah dan KBBI, penulisan kata wajib menggunakan ejaan bahasa Indonesia yang baku.`,
+          fix: `Gunakan Ctrl + H di Word untuk mengganti kata: ${foundTypos.join(", ")}.`,
+          pedomanRef: "Kaidah Bahasa Ilmiah & PUEBI/EYD V"
+        });
+      }
+
+      // Tanda baca cacat: titik ganda .. & spasi sebelum tanda baca
+      const doubleDot = (cleanText.match(/(?<!\.)\.\.(?!\.)/g) || []).length;
+      const spaceBeforePunct = (cleanText.match(/[A-Za-z0-9]\s+[,.?:;](?=\s|$)/g) || []).length;
+      if (doubleDot > 0 || spaceBeforePunct > 0) {
+        const details = [];
+        if (doubleDot > 0) details.push(`${doubleDot}x tanda titik ganda (..)`);
+        if (spaceBeforePunct > 0) details.push(`${spaceBeforePunct}x spasi sebelum tanda baca (contoh: "kata , " atau "teks . ")`);
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "any",
+          babLabel: "Tanda Baca (Typo)",
+          page: "Teks Dokumen",
+          locationDetail: details.join(" • "),
+          category: "Ejaan & Tanda Baca",
+          title: "Ditemukan Kesalahan Spasi Tanda Baca / Titik Ganda",
+          explanation: `Terdapat kesalahan pengetikan tanda baca: ${details.join(", ")}. Tanda baca koma atau titik harus menempel langsung ke kata sebelumnya tanpa spasi.`,
+          fix: "Buka Word lalu cari spasi sebelum tanda titik/koma (Ctrl + F) dan rapikan agar menempel tanpa spasi.",
+          pedomanRef: "Pedoman Tata Tulis EYD V"
+        });
+      }
+
+      // Konjungsi koordinatif di awal kalimat
+      const konjungsiMatches = [];
+      const kjRegex = /(?:^|[.!?]\s+)(Dan|Sedangkan|Sehingga|Serta|Atau)\s+[a-z]/g;
+      let km;
+      while ((km = kjRegex.exec(cleanText)) !== null) {
+        if (!konjungsiMatches.includes(km[1])) konjungsiMatches.push(km[1]);
+      }
+      if (konjungsiMatches.length > 0) {
+        dynamicIssues.push({
+          id: `dyn-${issIndex++}`,
+          stage: "any",
+          babLabel: "Tata Bahasa Ilmiah",
+          page: "Awal Kalimat",
+          locationDetail: `Kata: ${konjungsiMatches.join(", ")} di awal kalimat`,
+          category: "Struktur Kalimat",
+          title: `Ditemukan Kata Sambung di Awal Kalimat (${konjungsiMatches.join(', ')})`,
+          explanation: `Ditemukan penggunaan kata sambung koordinatif (${konjungsiMatches.join(', ')}) di awal kalimat tunggal setelah tanda titik. Dalam tata bahasa karya ilmiah, konjungsi koordinatif menghubungkan dua klausa dalam satu kalimat majemuk, bukan mengawali kalimat baru.`,
+          fix: `Gabungkan kalimat tersebut dengan kalimat sebelumnya menggunakan tanda koma, atau ganti kata '${konjungsiMatches[0]}' dengan frasa seperti 'Oleh karena itu,', 'Selain itu,', atau 'Di samping itu,'.`,
+          pedomanRef: "Kaidah Bahasa Indonesia Ilmiah"
+        });
+      }
+
+      // 8. ISU LAPORAN LENGKAP (stage: 'all')
       if (!hasBab3 || !hasBab4 || totalPages < 50) {
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
@@ -2972,7 +3369,7 @@
           title: `Ketebalan BAB I s/d BAB IV baru ${totalPages} Halaman (Kurang ${Math.max(0, 50 - totalPages)} Hal)`,
           explanation: `Pedoman BAB VII Hal. 9 Poin 1 menegaskan: 'Laporan dibuat minimal 50 halaman (dari Bab I Pendahuluan s/d Bab IV Penutup)'. Saat ini draf Anda baru mencapai ${totalPages} halaman karena naskah baru selesai sampai BAB ${hasBab3 ? 'III' : (hasBab2 ? 'II' : 'I')}.`,
           fix: "Lengkapi seluruh bab (BAB I s/d BAB IV), perdalam pembahasan analisis kebutuhan, diagram UML, mockup layar UI/UX, dan tabel pengujian BlackBox di Bab III hingga memenuhi minimal 50 halaman.",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 9 Poin 1"
+          pedomanRef: "Pedoman KP BAB VII Hal. 9 Poin 1"
         });
       }
 
@@ -2987,7 +3384,7 @@
           title: "8 Lampiran Wajib (SIUP/NIB, Surat Balasan, Logbook, Foto) belum terdeteksi",
           explanation: "Pedoman KP mewajibkan 8 lampiran resmi disertakan di bagian akhir laporan lengkap.",
           fix: "Sertakan 8 lampiran wajib (Surat Permohonan, Surat Balasan, SIUP/NIB, Log Bimbingan Instansi & Dosen, IA Siskerma, Masukan/Keluaran, Foto Kegiatan).",
-          pedomanRef: "Pedoman KP 2026 BAB VII Hal. 13-14"
+          pedomanRef: "Pedoman KP BAB VII Hal. 13-14"
         });
       }
 
@@ -3018,7 +3415,7 @@
       docAnalysis.hasBab3 = hasBab3;
       docAnalysis.hasBab4 = hasBab4;
       docAnalysis.rawText = text;
-      if (detectedForeign.length > 0) docAnalysis.foreignWords = detectedForeign;
+      if (detectedForeign.length > 0) docAnalysis.foreignWords = unfixedForeign;
       docAnalysis.issues = dynamicIssues;
 
       // Update Checklist BAB I
@@ -3334,7 +3731,6 @@
 
       renderStageButtons();
       renderUnifiedAuditList();
-      renderForeignWords();
       calculateGradeSimulation();
       updateScoreMetrics();
     }
