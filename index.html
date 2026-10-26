@@ -1599,19 +1599,24 @@
                     </div>
 
                     <div class="flex flex-wrap gap-1.5">
-                      ${foreignItems.map(f => `
+                      ${foreignItems.map(f => {
+                        const pageLabel = (f.nonItalicPages && f.nonItalicPages.length > 0)
+                          ? f.nonItalicPages.slice(0, 3).join(', ') + (f.nonItalicPages.length > 3 ? '...' : '')
+                          : (f.page || 'Hal. 1');
+                        const safeLoc = (f.page || pageLabel).replace(/'/g, "\\'");
+                        return `
                         <button 
                           type="button"
-                          onclick="copySingleWord('${f.word}')" 
-                          title="Klik untuk salin '${f.word}' lalu cari di Word (${f.page || ''})" 
+                          onclick="copySingleWord('${f.word}', '${safeLoc}')" 
+                          title="Klik untuk salin '${f.word}' lalu cari di Word (${f.page || pageLabel})" 
                           class="inline-flex items-center gap-1.5 bg-white hover:bg-amber-100/70 border ${f.isPartiallyItalic ? 'border-amber-400 bg-amber-50/30' : 'border-rose-300 hover:border-rose-400'} text-slate-800 text-xs px-2.5 py-1.5 rounded-lg font-medium shadow-2xs transition group/btn cursor-pointer"
                         >
                           <span class="font-bold font-mono italic text-unpam-800">${f.word}</span>
                           <span class="text-[10px] ${f.isPartiallyItalic ? 'bg-amber-100 text-amber-900' : 'bg-rose-100 text-rose-900'} font-black px-1.5 py-0.5 rounded-full">${f.nonItalicCount || f.count}x tegak</span>
-                          ${f.page ? `<span class="text-[10px] text-slate-500 font-normal">(${f.page})</span>` : ''}
+                          <span class="text-[10px] text-slate-500 font-semibold">(${pageLabel})</span>
                           <i class="fa-regular fa-copy text-[11px] text-slate-400 group-hover/btn:text-amber-700"></i>
                         </button>
-                      `).join('')}
+                      `;}).join('')}
                     </div>
 
                     <p class="text-[11px] text-amber-900/90 leading-tight">
@@ -1685,24 +1690,45 @@
         if (appState.checkedIssues[it.id]) doneCount++;
       });
 
-      const totalIssues = activeIssues.length;
-      let score = 50;
+      // Kumpulkan kriteria checklist pedoman yang aktif pada batas bab yang dipilih
+      let activeChecklist = [];
+      activeStages.forEach(st => {
+        if (docAnalysis.chapterChecklist && docAnalysis.chapterChecklist[st]) {
+          activeChecklist = activeChecklist.concat(docAnalysis.chapterChecklist[st]);
+        }
+      });
+      const passChecklist = activeChecklist.filter(it => it.status === "pass");
+      const warnChecklist = activeChecklist.filter(it => it.status === "warn");
 
-      if (totalIssues > 0) {
-        const resolvedRatio = doneCount / totalIssues;
-        score = Math.round(50 + (resolvedRatio * 50));
-      } else {
-        score = 100;
+      const totalIssues = activeIssues.length;
+      const unresolved = totalIssues - doneCount;
+
+      // Standar yang sudah terverifikasi sesuai pedoman (checklist lulus + poin revisi yang sudah ditandai selesai)
+      const verifiedCount = passChecklist.length + doneCount;
+      const totalEvaluated = activeChecklist.length + totalIssues;
+
+      let score = 100;
+      if (totalEvaluated > 0) {
+        if (unresolved === 0 && totalIssues > 0) {
+          // Seluruh temuan revisi pada bab ini sudah diselesaikan oleh mahasiswa
+          score = 100;
+        } else if (unresolved === 0 && totalIssues === 0) {
+          score = Math.round((passChecklist.length / Math.max(1, activeChecklist.length)) * 100);
+        } else {
+          // Bobot poin yang terpenuhi: checklist pass (1.0), checklist warn/parsial (0.5), isu terselesaikan (1.0)
+          const fulfilledPoints = passChecklist.length + (warnChecklist.length * 0.5) + doneCount;
+          score = Math.min(99, Math.max(15, Math.round((fulfilledPoints / totalEvaluated) * 100)));
+        }
       }
 
       document.getElementById("scorePercentage").textContent = `${score}%`;
       document.getElementById("scoreBar").style.width = `${score}%`;
 
       const scoreBadge = document.getElementById("scoreBadge");
-      if (score >= 90) {
+      if (score >= 85) {
         scoreBadge.textContent = "Sangat Siap Diajukan";
         scoreBadge.className = "text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30";
-      } else if (score >= 70) {
+      } else if (score >= 65) {
         scoreBadge.textContent = "Cukup Layak Bimbingan";
         scoreBadge.className = "text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30";
       } else {
@@ -1710,14 +1736,13 @@
         scoreBadge.className = "text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30";
       }
 
-      const unresolved = totalIssues - doneCount;
       document.getElementById("summaryUnresolvedCount").textContent = `${unresolved} Poin Belum Selesai`;
-      document.getElementById("summaryResolvedCount").textContent = `${doneCount} Poin Terselesaikan`;
+      document.getElementById("summaryResolvedCount").textContent = `${verifiedCount} Terverifikasi Sesuai`;
 
       // Update Print Elements
       document.getElementById("printDocName").textContent = docAnalysis.fileName;
       document.getElementById("printStageName").textContent = getStageName(appState.currentStage);
-      document.getElementById("printScore").textContent = `${score}% (${doneCount}/${totalIssues} Selesai)`;
+      document.getElementById("printScore").textContent = `${score}% (${verifiedCount}/${totalEvaluated} Standar Sesuai)`;
       document.getElementById("printAuditDate").textContent = new Date().toLocaleDateString("id-ID", {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
       });
@@ -1749,9 +1774,10 @@
       }
     }
 
-    function copySingleWord(word) {
+    function copySingleWord(word, pageInfo = "") {
       navigator.clipboard.writeText(word);
-      showToast(`Kata "${word}" disalin ke clipboard! Tekan Ctrl+F di Word.`, "success");
+      const locText = pageInfo ? ` (${pageInfo})` : "";
+      showToast(`Kata "${word}" disalin ke clipboard!${locText} Cari di Word dengan Ctrl+F lalu miringkan (Ctrl+I).`, "success");
     }
 
     // =========================================================================
@@ -2010,17 +2036,22 @@
             htmlRes = await mammoth.convertToHtml({ arrayBuffer });
           }
           const rawRes = await mammoth.extractRawText({ arrayBuffer });
-          extractedText = rawRes.value || "";
-          taggedText = (htmlRes.value || "")
+          const rawExtracted = rawRes.value || "";
+          const rawTagged = (htmlRes.value || "")
             .replace(/<img[^>]*>/gi, '')
             .replace(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/gi, '')
             .replace(/<em>/gi, '<i>')
             .replace(/<\/em>/gi, '</i>');
-          totalPages = Math.max(1, Math.round(extractedText.split(/\s+/).length / 280));
+          const paginatedDocx = paginateHtmlAndText(rawTagged, rawExtracted);
+          extractedText = paginatedDocx.text;
+          taggedText = paginatedDocx.taggedText;
+          totalPages = paginatedDocx.totalPages;
         } else if (fileNameLower.endsWith(".txt") || fileNameLower.endsWith(".doc")) {
-          extractedText = await file.text();
-          taggedText = extractedText;
-          totalPages = Math.max(1, Math.round(extractedText.split(/\s+/).length / 280));
+          const rawTxt = await file.text();
+          const paginatedTxt = paginateHtmlAndText(null, rawTxt);
+          extractedText = paginatedTxt.text;
+          taggedText = paginatedTxt.taggedText;
+          totalPages = paginatedTxt.totalPages;
         } else {
           alert("Format file belum didukung. Silakan gunakan format .PDF, .DOCX, atau .TXT");
           progressContainer.classList.add("hidden");
@@ -2058,12 +2089,121 @@
     }
 
     // =========================================================================
-    // DETEKSI KANDIDAT ISTILAH ASING DI LUAR KAMUS (HEURISTIK POLA BAHASA INGGRIS)
-    // Memeriksa isi naskah sebelum Daftar Pustaka, mengabaikan kata berhuruf kapital
-    // (nama/singkatan) dan kata yang sudah dicetak miring. Hasilnya hanya "kandidat".
+    // PAGINASI OTOMATIS CERDAS (WORD .DOCX, .TXT & TEMPEL TEKS)
+    // Membagi naskah menjadi [Halaman 1], [Halaman 2], dst. sesuai standar akademis
+    // (~260 kata per halaman A4 1.5 spasi) sehingga info halaman SELALU tersedia.
     // =========================================================================
-    // Potong naskah sebelum Daftar Pustaka (judul referensi berbahasa Inggris bukan istilah asing di teks).
-    // Memakai heading "DAFTAR PUSTAKA" terakhir yang berada di paruh akhir dokumen (menghindari Daftar Isi).
+    function paginateHtmlAndText(html, text, forcedTotalPages = null) {
+      if (/[Halaman\s+\d+]/i.test(text || '')) {
+        return { text, taggedText: html || text, totalPages: forcedTotalPages || 1 };
+      }
+
+      const words = (text || '').trim().split(/\s+/).filter(Boolean).length;
+      const targetWordsPerPage = forcedTotalPages && forcedTotalPages > 1 
+        ? Math.max(80, Math.floor(words / forcedTotalPages))
+        : 260;
+
+      const isHtml = /<[a-z][\s\S]*>/i.test(html || '');
+      
+      if (!isHtml) {
+        const paragraphs = (text || '').split(/\n+/);
+        let paginated = '[Halaman 1]\n';
+        let currentPage = 1;
+        let currentWords = 0;
+
+        paragraphs.forEach((p, idx) => {
+          const pTrim = p.trim();
+          if (!pTrim) return;
+          const pWords = pTrim.split(/\s+/).filter(Boolean).length;
+          const isNewChapter = /^(?:BAB\s+(?:[IVX]+|[1-4])|DAFTAR\s+PUSTAKA|LAMPIRAN)\b/i.test(pTrim);
+
+          if (idx > 0 && (isNewChapter || (currentWords + pWords > targetWordsPerPage && currentWords >= 120))) {
+            currentPage++;
+            paginated += '\n\n[Halaman ' + currentPage + ']\n';
+            currentWords = 0;
+          }
+          paginated += pTrim + '\n\n';
+          currentWords += pWords;
+        });
+
+        const finalPages = Math.max(currentPage, forcedTotalPages || 1);
+        return { text: paginated, taggedText: paginated, totalPages: finalPages };
+      }
+
+      const blocks = (html || '')
+        .replace(/<img[^>]*>/gi, '')
+        .replace(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/gi, '')
+        .replace(/<em>/gi, '<i>')
+        .replace(/<\/em>/gi, '</i>')
+        .split(/(<\/(?:p|h[1-6]|li|div)>|<br\s*\/?>)/i);
+
+      let paginatedHtml = '[Halaman 1] ';
+      let paginatedText = '[Halaman 1] ';
+      let currentPage = 1;
+      let currentWords = 0;
+
+      for (let i = 0; i < blocks.length; i++) {
+        const chunk = blocks[i];
+        if (!chunk) continue;
+
+        if (/^<\/(?:p|h[1-6]|li|div)>$/i.test(chunk) || /^<br\s*\/?>$/i.test(chunk)) {
+          paginatedHtml += chunk + '\n';
+          paginatedText += '\n';
+          continue;
+        }
+
+        const plainChunk = chunk.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        if (!plainChunk) {
+          paginatedHtml += chunk;
+          continue;
+        }
+
+        const chunkWords = plainChunk.split(/\s+/).filter(Boolean).length;
+        const isNewChapter = /^(?:BAB\s+(?:[IVX]+|[1-4])|DAFTAR\s+PUSTAKA|LAMPIRAN)\b/i.test(plainChunk);
+
+        if (i > 0 && (isNewChapter || (currentWords + chunkWords > targetWordsPerPage && currentWords >= 120))) {
+          currentPage++;
+          paginatedHtml += '\n\n[Halaman ' + currentPage + ']\n';
+          paginatedText += '\n\n[Halaman ' + currentPage + ']\n';
+          currentWords = 0;
+        }
+
+        paginatedHtml += chunk;
+        paginatedText += plainChunk + ' ';
+        currentWords += chunkWords;
+      }
+
+      const finalPages = Math.max(currentPage, forcedTotalPages || 1);
+      return { text: paginatedText, taggedText: paginatedHtml, totalPages: finalPages };
+    }
+
+    // Helper untuk mendeteksi nomor halaman berdasarkan karakter indeks teks
+    function findPageForIndex(text, charIndex) {
+      if (!text || charIndex <= 0) return 1;
+      const prefix = text.slice(0, charIndex);
+      const matches = [...prefix.matchAll(/\[Halaman\s+(\d+)\]/gi)];
+      if (matches.length > 0) {
+        return parseInt(matches[matches.length - 1][1], 10);
+      }
+      return 1;
+    }
+
+    // Helper untuk mendeteksi halaman awal setiap BAB atau bagian
+    function findChapterPage(text, chapterName) {
+      if (!text) return null;
+      const match = new RegExp(`\\b${chapterName}\\b`, 'i').exec(text);
+      if (match) {
+        return findPageForIndex(text, match.index);
+      }
+      return null;
+    }
+
+    // =========================================================================
+    // DETEKSI KANDIDAT ISTILAH ASING DINAMIS (UNIVERSAL UNTUK BERBAGAI TOPIK LAPORAN)
+    // Mendeteksi istilah teknis bahasa Inggris di berbagai ranah TI (Web, Mobile,
+    // IoT, AI, Cyber Security, Database, Jaringan, UI/UX, Sistem Informasi).
+    // Dilengkapi filter kata serapan KBBI & kosakata bahasa Indonesia agar 0 false-positive.
+    // =========================================================================
     function trimBibliography(taggedText) {
       if (!taggedText) return "";
       const dafRegex = /(?:^|\n|\[Halaman\s+\d+\])\s*DAFTAR\s+PUSTAKA\b/gi;
@@ -2073,64 +2213,130 @@
       return lastDaf > taggedText.length * 0.4 ? taggedText.slice(0, lastDaf) : taggedText;
     }
 
-    function detectCandidateForeign(taggedText, knownTerms) {
+    function detectDynamicForeignWords(auditTaggedText, knownTerms, pageBlocks) {
       const known = new Set();
       const phrases = [];
       knownTerms.forEach(term => {
-        const lower = term.toLowerCase();
+        const lower = term.toLowerCase().trim();
         if (/[\s\-]/.test(lower)) phrases.push(lower);
         else known.add(lower);
       });
 
-      let body = trimBibliography(taggedText);
+      let body = trimBibliography(auditTaggedText);
       body = body.replace(/https?:\/\/\S+|www\.\S+|\S+@\S+/gi, " ");
-      // Tutup (masking) frasa kamus agar kata di dalam frasa tidak terhitung ganda,
-      // sementara kemunculan mandiri kata yang sama tetap diperiksa.
+
       if (phrases.length > 0) {
         const escPhrases = phrases.map(ph => ph.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-        const phraseRegex = new RegExp(`\\b(?:${escPhrases.join('|')})(?:s)?\\b`, "gi");
+        const phraseRegex = new RegExp(`\\b(?:\${escPhrases.join('|')})(?:s)?\\b`, "gi");
         body = body.replace(phraseRegex, m => " ".repeat(m.length));
       }
 
-      const commonEnglish = new Set([
-        "with", "from", "that", "this", "have", "been", "your", "will", "when", "what", "which",
-        "their", "there", "where", "about", "other", "system", "systems", "information", "management",
-        "application", "applications", "analysis", "development", "design", "process", "service",
-        "services", "control", "manager", "error", "feature", "features", "module", "modules",
-        "version", "input", "output", "request", "response", "report", "page", "site", "link",
-        "file", "files", "search", "setting", "settings", "support", "access", "account", "profile",
-        "history", "content", "message", "messages", "order", "orders", "product", "products",
-        "state", "props", "hook", "store", "layer", "level", "score", "table", "column", "row",
-        "field", "value", "index", "query", "event", "queue", "stack", "scope", "token", "cache",
-        "client", "server", "cloud", "device", "mobile", "smart", "screen", "layout", "theme",
-        "widget", "plugin", "custom", "default", "active", "status", "result", "detail", "source",
-        "target", "filter", "action", "update", "delete", "create", "insert", "select", "import",
-        "export", "upload", "download", "online", "offline", "pipeline", "benchmark", "runtime",
-        "bundle", "compiler", "middleware", "package", "library", "framework", "syntax", "script",
-        "session", "cookie", "storage", "database", "backend", "frontend", "fullstack", "network",
-        "gateway", "router", "socket", "packet", "security", "cipher", "crypto", "payload", "endpoint",
-        "schema", "entity", "attribute", "relation", "diagram", "testing", "tester", "developer",
-        "designer", "admin", "user", "username", "password", "dashboard", "navbar", "sidebar"
+      // Kosakata umum & kata serapan baku Bahasa Indonesia (KBBI) agar 0 false-positive
+      const indonesianWords = new Set([
+        "pada", "era", "digital", "saat", "ini", "perkembangan", "aplikasi", "sangat", "pesat", "banyak",
+        "pengembang", "beralih", "menggunakan", "untuk", "membangun", "antarmuka", "pengguna", "yang",
+        "responsif", "selain", "itu", "integrasi", "dan", "memungkinkan", "data", "tersimpan", "secara",
+        "berdasarkan", "latar", "belakang", "tersebut", "ditemukan", "beberapa", "kendala", "kurangnya",
+        "sistem", "sensor", "perangkat", "proses", "model", "membutuhkan", "waktu", "komputasi", "lama",
+        "celah", "keamanan", "terhadap", "serangan", "menurut", "para", "ahli", "arsitektur", "memudahkan",
+        "independen", "penggunaan", "seperti", "atau", "dapat", "mengelola", "dengan", "tingkat", "tinggi",
+        "bab", "pendahuluan", "identifikasi", "masalah", "landasan", "teori", "rumusan", "tujuan", "manfaat",
+        "ruang", "lingkup", "metodologi", "penelitian", "hasil", "pembahasan", "kesimpulan", "saran",
+        "daftar", "pustaka", "lampiran", "profil", "perusahaan", "sejarah", "struktur", "organisasi",
+        "visi", "misi", "tugas", "fungsi", "informasi", "analisis", "perancangan", "implementasi", "pengujian",
+        "dokumen", "laporan", "kerja", "praktek", "universitas", "pamulang", "program", "studi", "teknik",
+        "informatika", "faktor", "konsep", "kegiatan", "tahapan", "metode", "aktivitas", "tabel", "gambar",
+        "halaman", "dalam", "dari", "oleh", "karena", "sehingga", "maka", "jika", "bila", "antara", "sampai",
+        "hingga", "sejak", "selama", "sebagai", "tentang", "mengenai", "serta", "namun", "tetapi", "sedangkan",
+        "adalah", "yaitu", "merupakan", "yakni", "akan", "telah", "sudah", "belum", "bisa", "harus", "wajib",
+        "boleh", "kami", "penulis", "pembaca", "mereka", "kita", "ia", "dia", "nya", "satu", "dua", "tiga",
+        "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "pertama", "kedua", "ketiga",
+        "keempat", "kelima", "ke", "di", "tidak", "bukan", "hanya", "juga", "komputer", "kualitas", "kriteria",
+        "evaluasi", "klasifikasi", "verifikasi", "validasi", "fasilitas", "komunikasi", "definisi", "instalasi",
+        "konfigurasi", "kapasitas", "prioritas", "efisiensi", "efektivitas", "otomatis", "spesifik", "strategis",
+        "teknis", "infrastruktur", "format", "skema", "kategori", "solusi", "generasi", "inovasi", "distribusi",
+        "institusi", "kondisi", "transisi", "komposisi", "posisi", "edisi", "prototipe", "agenda", "katalog",
+        "publik", "fisik", "logika", "etika", "estetika", "statistik", "karakteristik", "elektronik", "periode",
+        "rujukan", "kutipan", "sumber", "buku", "jurnal", "artikel", "pedoman", "tata", "tulis", "judul",
+        "sub", "bagian", "angka", "huruf", "tanda", "baca", "titik", "koma", "spasi", "baris", "paragraf",
+        "kalimat", "kata", "baku", "ejaan", "puebi", "eyd", "kamus", "arti", "makna", "istilah", "contoh"
       ]);
-      const enSuffix = /(?:tion|tions|sion|sions|ment|ments|ness|ship|ships|able|ibles?|ality|ities|ity|ous|ful|less|ically|ally|ization|izing|ised|ized|ware|wares|ough|ught|ight|ights|works?|lines?|boards?|bases?|sites?|pages?|codes?|marks?|flows?|times?|([bcdfghjklmnpqrstvwxz])\1ing)$/;
-      const hasEnglishPattern = (w) => {
-        if (commonEnglish.has(w)) return true;
-        if (enSuffix.test(w)) return true;
-        if (/(?:ck|tch|ph|wh|ght)/.test(w)) return true;
-        if (/oo(?!r)/.test(w) && !/zoo|koo/.test(w)) return true;
-        if (/sh/.test(w) && !/shalat|shalawat|shaf|shubuh|shahih|dishub/.test(w)) return true;
-        if (/th/.test(w) && !/thah|thaw|thib|thab|thol|thul|ethis|ethik/.test(w)) return true;
-        if (w.length >= 5 && /[bcdfghjklmnpqrstvwxz]y$/.test(w)) return true;
+
+      // Istilah teknis pendek (2-3 karakter) yang sering digunakan di laporan KP
+      const shortTechWords = new Set([
+        "api", "app", "web", "log", "bug", "fix", "git", "box", "tab", "row", "key", "tag",
+        "sql", "css", "dom", "svg", "ios", "iot", "mac", "cpu", "gpu", "vpn", "dns", "sdk",
+        "gui", "cli", "dev", "ops", "ram", "rom", "ssh", "ftp", "ssl", "url", "uri", "lan",
+        "wan", "wlan", "pos", "crm", "erp", "scm", "jwt", "npm", "pip", "jar", "war", "apk"
+      ]);
+
+      // Kosakata teknis bahasa Inggris umum di berbagai tema KP
+      const commonEnglishWords = new Set([
+        "flutter", "framework", "rest", "cloud", "storage", "real-time", "realtime",
+        "telemetry", "monitoring", "microcontroller", "preprocessing", "feature", "extraction",
+        "machine", "learning", "injection", "payload", "exploit", "backend", "server",
+        "microservices", "deployment", "scaling", "broker", "rabbitmq", "kafka", "message", "queue",
+        "throughput", "database", "query", "frontend", "fullstack", "middleware", "endpoint",
+        "widget", "state", "props", "hook", "docker", "kubernetes", "pipeline", "firmware", "sensor",
+        "responsive", "client", "service", "services", "controller", "model", "view", "route",
+        "routing", "migration", "seeder", "package", "library", "syntax", "runtime", "compiler",
+        "bundle", "cache", "cookie", "session", "token", "schema", "entity", "attribute", "relation",
+        "diagram", "testing", "tester", "developer", "designer", "admin", "user", "username", "password",
+        "dashboard", "navbar", "sidebar", "banner", "button", "input", "output", "upload", "download",
+        "online", "offline", "backup", "restore", "update", "delete", "insert", "select", "create",
+        "dataset", "accuracy", "precision", "recall", "loss", "epoch", "batch", "clustering",
+        "classification", "regression", "firewall", "vulnerability", "malware", "ransomware", "phishing",
+        "cipher", "crypto", "hash", "socket", "packet", "gateway", "router", "switch", "subnet",
+        "port", "handshake", "protocol", "bandwidth", "latency", "jitter", "payroll", "inventory",
+        "procurement", "accounting", "billing", "invoice", "voucher", "checkout", "cart", "catalog"
+      ]);
+
+      const isForeignWord = (w) => {
+        if (indonesianWords.has(w)) return false;
+        if (shortTechWords.has(w)) return true;
+        if (commonEnglishWords.has(w)) return true;
+        if (w.length < 3) return false;
+
+        // Awalan khas bahasa Inggris (Inggris + root)
+        if (/^(?:cyber|micro|macro|multi|hyper|inter|intra|crypto|meta|cross|auto)(?:[a-z]{3,})$/.test(w) && !indonesianWords.has(w)) {
+          return true;
+        }
+
+        // Akhiran morfologi khas bahasa Inggris
+        if (/(?:tion|tions|sion|sions|ment|ments|ness|nesses|ship|ships|able|ibles?|ality|ities|ity|ous|ful|less|ally|ically|ize|izes|izing|ized|ise|ises|ising|ised|ware|wares|cast|casts|stream|streams|store|stores|sheet|sheets|point|points|board|boards|base|bases|code|codes|line|lines|flow|flows|drop|drops|stack|stacks|work|works|print|prints|track|tracks|view|views|layer|layers|space|spaces|time|times|type|types|scope|scopes|patch|patches|builder|loader|driver|holder|runner|server|maker|worker|handler|controller|parser|crawler|scraper|listener|provider|wrapper|helper|adapter|manager|scanner|sender|receiver|ings?|ed|est)$/.test(w)) {
+          return true;
+        }
+
+        // Gugus konsonan khas bahasa Inggris
+        if (/(?:th|sh|ch|ph|wh|ck|gh|tch|ight|dge|str|spl|scr|spr|thr|shr|qu)/.test(w)) {
+          if (!/shalat|shahih|shaf|dishub|khusus|ikhtiar|makhluk|akhlak/.test(w)) return true;
+        }
+
+        // Pola konsonan akhir khas bahasa Inggris
+        if (/(?:ct|pt|ft|lt|st|xt|mp|nk|nd|nt|sk|sp|ff|ss|ll|tt|dd|gg|bb|pp|rr)$/.test(w)) {
+          if (!/saat|alat|surat|pusat|tepat|dapat|ingat|sangat|empat|lewat|turut|syarat/.test(w)) return true;
+        }
+
+        // Digraf vokal khas bahasa Inggris
+        if (/(?:oo|ee|ea|oa|ou|oi|ey|ay|ew|aw)/.test(w)) {
+          if (!/koor|koper|saat|keadaan|pantai|sungai|santai|sesuai|pandai|ramai|gerai|damai/.test(w)) return true;
+        }
+
+        if (w.length >= 4 && /[bcdfghjklmnpqrstvwxz]y$/.test(w)) {
+          return true;
+        }
+
         return false;
       };
 
-      const tokenRegex = /<\/?i>|\[Halaman\s+(\d+)\]|[A-Za-z]{4,}/g;
+      const tokenRegex = /<\/?i>|\[Halaman\s+(\d+)\]|[A-Za-z0-9_-]{2,}/g;
       let italic = false;
-      let page = null;
+      let page = "1";
       let sentStart = true;
       let lastEnd = 0;
       const found = new Map();
       let tm;
+
       while ((tm = tokenRegex.exec(body)) !== null) {
         const gap = body.slice(lastEnd, tm.index);
         lastEnd = tm.index + tm[0].length;
@@ -2139,45 +2345,62 @@
         if (raw === "<i>") { italic = true; continue; }
         if (raw === "</i>") { italic = false; continue; }
         if (tm[1]) { page = tm[1]; sentStart = true; continue; }
+
         const wasSentStart = sentStart;
         sentStart = false;
-        if (italic) continue;
-        // Kata kapital di tengah kalimat = nama/merek/singkatan -> abaikan.
-        // Kata berawalan kapital di awal kalimat (Title-case) tetap diperiksa.
-        const isTitleCase = /^[A-Z][a-z]+$/.test(raw);
+
+        // Singkatan kapital baku (PWA, UML, API, ERD, SQL, dll) tidak diwajibkan miring
+        if (/^[A-Z0-9_-]{2,6}$/.test(raw)) continue;
+
+        // Kata kapital di tengah kalimat biasanya nama orang/perusahaan -> abaikan
+        const isTitleCase = /^[A-Z][a-z0-9_-]+$/.test(raw);
         if (raw !== raw.toLowerCase() && !(wasSentStart && isTitleCase)) continue;
+
         const tok = raw.toLowerCase();
         if (known.has(tok) || known.has(tok.replace(/s$/, ""))) continue;
-        if (!hasEnglishPattern(tok)) continue;
-        if (!found.has(tok)) found.set(tok, { count: 0, pages: new Set() });
+        if (!isForeignWord(tok)) continue;
+
+        if (!found.has(tok)) {
+          found.set(tok, { count: 0, italicCount: 0, nonItalicCount: 0, italicPages: new Set(), nonItalicPages: new Set() });
+        }
         const rec = found.get(tok);
         rec.count++;
-        if (page) rec.pages.add(`Hal. ${page}`);
+        const pLabel = `Hal. ${page || 1}`;
+        if (italic) {
+          rec.italicCount++;
+          rec.italicPages.add(pLabel);
+        } else {
+          rec.nonItalicCount++;
+          rec.nonItalicPages.add(pLabel);
+        }
       }
 
       return Array.from(found.entries())
-        .sort((a, b) => b[1].count - a[1].count)
-        .slice(0, 40)
         .map(([word, rec]) => {
-          const pages = Array.from(rec.pages);
-          let loc = `Muncul ${rec.count}x dalam naskah`;
-          if (pages.length > 0) {
-            loc = `Masih tegak di ${pages.slice(0, 3).join(', ')}`;
-            if (pages.length > 3) loc += ` (+${pages.length - 3} hal lain)`;
+          const nonItalicPages = Array.from(rec.nonItalicPages);
+          const italicPages = Array.from(rec.italicPages);
+          let loc = `Masih tegak di Hal. 1`;
+          if (nonItalicPages.length > 0) {
+            loc = `Masih tegak di ${nonItalicPages.slice(0, 3).join(', ')}`;
+            if (nonItalicPages.length > 3) loc += ` (+${nonItalicPages.length - 3} hal lain)`;
+            if (rec.italicCount > 0) loc += ` • (Sudah miring di ${italicPages.slice(0, 2).join(', ')})`;
+          } else if (italicPages.length > 0) {
+            loc = `Sudah 100% miring di ${italicPages.slice(0, 3).join(', ')}`;
           }
+
           return {
             word,
             page: loc,
-            count: rec.count,
+            count: rec.nonItalicCount > 0 ? rec.nonItalicCount : rec.italicCount,
             totalCount: rec.count,
-            italicCount: 0,
-            nonItalicCount: rec.count,
-            isFullyItalic: false,
-            isPartiallyItalic: false,
-            isNotItalic: true,
-            italicPages: [],
-            nonItalicPages: pages,
-            context: "",
+            italicCount: rec.italicCount,
+            nonItalicCount: rec.nonItalicCount,
+            isFullyItalic: rec.nonItalicCount === 0 && rec.italicCount > 0,
+            isPartiallyItalic: rec.italicCount > 0 && rec.nonItalicCount > 0,
+            isNotItalic: rec.italicCount === 0,
+            italicPages,
+            nonItalicPages,
+            context: `Ditemukan istilah "${word}" sebanyak ${rec.count}x dalam naskah laporan`,
             isCandidate: true
           };
         });
@@ -2187,6 +2410,12 @@
     // DYNAMIC AUDIT LOGIC (FOR UPLOADED FILES WITH SPECIFIC LOCATION DETECTION)
     // =========================================================================
     function parseAndAuditDocument(fileName, text, totalPages, forcedScope = null, taggedText = null) {
+      if (!/\[Halaman\s+\d+\]/i.test(text || '')) {
+        const pag = paginateHtmlAndText(taggedText, text, totalPages);
+        text = pag.text;
+        taggedText = pag.taggedText;
+        totalPages = pag.totalPages;
+      }
       const cleanText = text.replace(/\r\n/g, '\n');
       const lower = cleanText.toLowerCase();
       const auditTaggedText = (taggedText || text || "")
@@ -2194,6 +2423,13 @@
         .replace(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/gi, '')
         .replace(/\r\n/g, '\n');
       const isScannedOrLittleText = text.trim().length < 150;
+
+      // Deteksi nomor halaman awal setiap BAB untuk info lokasi akurat
+      const bab1Page = findChapterPage(cleanText, "BAB I") || findChapterPage(cleanText, "BAB 1") || 1;
+      const bab2Page = findChapterPage(cleanText, "BAB II") || findChapterPage(cleanText, "BAB 2");
+      const bab3Page = findChapterPage(cleanText, "BAB III") || findChapterPage(cleanText, "BAB 3");
+      const bab4Page = findChapterPage(cleanText, "BAB IV") || findChapterPage(cleanText, "BAB 4");
+      const dafPage = findChapterPage(cleanText, "DAFTAR PUSTAKA");
 
       // 1. Deteksi bab secara ketat (menghindari baris Daftar Isi bertitik .... dan kutipan teori di bab lain)
       const babRegex = /(?:^|\n|\[Halaman\s+\d+\])\s*(BAB\s*([IVX]+|[1-4])\b[^\n\r]*)/gi;
@@ -2812,13 +3048,14 @@
         let nonItalicPages = [];
 
         if (pageBlocks.length > 0) {
-          // Format dokumen berhalaman (PDF)
+          // Format dokumen berhalaman (PDF atau Word/Teks terpaginasi otomatis)
           for (let i = 0; i < pageBlocks.length; i++) {
             const pNum = pageBlocks[i].pNum;
             const pContent = pageBlocks[i].pContent;
+            const blockRegex = new RegExp(`\\b${escaped}(?:s)?\\b`, "gi");
 
             let match;
-            while ((match = wordRegex.exec(pContent)) !== null) {
+            while ((match = blockRegex.exec(pContent)) !== null) {
               totalMatches++;
               const matchIdx = match.index;
               const before = pContent.substring(0, matchIdx);
@@ -2836,20 +3073,24 @@
             }
           }
         } else {
-          // Format DOCX atau teks tanpa header [Halaman X]
+          // Format teks darurat tanpa [Halaman X]
           let match;
-          while ((match = wordRegex.exec(workingTagged)) !== null) {
+          const docRegex = new RegExp(`\\b${escaped}(?:s)?\\b`, "gi");
+          while ((match = docRegex.exec(workingTagged)) !== null) {
             totalMatches++;
             const matchIdx = match.index;
             const before = workingTagged.substring(0, matchIdx);
             const lastOpen = before.lastIndexOf("<i>");
             const lastClose = before.lastIndexOf("</i>");
             const isInsideItalic = lastOpen > lastClose;
+            const pNum = findPageForIndex(cleanText, matchIdx);
 
             if (isInsideItalic) {
               italicCount++;
+              italicPages.push(`Hal. ${pNum}`);
             } else {
               nonItalicCount++;
+              nonItalicPages.push(`Hal. ${pNum}`);
             }
           }
         }
@@ -2859,24 +3100,26 @@
             workingTagged = workingTagged.replace(wordRegex, m => "\u0001".repeat(m.length));
           }
 
-          const uniqItalicPages = [...new Set(italicPages)];
-          const uniqNonItalicPages = [...new Set(nonItalicPages)];
+          let uniqItalicPages = [...new Set(italicPages)];
+          let uniqNonItalicPages = [...new Set(nonItalicPages)];
+
+          // Pastikan nomor halaman SELALU tersedia (fallback pencarian indeks naskah)
+          if (nonItalicCount > 0 && uniqNonItalicPages.length === 0) {
+            const fbMatch = new RegExp(`\\b${escaped}\\b`, "i").exec(cleanText);
+            const fbPage = fbMatch ? findPageForIndex(cleanText, fbMatch.index) : 1;
+            uniqNonItalicPages.push(`Hal. ${fbPage}`);
+          }
+          if (italicCount > 0 && uniqItalicPages.length === 0) {
+            uniqItalicPages.push("Hal. 1");
+          }
 
           let locationStr = "";
           if (nonItalicCount > 0) {
-            if (uniqNonItalicPages.length > 0) {
-              locationStr = `Masih tegak di ${uniqNonItalicPages.slice(0, 3).join(', ')}`;
-              if (uniqNonItalicPages.length > 3) locationStr += ` (+${uniqNonItalicPages.length - 3} hal lain)`;
-              if (italicCount > 0) locationStr += ` • (Sudah miring di ${uniqItalicPages.slice(0, 2).join(', ')})`;
-            } else {
-              locationStr = italicCount > 0 
-                ? `${nonItalicCount}x masih tegak (sebagian sudah miring)` 
-                : `Muncul ${totalMatches}x dalam naskah`;
-            }
+            locationStr = `Masih tegak di ${uniqNonItalicPages.slice(0, 3).join(', ')}`;
+            if (uniqNonItalicPages.length > 3) locationStr += ` (+${uniqNonItalicPages.length - 3} hal lain)`;
+            if (italicCount > 0) locationStr += ` • (Sudah miring di ${uniqItalicPages.slice(0, 2).join(', ')})`;
           } else {
-            locationStr = uniqItalicPages.length > 0 
-              ? `Sudah 100% miring di ${uniqItalicPages.slice(0, 3).join(', ')}`
-              : `Sudah 100% dicetak miring (${italicCount}x)`;
+            locationStr = `Sudah 100% miring di ${uniqItalicPages.slice(0, 3).join(', ')}`;
           }
 
           // Ambil kutipan kalimat asli untuk preview konteks
@@ -2909,9 +3152,21 @@
         }
       });
 
-      const unfixedForeign = detectedForeign.filter(d => !d.isFullyItalic);
-      const fixedForeign = detectedForeign.filter(d => d.isFullyItalic);
-      const candidateForeign = detectCandidateForeign(auditTaggedText, foreignTerms);
+      // Deteksi istilah asing dinamis universal di berbagai topik laporan
+      const dynamicDetected = detectDynamicForeignWords(auditTaggedText, foreignTerms, pageBlocks);
+      const combinedForeign = [...detectedForeign];
+      const seenWords = new Set(detectedForeign.map(d => d.word.toLowerCase()));
+
+      dynamicDetected.forEach(dyn => {
+        if (!seenWords.has(dyn.word.toLowerCase())) {
+          seenWords.add(dyn.word.toLowerCase());
+          combinedForeign.push(dyn);
+        }
+      });
+
+      const unfixedForeign = combinedForeign.filter(d => !d.isFullyItalic);
+      const fixedForeign = combinedForeign.filter(d => d.isFullyItalic);
+      const candidateForeign = [];
 
       // Estimasi halaman Bab I–IV
       const bab1To4Pages = Math.min(totalPages, Math.max(1, totalPages > 12 ? totalPages - 12 : totalPages));
@@ -2946,8 +3201,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab1",
             babLabel: "BAB I",
-            page: "BAB I Pendahuluan",
-            locationDetail: "BAB I Pendahuluan (Antara Sub-bab 1.1 s/d 1.5)",
+            page: bab1Page ? `Hal. ${bab1Page}` : "BAB I Pendahuluan",
+            locationDetail: `BAB I Pendahuluan (Hal. ${bab1Page || 1}, Sub-bab 1.1 s/d 1.5)`,
             category: "Kelengkapan Sub-Bab",
             title: `Ada sub-bab wajib BAB I yang belum lengkap (${missing.join(", ")})`,
             explanation: "Pedoman KP Hal. 11 mewajibkan 9 sub-bab terstruktur mulai dari 1.1 s/d 1.9.",
@@ -2962,8 +3217,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab1",
             babLabel: "BAB I",
-            page: "Sub-bab 1.2 & 1.3",
-            locationDetail: "Sub-bab 1.2 Identifikasi Masalah & 1.3 Rumusan Masalah",
+            page: bab1Page ? `Hal. ${bab1Page}` : "Sub-bab 1.2 & 1.3",
+            locationDetail: `Sub-bab 1.2 & 1.3 (Hal. ${bab1Page || 1})`,
             category: "Keselarasan Masalah",
             title: "Pastikan Identifikasi Masalah dipadatkan menjadi tepat 3 poin selaras",
             explanation: "Arahan Dosen Pembimbing: Identifikasi Masalah wajib dipadatkan menjadi 3 poin. Rumusan Masalah (3 poin), Tujuan Penelitian (3 poin), serta Pembahasan BAB III harus mengacu dan menjawab ketiga poin masalah tersebut secara berurutan (1-ke-1).",
@@ -2993,8 +3248,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab2",
             babLabel: "BAB II",
-            page: "BAB II (Setelah 2.1)",
-            locationDetail: "BAB II (Setelah Sub-Bab 2.1)",
+            page: bab2Page ? `Hal. ${bab2Page}` : "BAB II",
+            locationDetail: `BAB II Tinjauan Pustaka (Hal. ${bab2Page || 'Draf BAB II'})`,
             category: "Struktur Wajib",
             title: "Sub-Bab 2.2 Tinjauan Pustaka belum terdeteksi di BAB II",
             explanation: "Sesuai Pedoman KP Hal. 12, setelah profil perusahaan wajib mencantumkan sub-bab 2.2 Tinjauan Pustaka (penelitian terdahulu).",
@@ -3008,8 +3263,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab2",
             babLabel: "BAB II",
-            page: "BAB II (Metode)",
-            locationDetail: "BAB II (Sub-bab Metode Penelitian)",
+            page: bab2Page ? `Hal. ${bab2Page}` : "BAB II",
+            locationDetail: `BAB II Metode Penelitian (Hal. ${bab2Page || 'Draf BAB II'})`,
             category: "Struktur Wajib",
             title: "Sub-Bab Metode Penelitian belum terdeteksi di BAB II",
             explanation: "Sesuai arahan revisi dosen, BAB II wajib memuat sub-bab Metode Penelitian (teknik pengumpulan data: observasi, wawancara, dan metode pengembangan sistem).",
@@ -3023,8 +3278,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab2",
             babLabel: "BAB II & Dafpus",
-            page: "Landasan Teori",
-            locationDetail: "BAB II (Kutipan Buku Laudon)",
+            page: bab2Page ? `Hal. ${bab2Page}` : "Landasan Teori",
+            locationDetail: `BAB II Landasan Teori (Hal. ${bab2Page || 'Draf BAB II'}, Kutipan Laudon)`,
             category: "Sitasi & Literatur",
             title: "Ditemukan kutipan buku Laudon di Landasan Teori (Arahan Dosen: Hapus)",
             explanation: "Dosen Pembimbing menginstruksikan untuk menghapus referensi buku 'Laudon' dari Landasan Teori dan menggantinya dengan buku teks/referensi lain terbitan maksimal 10 tahun terakhir (2016–2026) yang memiliki ebook PDF.",
@@ -3038,8 +3293,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab2",
             babLabel: "BAB II & Dafpus",
-            page: "Daftar Pustaka",
-            locationDetail: "Daftar Pustaka (Referensi Jurnal)",
+            page: dafPage ? `Hal. ${dafPage}` : "Daftar Pustaka",
+            locationDetail: `Daftar Pustaka (Hal. ${dafPage || 'Bagian Akhir'}, Referensi Jurnal)`,
             category: "Jumlah Literatur",
             title: `Jumlah Jurnal Ilmiah (2021–2026) baru terdeteksi ${journalCount} (Syarat minimal 20 Jurnal)`,
             explanation: "Syarat mutlak laporan KP Prodi Sistem Informasi adalah minimal mengutip 20 jurnal dalam rentang 5 tahun terakhir.",
@@ -3053,8 +3308,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab2",
             babLabel: "BAB II & Dafpus",
-            page: "Daftar Pustaka",
-            locationDetail: "Daftar Pustaka (Referensi Buku Teks)",
+            page: dafPage ? `Hal. ${dafPage}` : "Daftar Pustaka",
+            locationDetail: `Daftar Pustaka (Hal. ${dafPage || 'Bagian Akhir'}, Referensi Buku Teks)`,
             category: "Jumlah Literatur",
             title: `Jumlah Buku Teks (2016–2026) baru terdeteksi ${bookCount} (Syarat minimal 5 Buku + Ada Ebook PDF)`,
             explanation: "Wajib menyertakan minimal 5 buku teks dengan tahun terbit maksimal 10 tahun terakhir (2016–2026) yang memiliki file ebook PDF. Hindari buku usang.",
@@ -3126,8 +3381,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab3",
             babLabel: "BAB III",
-            page: "BAB III (Perancangan)",
-            locationDetail: "BAB III (Sub-bab Diagram UML)",
+            page: bab3Page ? `Hal. ${bab3Page}` : "BAB III",
+            locationDetail: `BAB III Diagram UML (Hal. ${bab3Page || 'Draf BAB III'})`,
             category: "Struktur Wajib",
             title: "Diagram UML (Use Case, Activity, Sequence Diagram) belum terdeteksi di BAB III",
             explanation: "Pedoman KP mewajibkan dokumentasi diagram UML lengkap untuk rancangan sistem nyata di BAB III.",
@@ -3141,8 +3396,8 @@
             id: `dyn-${issIndex++}`,
             stage: "bab3",
             babLabel: "BAB III",
-            page: "BAB III (Pengujian)",
-            locationDetail: "BAB III (Sub-bab Pengujian BlackBox)",
+            page: bab3Page ? `Hal. ${bab3Page}` : "BAB III",
+            locationDetail: `BAB III Pengujian BlackBox (Hal. ${bab3Page || 'Draf BAB III'})`,
             category: "Pengujian Sistem",
             title: "Matriks Pengujian Sistem (BlackBox Testing) belum terdeteksi di BAB III",
             explanation: "Wajib menyertakan tabel matriks pengujian fungsionalitas sistem nyata (skenario uji dan hasil) pada BAB III.",
@@ -3171,17 +3426,19 @@
       // 5. ISU UMUM / ISTILAH ASING (stage: 'any')
       if (unfixedForeign.length > 0) {
         const firstPages = unfixedForeign.filter(d => d.page && !d.page.startsWith("Muncul")).map(d => `${d.word}: ${d.page}`).slice(0, 3).join("; ");
+        const allForeignPages = [...new Set(unfixedForeign.flatMap(d => d.nonItalicPages || []))];
+        const pageLoc = allForeignPages.length > 0 ? `Masih tegak di ${allForeignPages.slice(0, 4).join(', ')}` : "Hal. 1";
 
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: "any",
           babLabel: "Istilah Asing (Italic)",
-          page: "Teks Dokumen",
-          locationDetail: firstPages || "Tersebar di naskah (Klik tombol kata di bawah)",
+          page: allForeignPages.slice(0, 3).join(", ") || "Hal. 1",
+          locationDetail: firstPages || pageLoc,
           category: "Istilah Asing",
-          title: `${unfixedForeign.length} Istilah Asing Belum Dicetak Miring`,
-          explanation: `Pedoman KP Bab VII Hal. 9 Poin g.1 mewajibkan seluruh istilah teknis asing (bahasa Inggris) dicetak miring (italic). Masih ada ${unfixedForeign.length} istilah yang berformat huruf tegak pada halaman-halaman tertentu.`,
-          fix: "Klik tombol kata berwarna merah/oranye di bawah untuk menyalin istilah otomatis ke clipboard, lalu buka Word dan tekan Ctrl + H (Replace) dengan format cetak miring (Ctrl + I) untuk memiringkannya pada halaman yang masih tegak.",
+          title: `${unfixedForeign.length} Istilah Asing Belum Dicetak Miring (Dinamis: Web, AI, IoT, Cyber, DB)`,
+          explanation: `Pedoman KP Bab VII Hal. 9 Poin g.1 mewajibkan seluruh istilah teknis asing (bahasa Inggris) dicetak miring (italic). Terdeteksi ${unfixedForeign.length} istilah bahasa asing yang masih berformat huruf tegak pada halaman-halaman terkait.`,
+          fix: "Klik tombol istilah di bawah untuk menyalin kata beserta halaman lokasinya, lalu buka Word dan tekan Ctrl + F / Ctrl + H untuk memiringkannya (Ctrl + I).",
           pedomanRef: "Pedoman KP BAB VII Hal. 9 Poin g.1 (Aturan Huruf Miring)",
           foreignItems: unfixedForeign
         });
@@ -3211,18 +3468,20 @@
       while ((abMatch = arabicBabRegex.exec(cleanText)) !== null) {
         const num = abMatch[2];
         const rom = num === '1' ? 'I' : (num === '2' ? 'II' : (num === '3' ? 'III' : 'IV'));
-        arabicBabs.push({ found: abMatch[1].toUpperCase(), correct: `BAB ${rom}` });
+        const pNum = findPageForIndex(cleanText, abMatch.index);
+        arabicBabs.push({ found: abMatch[1].toUpperCase(), correct: `BAB ${rom}`, page: pNum });
       }
       if (arabicBabs.length > 0) {
-        const listStr = arabicBabs.map(b => `"${b.found}" ➔ "${b.correct}"`).join(', ');
+        const listStr = arabicBabs.map(b => `"${b.found}" ➔ "${b.correct}" (Hal. ${b.page})`).join(', ');
+        const pageList = [...new Set(arabicBabs.map(b => `Hal. ${b.page}`))].join(', ');
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: "any",
           babLabel: "Format Judul Bab",
-          page: "Judul Bab",
-          locationDetail: arabicBabs.map(b => b.found).join(", "),
+          page: pageList,
+          locationDetail: arabicBabs.map(b => `${b.found} (Hal. ${b.page})`).join(", "),
           category: "Format Bab",
-          title: `Penulisan Judul BAB Memakai Angka Biasa (${arabicBabs.map(b => b.found).join(', ')})`,
+          title: `Penulisan Judul BAB Memakai Angka Biasa (${arabicBabs.map(b => `${b.found} di Hal. ${b.page}`).join(', ')})`,
           explanation: "Pedoman KP BAB VII Hal. 9 mewajibkan penulisan judul bab utama menggunakan angka Romawi kapital tebal (BAB I, BAB II, BAB III, BAB IV), bukan angka Arab biasa.",
           fix: `Ganti penulisan ${listStr} pada naskah dokumen Word Anda.`,
           pedomanRef: "Pedoman KP BAB VII Hal. 9"
@@ -3230,23 +3489,25 @@
       }
 
       // b. Judul sub-bab diakhiri tanda titik (misal "1.1 Latar Belakang.")
-      const subBabDotRegex = /(?:^|\n)\s*([1-4]\.[1-9]\s+[^\n\r.]{3,55})\.\s*(?:\n|$)/g;
+      const subBabDotRegex = /(?:^|\n|\[Halaman\s+\d+\])\s*([1-4]\.[1-9]\s+[^\n\r.]{3,55})\.(?=\s*(?:\n|$|[A-Z]))/g;
       let dotMatch;
       const dotTitles = [];
       while ((dotMatch = subBabDotRegex.exec(cleanText)) !== null) {
-        dotTitles.push(dotMatch[1].trim());
+        const pNum = findPageForIndex(cleanText, dotMatch.index);
+        dotTitles.push({ text: dotMatch[1].trim(), page: pNum });
       }
       if (dotTitles.length > 0) {
+        const dotPages = [...new Set(dotTitles.map(d => `Hal. ${d.page}`))].slice(0, 3).join(', ');
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: "any",
           babLabel: "Tanda Baca Sub-Bab",
-          page: "Judul Sub-Bab",
-          locationDetail: dotTitles.slice(0, 3).join("; "),
+          page: dotPages,
+          locationDetail: dotTitles.slice(0, 3).map(d => `"${d.text}." (Hal. ${d.page})`).join("; "),
           category: "Format Sub-Bab",
-          title: `Judul Sub-Bab Diakhiri Tanda Titik (${dotTitles.slice(0, 2).join(', ')})`,
+          title: `Judul Sub-Bab Diakhiri Tanda Titik (${dotTitles.slice(0, 2).map(d => `"${d.text}." di Hal. ${d.page}`).join(', ')})`,
           explanation: "Sesuai kaidah tata tulis EYD V dan Pedoman KP UNPAM, judul bab dan judul sub-bab TIDAK boleh diakhiri dengan tanda titik (.).",
-          fix: `Hapus tanda titik di akhir judul sub-bab: ${dotTitles.join(', ')}.`,
+          fix: `Hapus tanda titik di akhir judul sub-bab: ${dotTitles.map(d => `"${d.text}." (Hal. ${d.page})`).join(', ')}.`,
           pedomanRef: "EYD V & Pedoman KP BAB VII"
         });
       }
@@ -3254,22 +3515,23 @@
       // c. Penomoran sub-sub bab bertingkat 3 level angka (1.1.1, 2.1.1, 3.1.1, dst.)
       const multiSubRegex = /\b([1-4]\.[1-9]\.[1-9](?:\.[1-9])?)\b/g;
       let msMatch;
-      const multiSubs = new Set();
+      const multiSubs = [];
       while ((msMatch = multiSubRegex.exec(cleanText)) !== null) {
-        multiSubs.add(msMatch[1]);
+        const pNum = findPageForIndex(cleanText, msMatch.index);
+        multiSubs.push({ num: msMatch[1], page: pNum });
       }
-      if (multiSubs.size > 0) {
-        const list = Array.from(multiSubs);
+      if (multiSubs.length > 0) {
+        const msPages = [...new Set(multiSubs.map(m => `Hal. ${m.page}`))].slice(0, 4).join(', ');
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: "any",
           babLabel: "Format Penomoran",
-          page: "Sub-sub Bab",
-          locationDetail: list.slice(0, 5).join(", "),
+          page: msPages,
+          locationDetail: multiSubs.slice(0, 5).map(m => `${m.num} (Hal. ${m.page})`).join(", "),
           category: "Format Penomoran",
-          title: `Penomoran Sub-Sub Bab Memakai Angka Bertingkat (${list.slice(0, 3).join(', ')})`,
+          title: `Penomoran Sub-Sub Bab Memakai Angka Bertingkat (${multiSubs.slice(0, 3).map(m => `${m.num} di Hal. ${m.page}`).join(', ')})`,
           explanation: "Arahan Dosen Pembimbing & Pedoman KP: Penomoran anak sub-bab (level 3) dilarang memakai format angka bertingkat seperti 1.1.1 atau 2.1.1. Wajib memakai format huruf kecil (a., b., c., dst.).",
-          fix: `Ubah penomoran ${list.join(', ')} menjadi huruf kecil a., b., c. pada naskah Word Anda.`,
+          fix: `Ubah penomoran ${multiSubs.slice(0, 5).map(m => `${m.num} (Hal. ${m.page})`).join(', ')} menjadi huruf kecil a., b., c. pada naskah Word Anda.`,
           pedomanRef: "Catatan Bimbingan Dosen & Pedoman BAB VII Hal. 9"
         });
       }
@@ -3293,42 +3555,68 @@
 
       const foundTypos = [];
       typoDictionary.forEach(t => {
-        const m = cleanText.match(t.pattern);
-        if (m && m.length > 0) {
-          foundTypos.push(`${t.wrong} ➔ ${t.correct} (${m.length}x)`);
+        let m;
+        const typoPages = new Set();
+        const tRegex = new RegExp(t.pattern.source, 'gi');
+        while ((m = tRegex.exec(cleanText)) !== null) {
+          typoPages.add(findPageForIndex(cleanText, m.index));
+        }
+        if (typoPages.size > 0) {
+          const pList = Array.from(typoPages).sort((a,b) => a - b);
+          foundTypos.push({
+            wrong: t.wrong,
+            correct: t.correct,
+            count: pList.length,
+            pages: pList,
+            label: `"${t.wrong}" ➔ "${t.correct}" di Hal. ${pList.join(', ')}`
+          });
         }
       });
 
       if (foundTypos.length > 0) {
+        const allTypoPages = [...new Set(foundTypos.flatMap(f => f.pages))].sort((a,b) => a - b);
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: "any",
           babLabel: "Typo & Kata Baku",
-          page: "Teks Dokumen",
-          locationDetail: foundTypos.slice(0, 3).join("; "),
+          page: allTypoPages.slice(0, 4).map(p => `Hal. ${p}`).join(", "),
+          locationDetail: foundTypos.slice(0, 3).map(f => f.label).join("; "),
           category: "Ejaan & Typo",
-          title: `Ditemukan ${foundTypos.length} Pola Kata Typo / Non-Baku dalam Dokumen`,
-          explanation: `Terdeteksi penulisan kata non-baku atau salah ketik (typo): ${foundTypos.join(", ")}. Sesuai kaidah penulisan karya ilmiah dan KBBI, penulisan kata wajib menggunakan ejaan bahasa Indonesia yang baku.`,
-          fix: `Gunakan Ctrl + H di Word untuk mengganti kata: ${foundTypos.join(", ")}.`,
+          title: `Ditemukan ${foundTypos.length} Pola Kata Typo / Non-Baku di Hal. ${allTypoPages.slice(0, 3).join(', ')}`,
+          explanation: `Terdeteksi penulisan kata non-baku atau salah ketik (typo): ${foundTypos.map(f => f.label).join(", ")}. Sesuai kaidah penulisan karya ilmiah dan KBBI, penulisan kata wajib menggunakan ejaan bahasa Indonesia yang baku.`,
+          fix: `Gunakan Ctrl + H di Word untuk mengganti kata: ${foundTypos.map(f => `"${f.wrong}" menjadi "${f.correct}"`).join(", ")}.`,
           pedomanRef: "Kaidah Bahasa Ilmiah & PUEBI/EYD V"
         });
       }
 
       // Tanda baca cacat: titik ganda .. & spasi sebelum tanda baca
-      const doubleDot = (cleanText.match(/(?<!\.)\.\.(?!\.)/g) || []).length;
-      const spaceBeforePunct = (cleanText.match(/[A-Za-z0-9]\s+[,.?:;](?=\s|$)/g) || []).length;
-      if (doubleDot > 0 || spaceBeforePunct > 0) {
+      const ddRegex = /(?<!\.)\.\.(?!\.)/g;
+      let ddm;
+      const ddPages = new Set();
+      while ((ddm = ddRegex.exec(cleanText)) !== null) {
+        ddPages.add(findPageForIndex(cleanText, ddm.index));
+      }
+
+      const spRegex = /[A-Za-z0-9]\s+[,.?:;](?=\s|$)/g;
+      let spm;
+      const spPages = new Set();
+      while ((spm = spRegex.exec(cleanText)) !== null) {
+        spPages.add(findPageForIndex(cleanText, spm.index));
+      }
+
+      if (ddPages.size > 0 || spPages.size > 0) {
         const details = [];
-        if (doubleDot > 0) details.push(`${doubleDot}x tanda titik ganda (..)`);
-        if (spaceBeforePunct > 0) details.push(`${spaceBeforePunct}x spasi sebelum tanda baca (contoh: "kata , " atau "teks . ")`);
+        if (ddPages.size > 0) details.push(`${ddPages.size}x titik ganda (..) di Hal. ${Array.from(ddPages).join(', ')}`);
+        if (spPages.size > 0) details.push(`${spPages.size}x spasi sebelum tanda baca di Hal. ${Array.from(spPages).join(', ')}`);
+        const punctPages = [...new Set([...ddPages, ...spPages])].sort((a,b) => a - b);
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: "any",
           babLabel: "Tanda Baca (Typo)",
-          page: "Teks Dokumen",
+          page: punctPages.slice(0, 4).map(p => `Hal. ${p}`).join(", "),
           locationDetail: details.join(" • "),
           category: "Ejaan & Tanda Baca",
-          title: "Ditemukan Kesalahan Spasi Tanda Baca / Titik Ganda",
+          title: `Ditemukan Kesalahan Tanda Baca di Hal. ${punctPages.slice(0, 3).join(', ')}`,
           explanation: `Terdapat kesalahan pengetikan tanda baca: ${details.join(", ")}. Tanda baca koma atau titik harus menempel langsung ke kata sebelumnya tanpa spasi.`,
           fix: "Buka Word lalu cari spasi sebelum tanda titik/koma (Ctrl + F) dan rapikan agar menempel tanpa spasi.",
           pedomanRef: "Pedoman Tata Tulis EYD V"
@@ -3337,22 +3625,24 @@
 
       // Konjungsi koordinatif di awal kalimat
       const konjungsiMatches = [];
-      const kjRegex = /(?:^|[.!?]\s+)(Dan|Sedangkan|Sehingga|Serta|Atau)\s+[a-z]/g;
+      const kjRegex = /(?:^|[.!?\n]\s*)(Dan|Sedangkan|Sehingga|Serta|Atau)\s+[a-z]/g;
       let km;
       while ((km = kjRegex.exec(cleanText)) !== null) {
-        if (!konjungsiMatches.includes(km[1])) konjungsiMatches.push(km[1]);
+        const pNum = findPageForIndex(cleanText, km.index);
+        konjungsiMatches.push({ word: km[1], page: pNum });
       }
       if (konjungsiMatches.length > 0) {
+        const kjPages = [...new Set(konjungsiMatches.map(k => `Hal. ${k.page}`))].slice(0, 4).join(', ');
         dynamicIssues.push({
           id: `dyn-${issIndex++}`,
           stage: "any",
           babLabel: "Tata Bahasa Ilmiah",
-          page: "Awal Kalimat",
-          locationDetail: `Kata: ${konjungsiMatches.join(", ")} di awal kalimat`,
+          page: kjPages,
+          locationDetail: konjungsiMatches.slice(0, 4).map(k => `Kata "${k.word}" di Hal. ${k.page}`).join(", "),
           category: "Struktur Kalimat",
-          title: `Ditemukan Kata Sambung di Awal Kalimat (${konjungsiMatches.join(', ')})`,
-          explanation: `Ditemukan penggunaan kata sambung koordinatif (${konjungsiMatches.join(', ')}) di awal kalimat tunggal setelah tanda titik. Dalam tata bahasa karya ilmiah, konjungsi koordinatif menghubungkan dua klausa dalam satu kalimat majemuk, bukan mengawali kalimat baru.`,
-          fix: `Gabungkan kalimat tersebut dengan kalimat sebelumnya menggunakan tanda koma, atau ganti kata '${konjungsiMatches[0]}' dengan frasa seperti 'Oleh karena itu,', 'Selain itu,', atau 'Di samping itu,'.`,
+          title: `Ditemukan Kata Sambung di Awal Kalimat (${konjungsiMatches.slice(0, 2).map(k => `"${k.word}" di Hal. ${k.page}`).join(', ')})`,
+          explanation: `Ditemukan penggunaan kata sambung koordinatif di awal kalimat tunggal setelah tanda titik atau baris baru: ${konjungsiMatches.map(k => `"${k.word}" di Hal. ${k.page}`).join(', ')}. Dalam tata bahasa karya ilmiah, konjungsi koordinatif menghubungkan dua klausa dalam satu kalimat majemuk, bukan mengawali kalimat baru.`,
+          fix: `Gabungkan kalimat tersebut dengan kalimat sebelumnya menggunakan tanda koma, atau ganti kata '${konjungsiMatches[0].word}' dengan frasa seperti 'Oleh karena itu,', 'Selain itu,', atau 'Di samping itu,'.`,
           pedomanRef: "Kaidah Bahasa Indonesia Ilmiah"
         });
       }
@@ -3557,7 +3847,8 @@
       }
 
       closePasteModal();
-      parseAndAuditDocument(title, content, pages, scope);
+      const paginated = paginateHtmlAndText(null, content, pages);
+      parseAndAuditDocument(title, paginated.text, paginated.totalPages, scope, paginated.taggedText);
       showToast("Teks laporan berhasil diaudit oleh ncexs!", "success");
     }
 

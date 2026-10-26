@@ -35,8 +35,8 @@ Seringkali laporan Kerja Praktek mahasiswa ditolak atau mendapatkan banyak revis
   2. *Sampai BAB II* (Profil PT, Tinjauan Pustaka, Teori, 20 Jurnal & 5 Buku)
   3. *Sampai BAB III* (UML Diagram, UI/UX Wireframe & BlackBox Testing)
   4. *Lengkap (BAB I–IV Full + Lampiran)* (Min. 50 Halaman, Kesimpulan, Daftar Pustaka & 8 Lampiran Wajib)
-- 🔍 **Deteksi Istilah Asing yang Belum Miring**:
-  Mendeteksi kata-kata teknis bahasa Inggris yang masih tegak dan menyediakan tombol *salin* cepat per kata untuk pencarian massal di Word via `Ctrl + H`.
+- 🔍 **Deteksi Istilah Asing Dinamis & Universal (Dengan Info Nomor Halaman)**:
+  Mendeteksi kata-kata teknis bahasa Inggris di berbagai ranah TI (Web, Mobile, AI/Machine Learning, IoT, Cyber Security, Jaringan, Database, UI/UX) yang masih tegak, lengkap dengan info nomor halaman lokasi temuan (`Hal. X`) dan tombol *salin* cepat per kata untuk pencarian massal di Word via `Ctrl + H`.
 - 📲 **Export Ringkasan ke WhatsApp Kelompok**:
   Satu klik untuk menyalin seluruh daftar temuan revisi ke clipboard dengan format rapi siap kirim ke grup WhatsApp.
 - 🖨️ **Cetak Lembar Audit Mandiri**:
